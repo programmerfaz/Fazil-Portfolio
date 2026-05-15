@@ -107,3 +107,16 @@ body,
     animation: none;
   }
 }
+
+/* “Work in motion” — horizontal edge fade only on sm+ so mobile isn’t vignetted */
+.marquee-edge-fade {
+  mask-image: none;
+  -webkit-mask-image: none;
+}
+
+@media (min-width: 640px) {
+  .marquee-edge-fade {
+    mask-image: linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%);
+  }
+}

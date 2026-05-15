@@ -8,6 +8,7 @@ import {
 import {
   Award,
   Briefcase,
+  FolderKanban,
   Mail,
   Menu as MenuIcon,
   Sparkles,
@@ -39,38 +40,39 @@ type Dim = {
 };
 
 const DIM_DESKTOP: Dim = {
-  wheel: 240,
-  iconRadius: 82,
+  wheel: 256,
+  iconRadius: 88,
   toggle: 56,
-  itemW: 62,
-  itemH: 52,
-  glow: 110,
+  itemW: 76,
+  itemH: 54,
+  glow: 118,
   iconSize: 18,
   labelSize: 8,
 };
 
 const DIM_MOBILE: Dim = {
-  wheel: 200,
-  iconRadius: 68,
+  wheel: 216,
+  iconRadius: 74,
   toggle: 50,
-  itemW: 56,
-  itemH: 48,
-  glow: 92,
+  itemW: 68,
+  itemH: 50,
+  glow: 98,
   iconSize: 17,
-  labelSize: 7.5,
+  labelSize: 7.25,
 };
 
 /**
- * Pentagon layout (one vertex at the top, two pairs below).
- * Angles measured CCW from +X: 90° = top, 162°/18° = upper pair, 234°/306° = lower pair.
- * Verified at both breakpoints — visible icon+label content stays well inside the wheel disc.
+ * Hexagon layout — clockwise from top in scroll order:
+ * About → Skills → Experience → Certs → Projects → Contact.
+ * Angles measured CCW from +X: 90° = top; each step −60° advances clockwise on screen.
  */
 const ITEMS: readonly Item[] = [
   { href: '#about', label: 'About', Icon: User, angleDeg: 90, stagger: 0 },
-  { href: '#skills', label: 'Skills', Icon: Sparkles, angleDeg: 162, stagger: 1 },
-  { href: '#certificates', label: 'Certs', Icon: Award, angleDeg: 18, stagger: 1 },
-  { href: '#projects', label: 'Projects', Icon: Briefcase, angleDeg: 234, stagger: 2 },
-  { href: '#contact', label: 'Contact', Icon: Mail, angleDeg: 306, stagger: 2 },
+  { href: '#skills', label: 'Skills', Icon: Sparkles, angleDeg: 30, stagger: 1 },
+  { href: '#experience', label: 'Experience', Icon: Briefcase, angleDeg: 330, stagger: 1 },
+  { href: '#certificates', label: 'Certs', Icon: Award, angleDeg: 270, stagger: 2 },
+  { href: '#projects', label: 'Projects', Icon: FolderKanban, angleDeg: 210, stagger: 2 },
+  { href: '#contact', label: 'Contact', Icon: Mail, angleDeg: 150, stagger: 3 },
 ] as const;
 
 const COLORS = {
@@ -354,7 +356,7 @@ export function RadialMenu() {
               onPointerLeave={() => setHover((curr) => (curr === i ? null : curr))}
               onFocus={() => setHover(i)}
               onBlur={() => setHover((curr) => (curr === i ? null : curr))}
-              className="absolute left-1/2 top-1/2 flex select-none flex-col items-center justify-center gap-[3px] overflow-hidden rounded-2xl outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+              className="absolute left-1/2 top-1/2 flex select-none flex-col items-center justify-center gap-[3px] overflow-hidden rounded-2xl px-px outline-none focus-visible:ring-2 focus-visible:ring-white/60"
               style={{
                 width: dim.itemW,
                 height: dim.itemH,
@@ -399,7 +401,7 @@ export function RadialMenu() {
                 />
               </motion.span>
               <motion.span
-                className="relative z-10 whitespace-nowrap font-semibold uppercase leading-none tracking-[0.18em]"
+                className="relative z-10 max-w-[5.75rem] text-center whitespace-nowrap font-semibold uppercase leading-none tracking-[0.1em]"
                 style={{ fontSize: `${dim.labelSize}px` }}
                 animate={{ color: isHovered || isPressed ? COLORS.labelActive : COLORS.labelIdle }}
                 transition={{ duration: 0.18 }}

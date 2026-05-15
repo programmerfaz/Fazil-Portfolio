@@ -26,7 +26,8 @@ export const PROJECTS: Project[] = [
       'Rich property filters tailored to the Bahrain market.',
     ],
     stack: ['React', 'Vite', 'Node.js', 'Tailwind', 'Supabase', 'OpenAI'],
-    repositoryUrl: 'https://github.com/programmerfaz',
+    liveUrl: 'https://realestatefazil.netlify.app/Login',
+    repositoryUrl: 'https://github.com/programmerfaz/Real-estate',
   },
   {
     num: '02',
@@ -38,7 +39,8 @@ export const PROJECTS: Project[] = [
       'TMDB integration for search, details, and discovery.',
     ],
     stack: ['React', 'Vite', 'Node.js', 'Tailwind', 'TMDB API'],
-    repositoryUrl: 'https://github.com/programmerfaz',
+    liveUrl: 'https://movie-site-react-lyart.vercel.app/',
+    repositoryUrl: 'https://github.com/programmerfaz/Movie-Site-React',
   },
   {
     num: '03',
@@ -50,7 +52,7 @@ export const PROJECTS: Project[] = [
       'RESTful APIs, PostgreSQL, and Maven for builds and dependencies.',
     ],
     stack: ['Java', 'Spring Boot', 'PostgreSQL', 'REST', 'Maven', 'MVC'],
-    repositoryUrl: 'https://github.com/programmerfaz',
+    repositoryUrl: 'https://github.com/7ax/LibraryOS',
   },
   {
     num: '04',
@@ -62,7 +64,7 @@ export const PROJECTS: Project[] = [
       'JavaScript, PHP, and MySQL for interactive flows and persistence.',
     ],
     stack: ['JavaScript', 'PHP', 'MySQL', 'HTML', 'CSS'],
-    repositoryUrl: 'https://github.com/programmerfaz',
+    repositoryUrl: 'https://github.com/StoicTylerDurden/itcs333-project',
   },
   {
     num: '05',
@@ -75,7 +77,7 @@ export const PROJECTS: Project[] = [
       'Python-focused workflow with clear evaluation and iteration.',
     ],
     stack: ['Python', 'scikit-learn', 'pandas', 'Logistic regression', 'Regression'],
-    repositoryUrl: 'https://github.com/programmerfaz',
+    repositoryUrl: 'https://github.com/programmerfaz/Machine-learning-Projects',
   },
   {
     num: '06',
@@ -87,7 +89,6 @@ export const PROJECTS: Project[] = [
       'Embedded logic for real-time slot state and transmission.',
     ],
     stack: ['Arduino', 'LoRa', 'ESP32', 'Sensors', 'Embedded C'],
-    repositoryUrl: 'https://github.com/programmerfaz',
   },
   {
     num: '07',
@@ -98,7 +99,22 @@ export const PROJECTS: Project[] = [
       'HTML, CSS, and JavaScript to mirror structure and interactivity.',
     ],
     stack: ['HTML', 'CSS', 'JavaScript'],
-    repositoryUrl: 'https://github.com/programmerfaz',
+    repositoryUrl: 'https://github.com/programmerfaz/Amazon-Website-Clone-HTML-CSS-',
+  },
+  {
+    num: '08',
+    category: 'Frontend',
+    title: 'Sessioner — Audio transcription studio',
+    summary:
+      'Record or upload audio, transcribe with AI, translate to other languages, and generate summaries and action items.',
+    bullets: [
+      'In-browser recording and upload with playback before processing.',
+      'Transcription, summaries, and announcements with RTL support for languages like Arabic.',
+      'React, Vite, and Tailwind CSS for a responsive, card-based UI.',
+    ],
+    stack: ['React', 'Vite', 'Tailwind', 'OpenAI'],
+    liveUrl: 'https://sessioner.vercel.app/',
+    repositoryUrl: 'https://github.com/programmerfaz/Sessioner',
   },
 ];
 

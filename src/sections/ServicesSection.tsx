@@ -32,13 +32,13 @@ export function ServicesSection() {
           }}
         >
           <h2
-            className="relative z-10 mb-4 bg-gradient-to-b from-white via-[#f4f4f5] to-zinc-400 bg-clip-text text-center font-black uppercase text-transparent sm:mb-6"
-            style={{ fontSize: 'clamp(3rem, 12vw, 160px)' }}
+            className="relative z-10 mb-4 px-3 bg-gradient-to-b from-white via-[#f4f4f5] to-zinc-400 bg-clip-text text-center font-black uppercase text-transparent max-sm:break-words sm:mb-6 sm:px-4"
+            style={{ fontSize: 'clamp(3rem, 12vw, 160px)', wordBreak: 'break-word', hyphens: 'auto' }}
           >
             Skills
           </h2>
           <p
-            className="relative z-10 mx-auto mb-12 max-w-2xl text-center font-medium leading-relaxed text-[#BBCCD7]/80 max-sm:mb-10 sm:mb-16 md:mb-20"
+            className="relative z-10 mx-auto mb-12 max-w-2xl px-4 text-center font-medium leading-relaxed text-[#BBCCD7]/80 max-sm:mb-10 sm:mb-16 sm:px-6 md:mb-20"
             style={{ fontSize: 'clamp(0.95rem, 1.8vw, 1.2rem)' }}
           >
             Core stack from coursework, personal builds, and my internship shipping ASP.NET and Azure DevOps workflows.
@@ -75,10 +75,13 @@ export function ServicesSection() {
           ].join(', '),
         }}
       >
-        <div className="relative mx-auto max-w-5xl pt-2 sm:pt-4 md:pt-6">
+        <div
+          id="experience"
+          className="relative mx-auto max-w-5xl scroll-mt-[max(6rem,15vh)] pt-2 sm:scroll-mt-[max(7rem,16vh)] sm:pt-4 md:pt-6"
+        >
           <h3
-            className="mb-12 bg-gradient-to-b from-neutral-900 to-neutral-500 bg-clip-text text-center font-black uppercase text-transparent"
-            style={{ fontSize: 'clamp(2rem, 8vw, 72px)' }}
+            className="mb-12 px-3 bg-gradient-to-b from-neutral-900 to-neutral-500 bg-clip-text text-center font-black uppercase text-transparent max-sm:break-words sm:px-4"
+            style={{ fontSize: 'clamp(2rem, 8vw, 72px)', wordBreak: 'break-word' }}
           >
             Experience
           </h3>
@@ -110,8 +113,8 @@ export function ServicesSection() {
           className="relative z-[1] mx-auto mt-16 w-full max-w-[min(100%,1320px)] scroll-mt-[max(6rem,15vh)] border-t border-neutral-200/80 px-0 pt-12 sm:mt-20 sm:scroll-mt-32 sm:pt-16 md:mt-24 md:pt-20"
         >
           <h3
-            className="mb-12 bg-gradient-to-b from-neutral-900 to-neutral-500 bg-clip-text px-2 pb-1 text-center font-black uppercase leading-none text-transparent sm:mb-16 md:mb-20"
-            style={{ fontSize: 'clamp(2rem, 8vw, 72px)' }}
+            className="mb-12 bg-gradient-to-b from-neutral-900 to-neutral-500 bg-clip-text px-3 pb-1 text-center font-black uppercase leading-none text-transparent max-sm:break-words sm:mb-16 sm:px-4 md:mb-20"
+            style={{ fontSize: 'clamp(2rem, 8vw, 72px)', wordBreak: 'break-word' }}
           >
             Certifications
           </h3>

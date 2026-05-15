@@ -136,7 +136,7 @@ export function AboutSection() {
 
           <FadeIn as="div" delay={0.1} duration={0.7} y={28}>
             <SectionCard label="At a glance" badge="02">
-              <dl className="grid min-w-0 grid-cols-2 gap-x-4 gap-y-5 sm:gap-y-6">
+              <dl className="grid min-w-0 grid-cols-1 gap-x-4 gap-y-5 sm:grid-cols-2 sm:gap-y-6">
                 <MetaItem Icon={MapPin} label="Based in" value={PROFILE.location} />
                 <MetaItem Icon={Flag} label="Nationality" value={PROFILE.nationality} />
                 <MetaItem Icon={Languages} label="Languages" value={PROFILE.languagesPersonal} />

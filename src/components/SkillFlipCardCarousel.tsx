@@ -44,8 +44,8 @@ type SlotMotion = {
   opacity: number;
 };
 
-/** Web (≥768) and tablet (640–767) match existing layout; only &lt;640px tightens 3D offsets. */
-type SlotTier = 'wide' | 'cozy' | 'compact';
+/** wide → cozy → compact → tight as the viewport narrows (<400px phones need tighter X/Z). */
+type SlotTier = 'wide' | 'cozy' | 'compact' | 'tight';
 
 function slotForOffset(offset: number, tier: SlotTier): SlotMotion {
   const cfg =
@@ -53,7 +53,9 @@ function slotForOffset(offset: number, tier: SlotTier): SlotMotion {
       ? { tx1: 268, tx2: 438, rot1: 32, rot2: 46, zFar: 420, rotFar: 48 }
       : tier === 'cozy'
         ? { tx1: 158, tx2: 268, rot1: 28, rot2: 40, zFar: 280, rotFar: 44 }
-        : { tx1: 92, tx2: 158, rot1: 22, rot2: 30, zFar: 200, rotFar: 40 };
+        : tier === 'compact'
+          ? { tx1: 92, tx2: 158, rot1: 22, rot2: 30, zFar: 200, rotFar: 40 }
+          : { tx1: 62, tx2: 108, rot1: 16, rot2: 24, zFar: 150, rotFar: 34 };
   const { tx1, tx2, rot1, rot2, zFar, rotFar } = cfg;
   switch (offset) {
     case 0:
@@ -138,7 +140,7 @@ function SkillFlipCard({ group, isActive }: SkillFlipCardProps) {
 
   return (
     <div
-        className={`relative isolate mx-auto w-[min(96vw,600px)] max-w-[600px] max-sm:max-w-[min(calc(100%-1.5rem),600px)] ${!interactive ? 'pointer-events-none select-none' : ''}`}
+        className={`relative isolate mx-auto w-[min(82vw,340px)] max-w-[340px] sm:w-[min(96vw,600px)] sm:max-w-[600px] ${!interactive ? 'pointer-events-none select-none' : ''}`}
       style={
         {
           perspective: '2000px',
@@ -158,7 +160,7 @@ function SkillFlipCard({ group, isActive }: SkillFlipCardProps) {
         role={interactive && !canHover ? 'button' : undefined}
         tabIndex={interactive ? 0 : undefined}
         aria-pressed={interactive && !canHover ? showBack : undefined}
-        className={`relative h-[min(820px,88vh)] min-h-[640px] rounded-[36px] outline-none ring-offset-2 ring-offset-[#0a0306] max-sm:h-[min(calc(100dvh-12rem),600px)] max-sm:min-h-[min(420px,calc(100dvh-11rem))] max-sm:max-h-[calc(100dvh-5rem)] max-sm:rounded-2xl ${
+        className={`relative h-[min(820px,min(88dvh,calc(100svh-3rem)))] min-h-[min(640px,max(300px,calc(100svh-14rem)))] rounded-[36px] outline-none ring-offset-2 ring-offset-[#0a0306] max-sm:h-[clamp(260px,min(560px,calc(100svh-6.5rem)),560px)] max-sm:min-h-[max(240px,min(380px,calc(100svh-7rem)))] max-sm:max-h-[min(560px,calc(100svh-3rem))] max-sm:rounded-2xl ${
           interactive && canHover
             ? 'cursor-pointer focus-visible:ring-2 focus-visible:ring-fuchsia-400 focus-visible:ring-offset-2 max-sm:focus-visible:ring-offset-1'
             : interactive && !canHover
@@ -383,10 +385,11 @@ export function SkillFlipCardCarousel() {
   const wide768 = useMediaQuery('(min-width: 768px)');
   const cozy640 = useMediaQuery('(min-width: 640px)');
   const narrowPhone = useMediaQuery('(max-width: 639px)');
-  const slotTier: SlotTier = wide768 ? 'wide' : cozy640 ? 'cozy' : 'compact';
+  const veryNarrow = useMediaQuery('(max-width: 399px)');
+  const slotTier: SlotTier = wide768 ? 'wide' : cozy640 ? 'cozy' : veryNarrow ? 'tight' : 'compact';
   const reduceMotion = useReducedMotion();
 
-  const perspectivePx = wide768 ? 1900 : narrowPhone ? 820 : 1250;
+  const perspectivePx = wide768 ? 1900 : veryNarrow ? 720 : narrowPhone ? 820 : 1250;
 
   const go = useCallback(
     (dir: -1 | 1) => {
@@ -399,12 +402,12 @@ export function SkillFlipCardCarousel() {
     <div className="relative mx-auto w-full max-w-[1600px] px-0 sm:px-2 md:px-4">
       {/* Sunset / neon card chrome on all breakpoints */}
       <div
-        className="relative mx-auto flex min-h-[min(820px,90vh)] w-full items-center justify-center overflow-visible py-6 max-sm:min-h-[min(calc(100dvh-10rem),620px))] max-sm:overflow-x-clip max-sm:py-4 max-sm:pb-[max(5.5rem,env(safe-area-inset-bottom))] sm:min-h-[min(900px,92vh)] sm:overflow-visible sm:py-10 sm:pb-10"
+        className="relative mx-auto flex min-h-[min(820px,max(480px,min(92dvh,calc(100svh-3rem))))] w-full items-center justify-center overflow-visible py-6 max-sm:min-h-[max(340px,min(560px,calc(100svh-8rem)))] max-sm:overflow-x-clip max-sm:py-4 max-sm:pb-[max(5.5rem,env(safe-area-inset-bottom))] sm:min-h-[min(900px,max(520px,min(93dvh,calc(100svh-4rem))))] sm:overflow-visible sm:py-10 sm:pb-10"
         aria-roledescription="carousel"
         aria-label="Skill areas"
       >
         <div
-          className="relative mx-auto h-[min(820px,90vh)] w-full max-w-[1600px] outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-400 focus-visible:ring-offset-4 focus-visible:ring-offset-[#0a0306] max-sm:h-[min(calc(100dvh-10rem),620px))] max-sm:focus-visible:ring-offset-2 sm:h-[min(900px,92vh)]"
+          className="relative mx-auto h-[min(820px,max(480px,min(92dvh,calc(100svh-3rem))))] w-full max-w-[1600px] outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-400 focus-visible:ring-offset-4 focus-visible:ring-offset-[#0a0306] max-sm:h-[max(320px,min(560px,calc(100svh-8rem)))] max-sm:max-h-[calc(100svh-2.5rem)] max-sm:focus-visible:ring-offset-2 sm:h-[min(900px,max(520px,min(93dvh,calc(100svh-4rem))))]"
           style={{ perspective: `${perspectivePx}px` }}
           tabIndex={0}
           role="region"
@@ -435,7 +438,7 @@ export function SkillFlipCardCarousel() {
                   }}
                 >
                   <motion.div
-                    className="w-[min(96vw,600px)] max-w-[600px] max-sm:w-full max-sm:max-w-[min(calc(100%-1.5rem),600px)]"
+                    className="w-[min(82vw,340px)] max-w-[340px] sm:w-[min(96vw,600px)] sm:max-w-[600px]"
                     initial={false}
                     animate={{
                       x: slot.x,

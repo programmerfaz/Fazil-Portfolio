@@ -12,6 +12,9 @@ const DEVICON_TAG = 'v2.16.0';
 const devicon = (path: string) =>
   `https://cdn.jsdelivr.net/gh/devicons/devicon@${DEVICON_TAG}/icons/${path}`;
 
+const OPENAI_LOGO = 'https://upload.wikimedia.org/wikipedia/commons/4/4d/OpenAI_Logo.svg';
+const TMDB_LOGO = 'https://upload.wikimedia.org/wikipedia/commons/8/89/Tmdb.new.logo.svg';
+
 export const TECH_BRAND: Partial<Record<string, TechBrandSpec>> = {
   Java: { iconUrl: devicon('java/java-original.svg') },
   Python: { iconUrl: devicon('python/python-original.svg') },
@@ -41,9 +44,15 @@ export const TECH_BRAND: Partial<Record<string, TechBrandSpec>> = {
     iconUrl:
       'https://raw.githubusercontent.com/espressif/esp-idf/master/docs/_static/espressif-logo.svg',
   },
-  'OpenAI API': {
-    iconUrl: 'https://upload.wikimedia.org/wikipedia/commons/4/4d/OpenAI_Logo.svg',
-  },
+  'OpenAI API': { iconUrl: OPENAI_LOGO },
+  OpenAI: { iconUrl: OPENAI_LOGO },
+  HTML: { iconUrl: devicon('html5/html5-original.svg') },
+  CSS: { iconUrl: devicon('css3/css3-original.svg') },
+  'TMDB API': { iconUrl: TMDB_LOGO },
+  'scikit-learn': { iconUrl: devicon('scikitlearn/scikitlearn-original.svg') },
+  pandas: { iconUrl: devicon('pandas/pandas-original.svg') },
+  /** C-family embedded work — same mark as C++ for recognition */
+  'Embedded C': { iconUrl: devicon('cplusplus/cplusplus-original.svg') },
   MVC: { iconUrl: devicon('dot-net/dot-net-original.svg') },
   'Client / server': { iconUrl: devicon('socketio/socketio-original.svg') },
   'IoT sensors': {

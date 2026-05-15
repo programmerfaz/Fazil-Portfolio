@@ -69,8 +69,8 @@ export function HeroSection() {
                   href="#about"
                   className="inline-flex items-center gap-2 text-xs font-medium uppercase tracking-[0.2em] text-neutral-400 transition-colors hover:text-neutral-900 lg:hidden"
                 >
-                  
-                  
+                  About me
+                  <ChevronDown className="h-4 w-4 shrink-0" strokeWidth={2} aria-hidden />
                 </a>
               </div>
             </motion.div>

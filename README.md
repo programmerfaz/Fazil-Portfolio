@@ -1,73 +1,56 @@
-# React + TypeScript + Vite
+# Fazil Hakim — Portfolio Website
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Personal portfolio site for **Fazil Hakim**, a Computer Science undergraduate at the **University of Bahrain** (BSc. Computer Science, 2022 – Dec 2026). The site introduces who I am, what I work with, and how to reach me.
 
-Currently, two official plugins are available:
+## About me
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **Role:** Computer Science undergraduate  
+- **Focus:** Software development, web and mobile, cloud, and AI-related learning  
+- **Location:** Al-Hidd, Bahrain  
+- **Highlights:** Microsoft Certified Azure AI Engineer Associate; experience includes an ASP.NET internship (Dimuma), hackathons, and coursework across languages, databases, and full-stack tooling.
 
-## React Compiler
+Visit the running site locally (see below) for the full narrative: bio, goals, education, experience, achievements, certifications, featured projects, and contact links—including [LinkedIn](https://www.linkedin.com/in/fazil-shahbaz-5278a1325/), [GitHub](https://github.com/programmerfaz), and email.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Site copy and structured profile data live in [`src/data/profile.ts`](src/data/profile.ts) so the README stays concise; the deployed experience is the source of truth for detailed wording.
 
-## Expanding the ESLint configuration
+## What’s on this site
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- Hero and positioning (name, tagline, quick links)  
+- About / background (education, summary, achievements)  
+- Skills and technologies grouped by theme  
+- Projects with imagery and outbound links  
+- Certificates and curated credentials  
+- Contact section with reachable channels  
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Tech stack
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+- **Framework:** React 18  
+- **Tooling:** Vite 8, TypeScript  
+- **Styling:** Tailwind CSS  
+- **Motion:** Framer Motion  
+- **Icons:** Lucide React  
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Run locally
+
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Then open the URL Vite prints (usually `http://localhost:5173`).
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Other scripts:
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm run build    # production build → dist/
+npm run preview  # preview the production build
+npm run lint     # ESLint
 ```
+
+## Repository
+
+This project is tracked at **[github.com/programmerfaz/Fazil-Portfolio](https://github.com/programmerfaz/Fazil-Portfolio)**.
+
+---
+
+Built and maintained by Fazil Hakim.

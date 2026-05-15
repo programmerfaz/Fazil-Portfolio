@@ -39,7 +39,7 @@ function MarqueeTile({ image, index, onOpen }: MarqueeTileProps) {
       <motion.button
         type="button"
         onClick={() => onOpen(src)}
-        className={`relative block cursor-zoom-in text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#BBCCD7] ${phoneFrame ? 'w-[200px] sm:w-[230px] md:w-[248px]' : ''}`}
+        className={`relative block cursor-zoom-in text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#BBCCD7] ${phoneFrame ? 'w-[min(340px,calc(100vw-12px))] sm:w-[230px] md:w-[248px]' : ''}`}
         aria-label="View full-size preview"
         whileTap={{ scale: 0.98 }}
       >
@@ -60,8 +60,8 @@ function MarqueeTile({ image, index, onOpen }: MarqueeTileProps) {
             <div
               className={
                 phoneFrame
-                  ? 'flex h-[270px] w-full items-center justify-center px-1.5 py-2 sm:px-2 sm:py-2.5'
-                  : 'h-[270px] w-[420px]'
+                  ? 'flex h-[min(270px,42svh)] w-full items-center justify-center px-1.5 py-2 sm:h-[270px] sm:px-2 sm:py-2.5'
+                  : 'h-[min(270px,42svh)] w-[min(420px,calc(100vw-12px))] sm:h-[270px] sm:w-[min(420px,calc(100vw-3rem))]'
               }
             >
               <img
@@ -245,35 +245,29 @@ export function MarqueeSection() {
       </div>
 
       <div className="relative z-10">
-        <div
-          className="mx-auto"
-          style={{
-            maskImage: 'linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%)',
-            WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%)',
-          }}
-        >
-          <div className="flex flex-col gap-5 md:gap-6">
+        <div className="marquee-edge-fade mx-auto w-full">
+          <div className="flex flex-col gap-3 sm:gap-5 md:gap-6">
             <div
-              className="overflow-hidden pl-2 md:pl-4"
+              className="overflow-hidden max-sm:pl-0 sm:pl-2 md:pl-4"
               style={{
                 transform: `translate3d(${offset - 200}px, 0, 0)`,
                 willChange: 'transform',
               }}
             >
-              <div className="marquee-drift-right flex w-max gap-4 md:gap-5">
+              <div className="marquee-drift-right flex w-max gap-3 sm:gap-4 md:gap-5">
                 {row1.map((item, i) => (
                   <MarqueeTile key={`r1-${i}`} image={item} index={i} onOpen={openPreview} />
                 ))}
               </div>
             </div>
             <div
-              className="overflow-hidden pr-2 md:pr-4"
+              className="overflow-hidden max-sm:pr-0 sm:pr-2 md:pr-4"
               style={{
                 transform: `translate3d(${-(offset - 200)}px, 0, 0)`,
                 willChange: 'transform',
               }}
             >
-              <div className="marquee-drift-left flex w-max gap-4 md:gap-5">
+              <div className="marquee-drift-left flex w-max gap-3 sm:gap-4 md:gap-5">
                 {row2.map((item, i) => (
                   <MarqueeTile key={`r2-${i}`} image={item} index={i} onOpen={openPreview} />
                 ))}

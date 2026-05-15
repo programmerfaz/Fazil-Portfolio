@@ -2,22 +2,9 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { Award, Cloud, Cpu, FileCode2, GraduationCap, Shield, X, type LucideIcon } from 'lucide-react';
+import { CertificatePdfViewer } from './CertificatePdfViewer';
 import { CERTIFICATE_PDFS, type CertificateAccent, type CertificateItem } from '../data/certificates';
 import { useMediaQuery } from '../hooks/useMediaQuery';
-
-function embedPdfReadOnlyUrl(assetUrl: string): string {
-  const params = new URLSearchParams({
-    page: '1',
-    toolbar: '0',
-    navpanes: '0',
-    scrollbar: '1',
-    statusbar: '0',
-    pagemode: 'none',
-    view: 'FitH',
-  });
-  return `${assetUrl}#${params.toString()}`;
-}
-
 const GLASS_CARD_DESKTOP =
   'absolute bottom-0 flex cursor-pointer flex-col overflow-hidden rounded-xl border border-white/75 bg-white/50 text-left shadow-[0_18px_48px_-14px_rgba(15,23,42,0.3)] backdrop-blur-xl sm:rounded-2xl md:rounded-3xl';
 
@@ -267,7 +254,17 @@ export function CertificatePdfStack() {
                   className="relative z-10 flex min-h-0 max-h-[100dvh] w-full max-w-4xl flex-col overflow-hidden rounded-t-2xl border-2 border-neutral-200 bg-neutral-100 shadow-[0_32px_80px_-24px_rgba(0,0,0,0.45)] sm:max-h-[min(92vh,880px)] sm:rounded-2xl md:rounded-3xl"
                   onClick={(e) => e.stopPropagation()}
                 >
-                  <div className="relative min-h-0 flex-1 p-2 sm:p-3">
+                  <div className="relative min-h-0 flex-1 p-2 pt-12 sm:p-3 sm:pt-14">
+                    <div className="absolute left-3 top-3 z-[1] flex max-w-[calc(100%-5rem)] items-center gap-2 sm:left-4 sm:top-4">
+                      <a
+                        href={modalCert.src}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="truncate text-xs font-medium text-neutral-600 underline-offset-2 hover:text-neutral-900 hover:underline"
+                      >
+                        Open in new tab
+                      </a>
+                    </div>
                     <button
                       type="button"
                       aria-label="Close"
@@ -276,13 +273,9 @@ export function CertificatePdfStack() {
                     >
                       <X className="h-5 w-5" aria-hidden />
                     </button>
-                    <iframe
-                      aria-label="Certificate PDF"
-                      src={embedPdfReadOnlyUrl(modalCert.src)}
-                      className="h-[min(85dvh,calc(100dvh-2rem))] w-full rounded-lg border-0 bg-white sm:h-[min(86vh,820px)] sm:rounded-xl md:h-[min(88vh,860px)]"
-                      loading="eager"
-                      referrerPolicy="no-referrer"
-                    />
+                    <div className="rounded-lg bg-white sm:rounded-xl">
+                      <CertificatePdfViewer key={modalCert.src} url={modalCert.src} title={modalCert.title} />
+                    </div>
                   </div>
                 </motion.div>
               </motion.div>
