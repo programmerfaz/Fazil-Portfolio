@@ -61,6 +61,8 @@ type MobileCertRowProps = {
   index: number;
   onOpen: () => void;
   reduceMotion: boolean;
+  /** Spring hover lifts are for real hover pointers only — touch “hover” sticks and fights the tap + modal open. */
+  motionHover: boolean;
   hoveredIndex: number | null;
   onHoverStart: () => void;
   onHoverEnd: () => void;
@@ -77,6 +79,7 @@ function MobileCertRow({
   index,
   onOpen,
   reduceMotion,
+  motionHover,
   hoveredIndex,
   onHoverStart,
   onHoverEnd,
@@ -104,7 +107,7 @@ function MobileCertRow({
       }
       transition={reduceMotion ? { duration: 0 } : { type: 'spring', stiffness: 360, damping: 32 }}
       whileHover={
-        reduceMotion
+        reduceMotion || !motionHover
           ? undefined
           : {
               x: baseX * 0.72,
@@ -118,6 +121,7 @@ function MobileCertRow({
       onClick={onOpen}
       onHoverStart={onHoverStart}
       onHoverEnd={onHoverEnd}
+      onPointerCancel={onHoverEnd}
       onFocus={onHoverStart}
       onBlur={onHoverEnd}
     >
@@ -181,6 +185,8 @@ function MobileCertRow({
 
 export function CertificatePdfStack() {
   const reduceMotion = useReducedMotion();
+  const finePointer = useMediaQuery('(hover: hover) and (pointer: fine)');
+  const motionHover = !reduceMotion && finePointer;
   const isLg = useMediaQuery('(min-width: 1024px)');
   const isMd = useMediaQuery('(min-width: 768px)');
 
@@ -209,11 +215,37 @@ export function CertificatePdfStack() {
       if (ev.key === 'Escape') setLightbox(null);
     };
     window.addEventListener('keydown', onKey);
-    const prev = document.body.style.overflow;
+
+    const scrollY = window.scrollY;
+    const html = document.documentElement;
+    const prev = {
+      bodyOverflow: document.body.style.overflow,
+      bodyPosition: document.body.style.position,
+      bodyTop: document.body.style.top,
+      bodyLeft: document.body.style.left,
+      bodyRight: document.body.style.right,
+      bodyWidth: document.body.style.width,
+      htmlOverflow: html.style.overflow,
+    };
+
+    html.style.overflow = 'hidden';
     document.body.style.overflow = 'hidden';
+    document.body.style.position = 'fixed';
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.left = '0';
+    document.body.style.right = '0';
+    document.body.style.width = '100%';
+
     return () => {
       window.removeEventListener('keydown', onKey);
-      document.body.style.overflow = prev;
+      html.style.overflow = prev.htmlOverflow;
+      document.body.style.overflow = prev.bodyOverflow;
+      document.body.style.position = prev.bodyPosition;
+      document.body.style.top = prev.bodyTop;
+      document.body.style.left = prev.bodyLeft;
+      document.body.style.right = prev.bodyRight;
+      document.body.style.width = prev.bodyWidth;
+      window.scrollTo(0, scrollY);
     };
   }, [lightbox]);
 
@@ -231,7 +263,7 @@ export function CertificatePdfStack() {
             {modalCert ? (
               <motion.div
                 key={modalCert.src}
-                className="fixed inset-0 z-[200] flex items-end justify-center p-0 sm:items-center sm:p-4 md:p-6"
+                className="fixed inset-0 z-[200] flex touch-manipulation items-end justify-center p-0 sm:items-center sm:p-4 md:p-6"
                 initial={reduceMotion ? { opacity: 1 } : { opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={reduceMotion ? { opacity: 0 } : { opacity: 0 }}
@@ -240,7 +272,7 @@ export function CertificatePdfStack() {
                 <button
                   type="button"
                   aria-label="Close certificate"
-                  className="absolute inset-0 bg-neutral-900/55 backdrop-blur-[2px]"
+                  className="absolute inset-0 touch-manipulation bg-neutral-900/55 backdrop-blur-[2px]"
                   onClick={() => setLightbox(null)}
                 />
                 <motion.div
@@ -251,10 +283,10 @@ export function CertificatePdfStack() {
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   exit={reduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.96, y: 12 }}
                   transition={{ type: 'spring', stiffness: 420, damping: 34 }}
-                  className="relative z-10 flex min-h-0 max-h-[100dvh] w-full max-w-4xl flex-col overflow-hidden rounded-t-2xl border-2 border-neutral-200 bg-neutral-100 shadow-[0_32px_80px_-24px_rgba(0,0,0,0.45)] sm:max-h-[min(92vh,880px)] sm:rounded-2xl md:rounded-3xl"
+                  className="relative z-10 flex min-h-0 max-h-[100dvh] w-full max-w-4xl touch-manipulation flex-col overflow-hidden overscroll-contain rounded-t-2xl border-2 border-neutral-200 bg-neutral-100 shadow-[0_32px_80px_-24px_rgba(0,0,0,0.45)] sm:max-h-[min(92vh,880px)] sm:rounded-2xl md:rounded-3xl"
                   onClick={(e) => e.stopPropagation()}
                 >
-                  <div className="relative min-h-0 flex-1 p-2 pt-12 sm:p-3 sm:pt-14">
+                  <div className="relative min-h-0 min-w-0 flex-1 p-2 pt-12 sm:p-3 sm:pt-14">
                     <div className="absolute left-3 top-3 z-[1] flex max-w-[calc(100%-5rem)] items-center gap-2 sm:left-4 sm:top-4">
                       <a
                         href={modalCert.src}
@@ -297,6 +329,7 @@ export function CertificatePdfStack() {
               cert={cert}
               index={i}
               reduceMotion={!!reduceMotion}
+              motionHover={motionHover}
               hoveredIndex={hoveredMobile}
               onHoverStart={() => setHoveredMobile(i)}
               onHoverEnd={() => setHoveredMobile((h) => (h === i ? null : h))}
@@ -343,7 +376,7 @@ export function CertificatePdfStack() {
                       : { type: 'spring', stiffness: 360, damping: 32 }
                   }
                   whileHover={
-                    reduceMotion
+                    reduceMotion || !motionHover
                       ? undefined
                       : {
                           y: baseY - hoverLift,
@@ -354,6 +387,7 @@ export function CertificatePdfStack() {
                   }
                   onHoverStart={() => setHovered(i)}
                   onHoverEnd={() => setHovered((h) => (h === i ? null : h))}
+                  onPointerCancel={() => setHovered((h) => (h === i ? null : h))}
                   onFocus={() => setHovered(i)}
                   onBlur={() => setHovered((h) => (h === i ? null : h))}
                   onClick={() => openCert(i)}

@@ -113,6 +113,20 @@ function readViewportHeight(): number {
   return Math.round(vv?.height ?? window.innerHeight);
 }
 
+/** Which project index is closest to facing the camera for ring rotation `phi` (deg). */
+function snapFrontIndexFromPhi(phi: number, n: number, spread: number): number {
+  const q = -phi / spread;
+  let k = Math.round(q);
+  return ((k % n) + n) % n;
+}
+
+/** Rotation (deg) that places `targetK` at the front, choosing the 360° wrap closest to `phi` for continuity. */
+function nearestRotationForFrontIndex(phi: number, targetK: number, spread: number): number {
+  const base = -targetK * spread;
+  const m = Math.round((phi - base) / 360);
+  return base + m * 360;
+}
+
 function useViewportSize(): { width: number; height: number } {
   const [{ width, height }, setSize] = useState(() => ({
     width: readViewportWidth(),
@@ -233,11 +247,13 @@ export function ProjectsCarousel3D() {
   const stepRing = useCallback(
     (direction: 1 | -1) => {
       setManualPauseFromButtons(true);
-      // Negative step matches continuous auto-rotation (0→360°) for “next” card.
-      rotationRef.current += direction * -spreadAngle;
+      const phi = rotationRef.current;
+      const k = snapFrontIndexFromPhi(phi, total, spreadAngle);
+      const nextK = (k + direction + total) % total;
+      rotationRef.current = nearestRotationForFrontIndex(phi, nextK, spreadAngle);
       applyRingTransform();
     },
-    [applyRingTransform, spreadAngle],
+    [applyRingTransform, spreadAngle, total],
   );
 
   const narrowViewport = viewportWidth < 640;

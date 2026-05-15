@@ -58,7 +58,7 @@ export function CertificatePdfViewer({ url, title }: CertificatePdfViewerProps) 
   return (
     <div
       ref={scrollRef}
-      className="mx-auto w-full max-w-full overflow-y-auto overflow-x-hidden [-webkit-overflow-scrolling:touch]"
+      className="mx-auto w-full max-w-full touch-manipulation overflow-y-auto overflow-x-hidden overscroll-y-contain [-webkit-overflow-scrolling:touch]"
       style={{ maxHeight: 'min(85dvh, calc(100dvh - 2rem))' }}
     >
       <Document
