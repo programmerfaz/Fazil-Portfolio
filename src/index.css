@@ -1,0 +1,109 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+  min-height: 100dvh;
+  overflow-x: hidden;
+  background-color: #0c0c0c;
+  font-family:
+    'Inter',
+    'Inter Placeholder',
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
+  /* Inter v4 stylistic refinements:
+   *   cv11 – single-storey "a" (cleaner at all sizes)
+   *   ss01 – open digits with tabular spacing for stats / CGPA
+   *   ss03 – curved descenders for a friendlier feel
+   * `-webkit-font-smoothing` keeps glyph edges crisp on macOS/Safari and
+   * `text-rendering: optimizeLegibility` enables proper kerning at display sizes. */
+  font-feature-settings:
+    'cv11' 1,
+    'ss01' 1,
+    'ss03' 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-variant-ligatures: common-ligatures;
+  letter-spacing: -0.005em;
+  line-height: 1.55;
+}
+
+/* Tabular numerals everywhere a stat/number is displayed.
+ * Tailwind's `tabular-nums` utility maps to font-variant-numeric: tabular-nums,
+ * which works with Inter out of the box. */
+
+/* Skills scroll gallery (Motion-style) */
+.img-container {
+  height: 100vh;
+  scroll-snap-align: start;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  padding: 24px 0;
+}
+
+.hero-heading {
+  background: linear-gradient(165deg, #f1f5f9 0%, #cbd5e1 42%, #94a3b8 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* Marquee — tripled tracks loop at 1/3 width */
+@keyframes marquee-drift-left {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-33.333%, 0, 0);
+  }
+}
+
+@keyframes marquee-drift-right {
+  from {
+    transform: translate3d(-33.333%, 0, 0);
+  }
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.marquee-drift-left {
+  animation: marquee-drift-left 110s linear infinite;
+  will-change: transform;
+}
+
+.marquee-drift-right {
+  animation: marquee-drift-right 125s linear infinite;
+  will-change: transform;
+}
+
+.marquee-drift-left:hover,
+.marquee-drift-right:hover {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-drift-left,
+  .marquee-drift-right {
+    animation: none;
+  }
+}
