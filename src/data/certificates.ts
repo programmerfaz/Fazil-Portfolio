@@ -1,3 +1,5 @@
+import { publicAssetUrl } from '../utils/publicAssetUrl';
+
 export type CertificateAccent = 'microsoft' | 'nvidia' | 'coursera' | 'aws' | 'web';
 
 export type CertificateItem = {
@@ -11,7 +13,7 @@ export type CertificateItem = {
 };
 
 function certPath(filename: string): string {
-  return new URL(`../Certificates/${filename}`, import.meta.url).href;
+  return publicAssetUrl(new URL(`../Certificates/${filename}`, import.meta.url).href);
 }
 
 /** PDFs in `src/Certificates` — bundled by Vite. */

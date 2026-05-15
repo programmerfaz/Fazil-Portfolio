@@ -19,8 +19,8 @@ import { TechBrandIcon } from './TechBrandIcon';
  * readable min/max) and radius/perspective/container height are all derived
  * from it via fixed geometric ratios, so the layout stays balanced from a
  * 320px phone through to a 4K monitor. Below 640px the projects section uses a
- * full-bleed wrapper so the ring can use the screen width; the card share is
- * still slightly below 100% so perspective + translateZ leaves a small buffer
+ * full-bleed wrapper so the ring can use the screen width; mobile card width is
+ * capped well below 100% so perspective + translateZ leaves a comfortable buffer
  * inside `overflow-x-clip` on the section.
  */
 
@@ -37,17 +37,16 @@ const ROTATE_SPEED_DEG_PER_MS = 360 / (ROTATE_DURATION_SEC * 1000);
 /** When the carousel is barely visible after using arrows, resume auto-spin (scroll-away / touch). */
 const INTERSECTION_RESUME_RATIO = 0.12;
 
-// Card sizing — desktop uses a modest viewport share; <640px uses a high share
-// (capped) so the ring fills the width while leaving a sliver for 3D depth inside
-// overflow-x clipping. Wider ≥640px layouts use the desktop fractions below.
+// Card sizing — <640px: keep cards noticeably smaller than the viewport so angled
+// side faces stay inside the screen and the ring reads cleanly on real phones.
 const CARD_W_MIN = 240;
-const CARD_W_MIN_NARROW = 200;
+const CARD_W_MIN_NARROW = 188;
 const CARD_W_MAX = 440;
 const CARD_W_VIEWPORT_FRACTION = 0.62;
-/** <640px: use most of the viewport; parent section full-bleeds on small screens. */
-const CARD_W_VIEWPORT_FRACTION_MOBILE = 0.88;
-/** Hard ceiling as a fraction of viewport width on mobile (after other clamps). */
-const MOBILE_CARD_W_MAX_VIEWPORT_RATIO = 0.92;
+/** <640px: conservative share so 3D side cards are not clipped or “broken”. */
+const CARD_W_VIEWPORT_FRACTION_MOBILE = 0.56;
+/** Hard ceiling vs viewport width on mobile after other clamps (leave margin for depth). */
+const MOBILE_CARD_W_MAX_VIEWPORT_RATIO = 0.68;
 
 // Geometry ratios (7 cards on the ring)
 //   Adjacent chord = 2·R·sin(π/7) ≈ 0.868·R; want chord > cardW so cards don't
@@ -78,7 +77,7 @@ function computeDim(viewportWidth: number, viewportHeight: number): Dim {
   /** Landscape / short viewports: shrink the ring so the front card fits vertically. */
   const verticalPad = viewportWidth < 640 ? CONTAINER_VERTICAL_PAD_MOBILE : CONTAINER_VERTICAL_PAD;
   const heightPerWidth = narrow ? CARD_HEIGHT_PER_WIDTH_MOBILE : CARD_HEIGHT_PER_WIDTH_DESKTOP;
-  const maxViewportShare = viewportWidth < 640 ? 0.78 : 0.82;
+  const maxViewportShare = viewportWidth < 640 ? 0.74 : 0.82;
   const maxContainerH = Math.max(200, viewportHeight * maxViewportShare);
   const maxCardHFromViewport = (maxContainerH - verticalPad) / FRONT_SCALE;
   const maxCardWFromHeight = Math.max(140, Math.floor(maxCardHFromViewport / heightPerWidth));
