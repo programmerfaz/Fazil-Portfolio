@@ -46,6 +46,9 @@ export const TECH_BRAND: Partial<Record<string, TechBrandSpec>> = {
   },
   'OpenAI API': { iconUrl: OPENAI_LOGO },
   OpenAI: { iconUrl: OPENAI_LOGO },
+  Pinecone: {
+    iconUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@11.15.0/icons/pinecone.svg',
+  },
   HTML: { iconUrl: devicon('html5/html5-original.svg') },
   CSS: { iconUrl: devicon('css3/css3-original.svg') },
   'TMDB API': { iconUrl: TMDB_LOGO },

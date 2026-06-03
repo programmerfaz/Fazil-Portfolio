@@ -30,6 +30,8 @@ type Dim = {
   radius: number;
   perspective: number;
   containerH: number;
+  /** <640px only — shrinks the 3D ring so faces don't spill past the viewport while spinning */
+  mobileVisualScale?: number;
 };
 
 const ROTATE_DURATION_SEC = 55;
@@ -37,67 +39,108 @@ const ROTATE_SPEED_DEG_PER_MS = 360 / (ROTATE_DURATION_SEC * 1000);
 /** When the carousel is barely visible after using arrows, resume auto-spin (scroll-away / touch). */
 const INTERSECTION_RESUME_RATIO = 0.12;
 
-// Card sizing — <640px: keep cards noticeably smaller than the viewport so angled
-// side faces stay inside the screen and the ring reads cleanly on real phones.
-const CARD_W_MIN = 240;
-const CARD_W_MIN_NARROW = 188;
-const CARD_W_MAX = 440;
-const CARD_W_VIEWPORT_FRACTION = 0.62;
-/** <640px: conservative share so 3D side cards are not clipped or “broken”. */
-const CARD_W_VIEWPORT_FRACTION_MOBILE = 0.56;
-/** Hard ceiling vs viewport width on mobile after other clamps (leave margin for depth). */
-const MOBILE_CARD_W_MAX_VIEWPORT_RATIO = 0.68;
+// Card sizing — every face uses the same computed cardW × cardH (fixed aspect).
+const CARD_W_MIN = 280;
+const CARD_W_MIN_NARROW = 200;
+const CARD_W_MAX = 580;
+/** Desktop / tablet: wider cards (fraction of viewport, capped). */
+const CARD_W_VIEWPORT_FRACTION = 0.78;
+const CARD_W_DESKTOP_TARGET = 520;
+/** <640px: narrower than viewport so 3D swipe doesn't feel wider than the screen. */
+const CARD_W_VIEWPORT_FRACTION_MOBILE = 0.66;
+const MOBILE_CARD_W_MAX_VIEWPORT_RATIO = 0.7;
+/** Space for arrow buttons + perspective bleed at the sides */
+const MOBILE_CARD_W_ARROW_GUTTER_PX = 76;
+/** Pull the ring slightly inward on phones (less side spill while rotating) */
+const MOBILE_RING_RADIUS_SCALE = 0.88;
+/** Height = width × ratio — identical for every project on a given viewport. */
+const CARD_ASPECT_DESKTOP = 1.1;
+/** Taller faces on phones so title, stack, and actions fit. */
+const CARD_ASPECT_MOBILE = 1.28;
+/** Softer 3D scale on mobile — less vertical magnification/clipping (P/(P−1)). */
+const P_PER_R_MOBILE = 5;
+const FRONT_SCALE_MOBILE = P_PER_R_MOBILE / (P_PER_R_MOBILE - 1);
 
-// Geometry ratios (7 cards on the ring)
-//   Adjacent chord = 2·R·sin(π/7) ≈ 0.868·R; want chord > cardW so cards don't
-//   touch. R = 1.3·cardW gives ~13% headroom.
-//   Front-card perspective scale = P / (P − R). P = 3.5·R → scale ≈ 1.40,
-//   which determines how much vertical room the front card needs.
-const R_PER_CARD_W = 1.3;
+// Ring geometry — radius scales with card count so adjacent faces don't overlap.
+//   Chord between neighbors = 2·R·sin(π/n). Target chord ≈ headroom × cardW.
+const CARD_RING_HEADROOM = 1.2;
 const P_PER_R = 3.5;
 const FRONT_SCALE = P_PER_R / (P_PER_R - 1); // ≈ 1.4
-const CONTAINER_VERTICAL_PAD = 32;
-const CONTAINER_VERTICAL_PAD_MOBILE = 22;
+const CONTAINER_VERTICAL_PAD = 40;
+const CONTAINER_VERTICAL_PAD_MOBILE = 28;
 /** Extra height so card shadows, border radius, and 3D paint are not clipped by the fixed-height shell. */
-const CONTAINER_3D_VERTICAL_BLEED = 44;
-const CONTAINER_3D_VERTICAL_BLEED_MOBILE = 56;
+const CONTAINER_3D_VERTICAL_BLEED = 72;
+const CONTAINER_3D_VERTICAL_BLEED_MOBILE = 64;
 const PERSPECTIVE_MIN = 900;
 
-/** Card height = width × this factor (smaller denominator ⇒ taller card, less in-card overflow). */
-const CARD_HEIGHT_PER_WIDTH_DESKTOP = 440 / 380;
-/** Mobile: extra vertical room so bullets + stack fit without scrolling inside the face. */
-const CARD_HEIGHT_PER_WIDTH_MOBILE = 440 / 328;
+/** Reserved vertical space inside every card (stack + action row). */
+const CARD_FOOTER_MIN_H_PX = 132;
+const CARD_FOOTER_MIN_H_MOBILE_PX = 88;
+const CARD_ACTION_ROW_MIN_H_PX = 40;
+const CARD_ACTION_ROW_MIN_H_MOBILE_PX = 36;
 
-function computeDim(viewportWidth: number, viewportHeight: number): Dim {
+function ringRadiusPerCardWidth(cardCount: number): number {
+  return CARD_RING_HEADROOM / (2 * Math.sin(Math.PI / cardCount));
+}
+
+function computeDim(viewportWidth: number, viewportHeight: number, cardCount: number): Dim {
   const narrow = viewportWidth < 640;
-  const frac = narrow ? CARD_W_VIEWPORT_FRACTION_MOBILE : CARD_W_VIEWPORT_FRACTION;
-  const floor = narrow && viewportWidth < 420 ? CARD_W_MIN_NARROW : CARD_W_MIN;
-  let cardW = Math.round(Math.min(CARD_W_MAX, Math.max(floor, viewportWidth * frac)));
+  const aspect = narrow ? CARD_ASPECT_MOBILE : CARD_ASPECT_DESKTOP;
+  const frontScale = narrow ? FRONT_SCALE_MOBILE : FRONT_SCALE;
+  const verticalPad = narrow ? CONTAINER_VERTICAL_PAD_MOBILE : CONTAINER_VERTICAL_PAD;
+  const bleed = narrow ? CONTAINER_3D_VERTICAL_BLEED_MOBILE : CONTAINER_3D_VERTICAL_BLEED;
+  const pPerR = narrow ? P_PER_R_MOBILE : P_PER_R;
 
-  /** Landscape / short viewports: shrink the ring so the front card fits vertically. */
-  const verticalPad = viewportWidth < 640 ? CONTAINER_VERTICAL_PAD_MOBILE : CONTAINER_VERTICAL_PAD;
-  const heightPerWidth = narrow ? CARD_HEIGHT_PER_WIDTH_MOBILE : CARD_HEIGHT_PER_WIDTH_DESKTOP;
-  const maxViewportShare = viewportWidth < 640 ? 0.74 : 0.82;
-  const maxContainerH = Math.max(200, viewportHeight * maxViewportShare);
-  const maxCardHFromViewport = (maxContainerH - verticalPad) / FRONT_SCALE;
-  const maxCardWFromHeight = Math.max(140, Math.floor(maxCardHFromViewport / heightPerWidth));
-  cardW = Math.min(cardW, maxCardWFromHeight);
-  /** Prefer the width floor only when it still fits vertically. */
-  if (cardW < floor && maxCardWFromHeight >= floor) {
-    cardW = floor;
-  }
+  let cardW: number;
+  let cardH: number;
+
+  let mobileVisualScale: number | undefined;
 
   if (narrow) {
-    const motionCap = Math.floor(viewportWidth * MOBILE_CARD_W_MAX_VIEWPORT_RATIO);
-    cardW = Math.min(cardW, motionCap);
+    const floor = viewportWidth < 380 ? 200 : CARD_W_MIN_NARROW;
+    const widthCap = Math.min(
+      Math.floor(viewportWidth * MOBILE_CARD_W_MAX_VIEWPORT_RATIO),
+      viewportWidth - MOBILE_CARD_W_ARROW_GUTTER_PX,
+    );
+    cardW = Math.round(
+      Math.min(CARD_W_MAX, widthCap, Math.max(floor, viewportWidth * CARD_W_VIEWPORT_FRACTION_MOBILE)),
+    );
+
+    const maxContainerH = Math.max(320, viewportHeight * 0.94);
+    const maxCardH = Math.floor((maxContainerH - verticalPad - bleed) / frontScale);
+    cardH = Math.min(Math.round(cardW * aspect), maxCardH);
+    cardH = Math.max(cardH, Math.round(floor * aspect));
+    cardW = Math.max(floor, Math.min(cardW, Math.floor(cardH / aspect)));
+    cardH = Math.round(cardW * aspect);
+
+    const swipeSafeW = viewportWidth - MOBILE_CARD_W_ARROW_GUTTER_PX;
+    mobileVisualScale = Math.min(1, swipeSafeW / (cardW * frontScale * 1.04));
+  } else {
+    const floor = CARD_W_MIN;
+    const frac = CARD_W_VIEWPORT_FRACTION;
+    cardW = Math.round(Math.min(CARD_W_MAX, Math.max(floor, viewportWidth * frac)));
+
+    if (viewportWidth >= 1024) {
+      cardW = Math.max(cardW, Math.min(CARD_W_MAX, CARD_W_DESKTOP_TARGET));
+    }
+
+    const maxContainerH = Math.max(280, viewportHeight * 0.92);
+    const maxCardHFromViewport = Math.floor((maxContainerH - verticalPad - bleed) / frontScale);
+    const maxCardWFromHeight = Math.max(200, Math.floor(maxCardHFromViewport / aspect));
+    cardW = Math.min(cardW, maxCardWFromHeight);
+    if (cardW < floor && maxCardWFromHeight >= floor) {
+      cardW = floor;
+    }
+    cardH = Math.round(cardW * aspect);
   }
 
-  const cardH = Math.round(cardW * heightPerWidth);
-  const radius = Math.round(cardW * R_PER_CARD_W);
-  const perspective = Math.max(PERSPECTIVE_MIN, Math.round(radius * P_PER_R));
-  const bleed = narrow ? CONTAINER_3D_VERTICAL_BLEED_MOBILE : CONTAINER_3D_VERTICAL_BLEED;
-  const containerH = Math.round(cardH * FRONT_SCALE + verticalPad + bleed);
-  return { cardW, cardH, radius, perspective, containerH };
+  let radius = Math.round(cardW * ringRadiusPerCardWidth(cardCount));
+  if (narrow) {
+    radius = Math.round(radius * MOBILE_RING_RADIUS_SCALE);
+  }
+  const perspective = Math.max(PERSPECTIVE_MIN, Math.round(radius * pPerR));
+  const containerH = Math.round(cardH * frontScale + verticalPad + bleed);
+  return { cardW, cardH, radius, perspective, containerH, mobileVisualScale };
 }
 
 function readViewportWidth(): number {
@@ -153,10 +196,12 @@ function useViewportSize(): { width: number; height: number } {
   return { width, height };
 }
 
+const PROJECT_COUNT = PROJECTS.length;
+
 export function ProjectsCarousel3D() {
   const { width: viewportWidth, height: viewportHeight } = useViewportSize();
   const dim = useMemo(
-    () => computeDim(viewportWidth, viewportHeight),
+    () => computeDim(viewportWidth, viewportHeight, PROJECT_COUNT),
     [viewportWidth, viewportHeight],
   );
   const reduceMotion = useReducedMotion();
@@ -180,14 +225,18 @@ export function ProjectsCarousel3D() {
   const paused = hoverCount > 0 || manualPauseFromButtons;
   pausedRef.current = paused;
 
-  const total = PROJECTS.length;
+  const total = PROJECT_COUNT;
   const spreadAngle = 360 / total;
+
+  const mobileRingScale = dim.mobileVisualScale ?? 1;
 
   const applyRingTransform = useCallback(() => {
     const el = ringRef.current;
     if (!el) return;
-    el.style.transform = `translate(-50%, -50%) rotateY(${rotationRef.current}deg)`;
-  }, []);
+    const scale =
+      mobileRingScale < 1 ? ` scale(${mobileRingScale.toFixed(4)})` : '';
+    el.style.transform = `translate(-50%, -50%) rotateY(${rotationRef.current}deg)${scale}`;
+  }, [mobileRingScale]);
 
   useEffect(() => {
     if (reduceMotion) {
@@ -260,7 +309,7 @@ export function ProjectsCarousel3D() {
   return (
     <div
       ref={containerRef}
-      className="relative mx-auto w-full overflow-visible"
+      className="relative mx-auto w-full max-sm:max-w-[100vw] max-sm:overflow-x-clip sm:overflow-visible"
       style={{ height: dim.containerH }}
       onPointerLeave={(e) => {
         if (e.pointerType === 'mouse') {
@@ -268,7 +317,10 @@ export function ProjectsCarousel3D() {
         }
       }}
     >
-      <div className="relative h-full w-full overflow-visible" style={{ perspective: dim.perspective }}>
+      <div
+        className="relative mx-auto h-full w-full max-sm:max-w-full max-sm:overflow-x-clip sm:overflow-visible"
+        style={{ perspective: dim.perspective }}
+      >
         <div
           ref={ringRef}
           style={{
@@ -288,6 +340,7 @@ export function ProjectsCarousel3D() {
               project={project}
               dim={dim}
               angle={i * spreadAngle}
+              compact={narrowViewport}
               stackIconSize={narrowViewport ? 8 : 11}
               onHoverStart={handleHoverStart}
               onHoverEnd={handleHoverEnd}
@@ -296,11 +349,11 @@ export function ProjectsCarousel3D() {
         </div>
       </div>
 
-      <div className="pointer-events-none absolute inset-y-0 left-0 right-0 z-10 flex items-center justify-between gap-2 px-1 sm:px-3">
+      <div className="pointer-events-none absolute inset-y-0 left-0 right-0 z-10 flex items-center justify-between gap-1 px-0.5 sm:gap-2 sm:px-3">
         <button
           type="button"
           onClick={() => stepRing(-1)}
-          className="pointer-events-auto flex h-11 w-11 shrink-0 touch-manipulation items-center justify-center rounded-full border border-[#D7E2EA]/25 bg-[#0C0C0C]/75 text-[#D7E2EA] shadow-[0_12px_40px_-12px_rgba(0,0,0,0.85)] backdrop-blur-md transition-colors hover:border-[#48E5C2]/50 hover:text-[#48E5C2] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#48E5C2]/70 sm:h-12 sm:w-12"
+          className="pointer-events-auto flex h-9 w-9 shrink-0 touch-manipulation items-center justify-center rounded-full border border-[#D7E2EA]/25 bg-[#0C0C0C]/85 text-[#D7E2EA] shadow-[0_12px_40px_-12px_rgba(0,0,0,0.85)] backdrop-blur-md transition-colors hover:border-[#48E5C2]/50 hover:text-[#48E5C2] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#48E5C2]/70 sm:h-12 sm:w-12"
           aria-label="Rotate carousel left"
         >
           <ChevronLeft className="h-6 w-6 sm:h-7 sm:w-7" strokeWidth={2} aria-hidden />
@@ -308,7 +361,7 @@ export function ProjectsCarousel3D() {
         <button
           type="button"
           onClick={() => stepRing(1)}
-          className="pointer-events-auto flex h-11 w-11 shrink-0 touch-manipulation items-center justify-center rounded-full border border-[#D7E2EA]/25 bg-[#0C0C0C]/75 text-[#D7E2EA] shadow-[0_12px_40px_-12px_rgba(0,0,0,0.85)] backdrop-blur-md transition-colors hover:border-[#48E5C2]/50 hover:text-[#48E5C2] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#48E5C2]/70 sm:h-12 sm:w-12"
+          className="pointer-events-auto flex h-9 w-9 shrink-0 touch-manipulation items-center justify-center rounded-full border border-[#D7E2EA]/25 bg-[#0C0C0C]/85 text-[#D7E2EA] shadow-[0_12px_40px_-12px_rgba(0,0,0,0.85)] backdrop-blur-md transition-colors hover:border-[#48E5C2]/50 hover:text-[#48E5C2] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#48E5C2]/70 sm:h-12 sm:w-12"
           aria-label="Rotate carousel right"
         >
           <ChevronRight className="h-6 w-6 sm:h-7 sm:w-7" strokeWidth={2} aria-hidden />
@@ -322,12 +375,24 @@ type CardProps = {
   project: Project;
   dim: Dim;
   angle: number;
+  compact: boolean;
   stackIconSize: number;
   onHoverStart: () => void;
   onHoverEnd: () => void;
 };
 
-function CarouselCard({ project, dim, angle, stackIconSize, onHoverStart, onHoverEnd }: CardProps) {
+function CarouselCard({
+  project,
+  dim,
+  angle,
+  compact,
+  stackIconSize,
+  onHoverStart,
+  onHoverEnd,
+}: CardProps) {
+  const footerMinH = compact ? CARD_FOOTER_MIN_H_MOBILE_PX : CARD_FOOTER_MIN_H_PX;
+  const actionMinH = compact ? CARD_ACTION_ROW_MIN_H_MOBILE_PX : CARD_ACTION_ROW_MIN_H_PX;
+  const stackItems = compact ? project.stack.slice(0, 5) : project.stack;
   return (
     <div
       className="absolute left-0 top-0"
@@ -343,41 +408,56 @@ function CarouselCard({ project, dim, angle, stackIconSize, onHoverStart, onHove
       onPointerLeave={onHoverEnd}
       onPointerCancel={onHoverEnd}
     >
-      <article className="flex h-full min-w-0 flex-col overflow-hidden rounded-2xl border border-[#D7E2EA]/15 bg-gradient-to-b from-[#16161A] via-[#0F1014] to-[#0B0B0D] p-2.5 shadow-[0_30px_80px_-30px_rgba(0,0,0,0.7),0_0_0_1px_rgba(255,255,255,0.04)_inset] sm:rounded-3xl sm:p-6">
-        <header className="flex min-w-0 items-start justify-between gap-1.5 sm:gap-3">
-          <span className="min-w-0 flex-1 break-words text-[9px] font-medium uppercase leading-tight tracking-[0.14em] text-[#48E5C2] sm:text-[10px] sm:leading-snug sm:tracking-[0.22em]">
-            {project.category}
-          </span>
-          <span className="shrink-0 font-black tabular-nums leading-none text-[#D7E2EA]/15 text-[clamp(0.78rem,3.2vw,1.05rem)] sm:text-[clamp(1.35rem,5.5vw,3rem)]">
-            {project.num}
-          </span>
-        </header>
+      <article className="box-border flex h-full w-full min-h-0 min-w-0 flex-col overflow-hidden rounded-2xl border border-[#D7E2EA]/15 bg-gradient-to-b from-[#16161A] via-[#0F1014] to-[#0B0B0D] p-3 shadow-[0_30px_80px_-30px_rgba(0,0,0,0.7),0_0_0_1px_rgba(255,255,255,0.04)_inset] sm:rounded-3xl sm:p-6">
+        <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
+          <header className="flex shrink-0 min-w-0 items-start justify-between gap-2 sm:gap-3">
+            <span className="min-w-0 flex-1 text-[9px] font-medium uppercase leading-tight tracking-[0.14em] text-[#48E5C2] sm:text-[10px] sm:leading-snug sm:tracking-[0.22em]">
+              {project.category}
+            </span>
+            <span className="shrink-0 font-black tabular-nums leading-none text-[#D7E2EA]/15 text-lg sm:text-4xl">
+              {project.num}
+            </span>
+          </header>
 
-        <h3 className="mt-1.5 min-w-0 break-words text-pretty text-[clamp(0.68rem,3vw,0.95rem)] font-medium uppercase leading-tight text-[#D7E2EA] [word-break:break-word] sm:mt-3 sm:text-[clamp(0.88rem,3.8vw,1.25rem)] sm:leading-tight">
-          {project.title}
-        </h3>
-        <p className="mt-1 min-w-0 break-words text-pretty text-[clamp(0.6rem,2.4vw,0.72rem)] font-light leading-tight text-[#D7E2EA]/75 [word-break:break-word] sm:mt-2 sm:text-[clamp(0.75rem,2.8vw,0.875rem)] sm:leading-snug">
-          {project.summary}
-        </p>
+          <h3
+            className={`mt-2 min-w-0 shrink-0 font-medium uppercase text-[#D7E2EA] sm:mt-3 sm:text-[1.05rem] sm:leading-tight ${
+              compact
+                ? 'text-[0.8rem] leading-snug'
+                : 'line-clamp-3 text-[1.05rem] leading-tight'
+            }`}
+          >
+            {project.title}
+          </h3>
+          <p
+            className={`mt-1.5 min-w-0 shrink-0 font-light leading-snug text-[#D7E2EA]/75 sm:mt-2 sm:text-sm ${
+              compact ? 'line-clamp-3 text-[0.7rem]' : 'line-clamp-2'
+            }`}
+          >
+            {project.summary}
+          </p>
 
-        <ul className="mt-1.5 min-w-0 space-y-1 sm:mt-3 sm:space-y-1.5">
-          {project.bullets.slice(0, 3).map((bullet) => (
-            <li
-              key={bullet}
-              className="flex min-w-0 gap-1.5 text-[8px] leading-[1.25] text-[#D7E2EA]/70 sm:gap-2 sm:text-xs sm:leading-snug"
-            >
-              <span className="mt-1 h-0.5 w-0.5 shrink-0 rounded-full bg-[#48E5C2] sm:mt-1.5 sm:h-1 sm:w-1" aria-hidden />
-              <span className="min-w-0 flex-1 break-words [word-break:break-word]">{bullet}</span>
-            </li>
-          ))}
-        </ul>
+          <ul className="mt-2 hidden min-h-0 flex-1 space-y-1 overflow-hidden sm:mt-3 sm:block sm:space-y-1.5">
+            {project.bullets.slice(0, 3).map((bullet) => (
+              <li
+                key={bullet}
+                className="flex min-w-0 gap-1.5 text-[8px] leading-snug text-[#D7E2EA]/70 sm:gap-2 sm:text-xs"
+              >
+                <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-[#48E5C2]" aria-hidden />
+                <span className="line-clamp-2 min-w-0 flex-1">{bullet}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
 
-        <div className="mt-auto flex min-w-0 flex-wrap content-end gap-1 pt-1.5 sm:gap-2 sm:pt-3">
-          {project.stack.map((tech) => (
+        <div
+          className="mt-2 flex shrink-0 flex-wrap content-end gap-1 overflow-hidden sm:mt-3 sm:gap-2"
+          style={{ minHeight: footerMinH }}
+        >
+          {stackItems.map((tech) => (
             <span
               key={tech}
               title={tech}
-              className="inline-flex max-w-full min-w-0 items-center gap-0.5 rounded-full border border-[#D7E2EA]/15 py-px pl-0.5 pr-1 text-[7px] font-medium uppercase leading-none tracking-wide text-[#D7E2EA]/85 sm:gap-1.5 sm:py-0.5 sm:pl-1.5 sm:pr-2 sm:text-[10px] sm:leading-normal"
+              className="inline-flex max-w-full min-w-0 items-center gap-0.5 rounded-full border border-[#D7E2EA]/15 py-0.5 pl-1 pr-1.5 text-[7px] font-medium uppercase leading-none tracking-wide text-[#D7E2EA]/85 sm:gap-1.5 sm:py-0.5 sm:pl-1.5 sm:pr-2.5 sm:text-[10px] sm:leading-normal"
             >
               <TechBrandIcon
                 name={tech}
@@ -386,26 +466,27 @@ function CarouselCard({ project, dim, angle, stackIconSize, onHoverStart, onHove
                 surface="dark"
                 className="shrink-0 !p-0 sm:!p-px"
               />
-              <span className="min-w-0 max-w-[7.5rem] truncate sm:max-w-none">{tech}</span>
+              <span className="min-w-0 truncate">{tech}</span>
             </span>
           ))}
         </div>
 
-        {(project.liveUrl || project.repositoryUrl) ? (
-          <div className="mt-1.5 flex min-w-0 flex-wrap gap-1.5 sm:mt-3 sm:gap-2">
-            {project.liveUrl ? (
-              <CarouselLink href={project.liveUrl} label="Live" Icon={ExternalLink} />
-            ) : null}
-            {project.repositoryUrl ? (
-              <CarouselLink
-                href={project.repositoryUrl}
-                label="GitHub"
-                Icon={Github}
-                muted={Boolean(project.liveUrl)}
-              />
-            ) : null}
-          </div>
-        ) : null}
+        <div
+          className="mt-2 flex shrink-0 flex-wrap items-center gap-2 pb-0.5 sm:mt-3 sm:pb-0"
+          style={{ minHeight: actionMinH }}
+        >
+          {project.liveUrl ? (
+            <CarouselLink href={project.liveUrl} label="Live" Icon={ExternalLink} />
+          ) : null}
+          {project.repositoryUrl ? (
+            <CarouselLink
+              href={project.repositoryUrl}
+              label="GitHub"
+              Icon={Github}
+              muted={Boolean(project.liveUrl)}
+            />
+          ) : null}
+        </div>
       </article>
     </div>
   );

@@ -1,6 +1,6 @@
 import { publicAssetUrl } from '../utils/publicAssetUrl';
 
-export type CertificateAccent = 'microsoft' | 'nvidia' | 'coursera' | 'aws' | 'web';
+export type CertificateAccent = 'microsoft' | 'nvidia' | 'coursera' | 'aws' | 'web' | 'anthropic';
 
 export type CertificateItem = {
   title: string;
@@ -66,5 +66,33 @@ export const CERTIFICATE_PDFS: CertificateItem[] = [
     accent: 'nvidia',
     highlights: ['Deep learning labs', 'NVIDIA stack'],
     src: certPath('Certificate+My+Learning+_+NVIDIA+202205042.pdf'),
+  },
+  {
+    title: 'AI Fluency Certificate',
+    gist: 'AI fluency · Foundations',
+    accent: 'anthropic',
+    highlights: ['AI literacy', 'Practical fluency'],
+    src: certPath('AI Fluency Certificate.pdf'),
+  },
+  {
+    title: 'Overview of AI',
+    gist: 'Overview of AI',
+    accent: 'anthropic',
+    highlights: ['AI landscape', 'Core concepts'],
+    src: certPath('Overview of AI.pdf'),
+  },
+  {
+    title: 'Claude 101',
+    gist: 'Claude 101',
+    accent: 'anthropic',
+    highlights: ['Claude fundamentals', 'Best practices'],
+    src: certPath('Claude 101.pdf'),
+  },
+  {
+    title: 'Claude Code 101',
+    gist: 'Claude Code 101',
+    accent: 'anthropic',
+    highlights: ['Agentic coding', 'Claude Code workflow'],
+    src: certPath('Claude Code 101.pdf'),
   },
 ];

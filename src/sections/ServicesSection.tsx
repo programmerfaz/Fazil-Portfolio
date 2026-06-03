@@ -118,11 +118,9 @@ export function ServicesSection() {
           >
             Certifications
           </h3>
-          <FadeIn duration={0.65} y={20}>
-            <div className="pt-4 pb-[max(10rem,calc(env(safe-area-inset-bottom)+8.5rem))] sm:pt-6 sm:pb-[max(11rem,calc(env(safe-area-inset-bottom)+9rem))] md:pt-8">
-              <CertificatePdfStack />
-            </div>
-          </FadeIn>
+          <div className="pt-4 pb-[max(10rem,calc(env(safe-area-inset-bottom)+8.5rem))] sm:pt-6 sm:pb-[max(11rem,calc(env(safe-area-inset-bottom)+9rem))] md:pt-8">
+            <CertificatePdfStack />
+          </div>
         </div>
       </div>
     </section>

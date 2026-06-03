@@ -116,6 +116,20 @@ export const PROJECTS: Project[] = [
     liveUrl: 'https://sessioner.vercel.app/',
     repositoryUrl: 'https://github.com/programmerfaz/Sessioner',
   },
+  {
+    num: '09',
+    category: 'Full-stack',
+    title: 'Siyaha BH — AI tourism & local discovery',
+    summary:
+      'Bahrain tourism platform with an AI-powered feed, trip itineraries, and AR-guided local discovery.',
+    bullets: [
+      'OpenAI and Pinecone for semantic search, recommendations, and smart itineraries.',
+      'PostgreSQL with REST APIs for feeds, places, and user data.',
+      'React and Vite front end for discovery, planning, and immersive AR experiences.',
+    ],
+    stack: ['React', 'Vite', 'Node.js', 'PostgreSQL', 'Pinecone', 'OpenAI', 'REST'],
+    liveUrl: 'https://www.siyahabh.com/',
+  },
 ];
 
 export function projectHasGallery(p: Project): boolean {
