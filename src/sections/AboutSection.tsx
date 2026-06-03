@@ -60,7 +60,7 @@ const TIMELINE: ReadonlyArray<TimelineEntry> = [
   {
     period: PROFILE.schoolPeriod,
     primary: PROFILE.school,
-    secondary: 'Pre-university',
+    secondary: 'Secondary school',
   },
 ];
 

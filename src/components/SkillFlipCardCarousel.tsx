@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { ChevronLeft, ChevronRight, RotateCw } from 'lucide-react';
 import { TechBrandIcon } from './TechBrandIcon';
@@ -90,19 +90,19 @@ type SkillFlipCardProps = {
 function SkillFlipCard({ group, isActive }: SkillFlipCardProps) {
   const { title, tagline, summary, technologies } = group;
   const previewIcons = useMemo(() => technologies.slice(0, 8), [technologies]);
-  const canHover = useMediaQuery('(hover: hover)');
+  /** Mouse/trackpad hover flip — not touch devices that still report (hover: hover). */
+  const prefersHoverFlip = useMediaQuery('(hover: hover) and (pointer: fine)');
   /** Icon raster size only — slightly smaller on narrow phones so chips still wrap cleanly. */
   const roomy = useMediaQuery('(min-width: 640px)');
   const previewIconSize = roomy ? 38 : 30;
   const backTechIconSize = roomy ? 30 : 26;
   const [touchFlipped, setTouchFlipped] = useState(false);
   const [hover, setHover] = useState(false);
-  const [focused, setFocused] = useState(false);
+  const lastPointerType = useRef<'mouse' | 'touch' | 'pen'>('mouse');
 
   useEffect(() => {
     setTouchFlipped(false);
     setHover(false);
-    setFocused(false);
   }, [group.n]);
 
   const interactive = isActive;
@@ -117,26 +117,26 @@ function SkillFlipCard({ group, isActive }: SkillFlipCardProps) {
     el.style.setProperty('--gy', `${y}%`);
   }, [isActive]);
 
-  const handleTouchFlipToggle = useCallback(() => {
-    if (!interactive || canHover) return;
+  const handleFlipToggle = useCallback(() => {
+    if (!interactive) return;
+    const pt = lastPointerType.current;
+    if (pt === 'mouse' && prefersHoverFlip) return;
     setTouchFlipped((v) => !v);
-  }, [interactive, canHover]);
+  }, [interactive, prefersHoverFlip]);
 
-  const handleTouchKeyDown = useCallback(
+  const handleFlipKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
-      if (!interactive || canHover) return;
+      if (!interactive) return;
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
         setTouchFlipped((v) => !v);
       }
     },
-    [interactive, canHover],
+    [interactive],
   );
 
   /** CSS group-hover breaks easily under nested 3D transforms — drive flip explicitly */
-  const showBack =
-    interactive &&
-    ((!canHover && touchFlipped) || (canHover && (hover || focused)));
+  const showBack = interactive && (touchFlipped || (prefersHoverFlip && hover));
 
   return (
     <div
@@ -148,40 +148,39 @@ function SkillFlipCard({ group, isActive }: SkillFlipCardProps) {
       }
     >
       <div
+        onPointerDown={
+          interactive
+            ? (e) => {
+                lastPointerType.current = e.pointerType;
+              }
+            : undefined
+        }
         onPointerMove={interactive ? onPointerMove : undefined}
-        onMouseEnter={() => interactive && canHover && setHover(true)}
+        onMouseEnter={() => interactive && prefersHoverFlip && setHover(true)}
         onMouseLeave={() => setHover(false)}
-        onFocusCapture={() => interactive && canHover && setFocused(true)}
-        onBlurCapture={(e) => {
-          if (!e.currentTarget.contains(e.relatedTarget as Node)) setFocused(false);
-        }}
-        onClick={interactive && !canHover ? handleTouchFlipToggle : undefined}
-        onKeyDown={handleTouchKeyDown}
-        role={interactive && !canHover ? 'button' : undefined}
+        onClick={interactive ? handleFlipToggle : undefined}
+        onKeyDown={handleFlipKeyDown}
+        role={interactive ? 'button' : undefined}
         tabIndex={interactive ? 0 : undefined}
-        aria-pressed={interactive && !canHover ? showBack : undefined}
+        aria-pressed={interactive ? showBack : undefined}
         className={`relative h-[min(820px,min(88dvh,calc(100svh-3rem)))] min-h-[min(640px,max(300px,calc(100svh-14rem)))] rounded-[36px] outline-none ring-offset-2 ring-offset-[#0a0306] max-sm:h-[clamp(260px,min(560px,calc(100svh-6.5rem)),560px)] max-sm:min-h-[max(240px,min(380px,calc(100svh-7rem)))] max-sm:max-h-[min(560px,calc(100svh-3rem))] max-sm:rounded-2xl ${
-          interactive && canHover
-            ? 'cursor-pointer focus-visible:ring-2 focus-visible:ring-fuchsia-400 focus-visible:ring-offset-2 max-sm:focus-visible:ring-offset-1'
-            : interactive && !canHover
-              ? 'cursor-pointer touch-manipulation focus-visible:ring-2 focus-visible:ring-fuchsia-400 focus-visible:ring-offset-2 max-sm:focus-visible:ring-offset-1'
-              : ''
+          interactive
+            ? 'cursor-pointer touch-manipulation focus-visible:ring-2 focus-visible:ring-fuchsia-400 focus-visible:ring-offset-2 max-sm:focus-visible:ring-offset-1'
+            : ''
         }`}
         aria-hidden={!interactive}
         aria-label={
-          interactive && canHover
+          interactive && prefersHoverFlip
             ? `${title}. ${tagline} Hover or focus to flip for details.`
-            : interactive && !canHover
+            : interactive
               ? `${title}. ${tagline} Tap to flip the card and see tools and notes.`
-              : interactive
-                ? `${title}. ${tagline}`
-                : undefined
+              : undefined
         }
       >
         {/* Cursor shimmer — warm flare on web */}
         <div
           className={`pointer-events-none absolute -inset-px rounded-[36px] transition-opacity duration-300 max-sm:rounded-2xl ${
-            interactive && (hover || focused) && !showBack ? 'opacity-100' : 'opacity-0'
+            interactive && hover && !showBack ? 'opacity-100' : 'opacity-0'
           }`}
           aria-hidden
           style={{
@@ -191,7 +190,7 @@ function SkillFlipCard({ group, isActive }: SkillFlipCardProps) {
 
         <div
           className={`relative h-full rounded-[36px] [transform-style:preserve-3d] transition-[transform,box-shadow] duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:duration-200 max-sm:rounded-2xl ${
-            interactive && (hover || focused)
+            interactive && hover
               ? 'shadow-[0_40px_90px_-20px_rgba(244,63,94,0.45)] ring-2 ring-fuchsia-400/70'
               : ''
           }`}
@@ -267,7 +266,7 @@ function SkillFlipCard({ group, isActive }: SkillFlipCardProps) {
 
               <p className="mx-auto mt-1 max-w-[96%] px-1 text-center text-xs font-medium leading-snug text-rose-100/75 max-sm:text-[10px] sm:max-w-lg sm:text-sm">
                 {interactive
-                  ? canHover
+                  ? prefersHoverFlip
                     ? 'Hover to flip — full stack and notes on the other side.'
                     : 'Tap anywhere on the card to flip — see tools and notes on the other side.'
                   : 'Use arrows to bring this card forward.'}
