@@ -1,6 +1,10 @@
-import { useEffect } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { X } from 'lucide-react';
+
+const CertificatePdfViewer = lazy(() =>
+  import('./CertificatePdfViewer').then((m) => ({ default: m.CertificatePdfViewer })),
+);
 
 type CertificateLightboxProps = {
   title: string;
@@ -38,10 +42,10 @@ export function CertificateLightbox({ title, src, onClose }: CertificateLightbox
         role="dialog"
         aria-modal="true"
         aria-label={title}
-        className="relative z-10 flex max-h-[min(92dvh,900px)] w-full max-w-4xl flex-col overflow-hidden rounded-t-2xl border border-neutral-200 bg-white shadow-2xl sm:rounded-2xl"
+        className="relative z-10 flex max-h-[min(92dvh,900px)] w-full max-w-4xl flex-col overflow-hidden rounded-t-2xl border border-neutral-200 bg-neutral-100 shadow-2xl sm:rounded-2xl"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex shrink-0 items-center justify-between gap-3 border-b border-neutral-200 px-4 py-3 sm:px-5">
+        <div className="flex shrink-0 items-center justify-between gap-3 border-b border-neutral-200 bg-white px-4 py-3 sm:px-5">
           <p className="min-w-0 truncate text-sm font-semibold text-neutral-900">{title}</p>
           <div className="flex shrink-0 items-center gap-2">
             <a
@@ -62,11 +66,17 @@ export function CertificateLightbox({ title, src, onClose }: CertificateLightbox
             </button>
           </div>
         </div>
-        <iframe
-          title={title}
-          src={src}
-          className="min-h-[min(72dvh,720px)] w-full flex-1 border-0 bg-neutral-100"
-        />
+        <div className="min-h-0 flex-1 overflow-hidden bg-white">
+          <Suspense
+            fallback={
+              <div className="flex min-h-[240px] items-center justify-center py-16 text-sm text-neutral-500">
+                Loading certificate…
+              </div>
+            }
+          >
+            <CertificatePdfViewer key={src} url={src} title={title} />
+          </Suspense>
+        </div>
       </div>
     </div>,
     document.body,
