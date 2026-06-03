@@ -37,7 +37,7 @@ export function AnimatedText() {
   return (
     <p
       ref={ref}
-      className="mx-auto max-w-[620px] px-4 text-balance text-center font-medium leading-relaxed text-[#D7E2EA] sm:px-5 md:px-0"
+      className="mx-auto max-w-[620px] px-4 text-balance text-center font-medium leading-relaxed text-portfolio-ink-dark sm:px-5 md:px-0"
       style={{ fontSize: 'clamp(0.95rem, 4.2vw, 1.35rem)' }}
     >
       {chars.map((c, i) => (

@@ -32,14 +32,13 @@ function makeRowVariants(delayChildren: number): Variants {
 
 const WORD1 = 'PORTFOLIO';
 
-/** Extra scale after letters finish — kept modest because font size jumps to fill ~70vh */
 function scaleForWidth(w: number): number {
   if (w < 380) return 1.01;
   if (w < 480) return 1.02;
   if (w < 640) return 1.04;
   if (w < 768) return 1.06;
-  if (w < 1024) return 1.12;
-  return 1.14;
+  if (w < 1024) return 1.1;
+  return 1.12;
 }
 
 export function PortfolioSplash() {
@@ -112,7 +111,6 @@ export function PortfolioSplash() {
 
   const zoom = phase === 'zoom';
 
-  /** Fills ~70% viewport height: dvh + vw caps for narrow phones */
   const fs1 = zoom
     ? 'clamp(2.4rem, min(10.5vw, 14dvh), 9rem)'
     : 'clamp(2.7rem, 12.5vw, 9.5rem)';
@@ -120,22 +118,32 @@ export function PortfolioSplash() {
     ? 'clamp(1.7rem, min(6.8vw, 9.5dvh), 6.2rem)'
     : 'clamp(1.9rem, 7.8vw, 6.2rem)';
 
+  const rowTextClass = zoom
+    ? 'hero-heading-light font-black uppercase leading-[0.9] transition-[font-size] duration-[420ms] ease-out [text-wrap:balance]'
+    : 'font-black uppercase leading-[0.9] text-portfolio-ink-dark transition-[font-size] duration-[420ms] ease-out [text-wrap:balance]';
+
   return (
     <motion.div
       role="dialog"
       aria-label="Loading intro"
       aria-busy={!exiting}
-      className="fixed inset-0 z-[200] flex flex-col items-center justify-center bg-[#0a0a0a] px-[max(0.75rem,env(safe-area-inset-left))] py-[max(0.75rem,env(safe-area-inset-top))] pr-[max(0.75rem,env(safe-area-inset-right))] sm:px-4"
+      className="fixed inset-0 z-[200] flex flex-col items-center justify-center bg-portfolio-light px-[max(0.75rem,env(safe-area-inset-left))] py-[max(0.75rem,env(safe-area-inset-top))] pr-[max(0.75rem,env(safe-area-inset-right))] sm:px-4"
+      style={{
+        backgroundImage: [
+          'radial-gradient(ellipse 100% 80% at 20% 10%, rgba(6, 182, 212, 0.07) 0%, transparent 52%)',
+          'radial-gradient(ellipse 90% 70% at 85% 20%, rgba(139, 92, 246, 0.06) 0%, transparent 48%)',
+        ].join(', '),
+      }}
       initial={{ opacity: 1 }}
       animate={{ opacity: exiting ? 0 : 1 }}
-      transition={{ duration: 0.22, ease: [0.25, 0.1, 0.25, 1] }}
+      transition={{ duration: 0.28, ease: [0.25, 0.1, 0.25, 1] }}
       onAnimationComplete={() => {
         if (exiting) setOpen(false);
       }}
     >
       <button
         type="button"
-        className="absolute right-[max(1rem,env(safe-area-inset-right))] top-[max(1rem,env(safe-area-inset-top))] text-[10px] font-medium uppercase tracking-[0.2em] text-white/40 transition-colors hover:text-[#48E5C2] sm:right-8 sm:top-8 sm:text-[11px]"
+        className="absolute right-[max(1rem,env(safe-area-inset-right))] top-[max(1rem,env(safe-area-inset-top))] text-[10px] font-medium uppercase tracking-[0.2em] text-portfolio-muted-dark transition-colors hover:text-portfolio-cyan sm:right-8 sm:top-8 sm:text-[11px]"
         onClick={finish}
       >
         Skip
@@ -154,15 +162,15 @@ export function PortfolioSplash() {
         }}
         style={{ transformOrigin: 'center center' }}
       >
-        <div
-          className={`flex max-w-full flex-col items-center text-center transition-[gap,text-shadow,letter-spacing] duration-[420ms] ease-out ${
+        <motion.div
+          className={`flex max-w-full flex-col items-center text-center transition-[gap,letter-spacing] duration-[420ms] ease-out ${
             zoom
-              ? 'w-full justify-center gap-[clamp(0.75rem,3.5dvh,2rem)] tracking-[0.02em] drop-shadow-[0_0_36px_rgba(255,255,255,0.14)]'
+              ? 'w-full justify-center gap-[clamp(0.75rem,3.5dvh,2rem)] tracking-[0.02em]'
               : 'gap-8 sm:gap-12 md:gap-14'
           }`}
         >
           <motion.div
-            className="flex max-w-full flex-wrap justify-center font-black uppercase leading-[0.9] text-white transition-[font-size] duration-[420ms] ease-out [text-wrap:balance]"
+            className={`flex max-w-full flex-wrap justify-center ${rowTextClass}`}
             style={{ fontSize: fs1 }}
             variants={row1}
             initial="hidden"
@@ -176,7 +184,7 @@ export function PortfolioSplash() {
           </motion.div>
 
           <motion.div
-            className="flex max-w-full flex-wrap justify-center font-black uppercase leading-[0.9] text-white transition-[font-size] duration-[420ms] ease-out [text-wrap:balance]"
+            className={`flex max-w-full flex-wrap justify-center ${rowTextClass}`}
             style={{ fontSize: fs2 }}
             variants={row2}
             initial="hidden"
@@ -195,7 +203,7 @@ export function PortfolioSplash() {
               );
             })}
           </motion.div>
-        </div>
+        </motion.div>
       </motion.div>
     </motion.div>
   );

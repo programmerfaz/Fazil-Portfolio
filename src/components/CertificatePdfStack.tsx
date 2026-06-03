@@ -6,7 +6,7 @@ import { CertificatePdfViewer } from './CertificatePdfViewer';
 import { CERTIFICATE_PDFS, type CertificateAccent, type CertificateItem } from '../data/certificates';
 import { useMediaQuery } from '../hooks/useMediaQuery';
 const GLASS_CARD_DESKTOP =
-  'absolute bottom-0 flex cursor-pointer flex-col overflow-hidden rounded-xl border border-white/75 bg-white/50 text-left shadow-[0_18px_48px_-14px_rgba(15,23,42,0.3)] backdrop-blur-xl sm:rounded-2xl md:rounded-3xl';
+  'absolute bottom-0 flex cursor-pointer flex-col overflow-hidden rounded-xl border border-portfolio-light bg-gradient-to-b from-white/95 to-portfolio-light-alt/90 text-left shadow-glass-light backdrop-blur-xl sm:rounded-2xl md:rounded-3xl';
 
 const ACCENT: Record<
   CertificateAccent,
@@ -37,10 +37,16 @@ const ACCENT: Record<
     iconColor: 'text-[#d87600]',
   },
   web: {
-    bar: 'bg-gradient-to-r from-orange-500 via-rose-500 to-violet-600',
+    bar: 'bg-gradient-to-r from-cyan-500 via-violet-500 to-purple-600',
     Icon: FileCode2,
-    iconWrap: 'bg-gradient-to-br from-orange-500/15 to-violet-600/15 ring-orange-400/25',
-    iconColor: 'text-orange-700',
+    iconWrap: 'bg-gradient-to-br from-cyan-500/15 to-violet-600/15 ring-cyan-400/25',
+    iconColor: 'text-cyan-400',
+  },
+  anthropic: {
+    bar: 'bg-[#d97757]',
+    Icon: Award,
+    iconWrap: 'bg-[#d97757]/15 ring-[#d97757]/30',
+    iconColor: 'text-[#c4654a]',
   },
 };
 
@@ -97,7 +103,7 @@ function MobileCertRow({
     <motion.button
       type="button"
       layout={false}
-      className="group relative mx-auto flex min-h-[196px] w-full max-w-[min(268px,88vw)] touch-manipulation flex-col overflow-hidden rounded-2xl border border-white/80 bg-white/60 px-3 pb-4 pt-0 text-left shadow-[0_14px_36px_-12px_rgba(15,23,42,0.28)] backdrop-blur-md"
+      className="group relative mx-auto flex min-h-[196px] w-full max-w-[min(268px,88vw)] touch-manipulation flex-col overflow-hidden rounded-2xl border border-portfolio-light bg-gradient-to-b from-white/95 to-portfolio-light-alt/90 px-3 pb-4 pt-0 text-left shadow-glass-light backdrop-blur-md"
       style={{ zIndex: z, transformOrigin: '50% 50%' }}
       initial={false}
       animate={
@@ -125,7 +131,7 @@ function MobileCertRow({
       onFocus={onHoverStart}
       onBlur={onHoverEnd}
     >
-      <div className="pointer-events-none absolute inset-0 rounded-[inherit] bg-[radial-gradient(circle_at_18%_10%,rgba(255,255,255,0.72),transparent_44%),radial-gradient(circle_at_82%_92%,rgba(139,92,246,0.06),transparent_48%)]" />
+      <div className="pointer-events-none absolute inset-0 rounded-[inherit] bg-[radial-gradient(circle_at_18%_10%,rgba(6,182,212,0.08),transparent_44%),radial-gradient(circle_at_82%_92%,rgba(139,92,246,0.06),transparent_48%)]" />
 
       <div className={`relative z-[1] h-1.5 w-full shrink-0 rounded-b-sm ${a.bar}`} aria-hidden />
 
@@ -137,26 +143,26 @@ function MobileCertRow({
             <BrandIcon className={`h-6 w-6 ${a.iconColor}`} strokeWidth={2.1} aria-hidden />
           </div>
           <div className="min-w-0 flex-1">
-            <p className="text-sm font-bold leading-snug text-neutral-900">{cert.gist}</p>
-            <p className="mt-2 text-[11px] font-medium leading-relaxed text-neutral-600">{cert.title}</p>
+            <p className="text-sm font-bold leading-snug text-portfolio-ink-dark">{cert.gist}</p>
+            <p className="mt-2 text-[11px] font-medium leading-relaxed text-portfolio-muted-dark">{cert.title}</p>
           </div>
         </div>
 
-        <ul className="space-y-2 border-t border-neutral-200/55 pt-3">
+        <ul className="space-y-2 border-t border-portfolio pt-3">
           {cert.highlights.map((line) => (
-            <li key={line} className="flex gap-2 text-[11px] leading-relaxed text-neutral-600">
-              <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-violet-400" aria-hidden />
+            <li key={line} className="flex gap-2 text-[11px] leading-relaxed text-portfolio-muted-dark">
+              <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-portfolio-cyan shadow-[0_0_8px_rgba(6,182,212,0.5)]" aria-hidden />
               <span>{line}</span>
             </li>
           ))}
         </ul>
 
-        <div className="mt-auto flex items-end justify-between border-t border-neutral-200/60 pt-3">
+        <div className="mt-auto flex items-end justify-between border-t border-portfolio pt-3">
           <Award
-            className="h-5 w-5 text-neutral-400 transition-colors duration-200 group-hover:text-violet-600"
+            className="h-5 w-5 text-portfolio-muted-dark transition-colors duration-200 group-hover:text-portfolio-purple"
             aria-hidden
           />
-          <span className="font-mono text-xl font-black tabular-nums text-neutral-300 transition-colors duration-200 group-hover:text-neutral-400">
+          <span className="font-mono text-xl font-black tabular-nums text-portfolio-muted-dark/50 transition-colors duration-200 group-hover:text-portfolio-cyan">
             {String(index + 1).padStart(2, '0')}
           </span>
         </div>
@@ -167,7 +173,7 @@ function MobileCertRow({
           className="rounded-b-xl px-2 py-2 shadow-[0_-10px_24px_-4px_rgba(0,0,0,0.32)]"
           style={{
             background:
-              'linear-gradient(to top, rgb(10 10 12 / 0.97) 0%, rgb(23 23 26 / 0.92) 38%, rgb(38 38 42 / 0.55) 68%, transparent 100%)',
+              'linear-gradient(to top, rgb(3 7 18 / 0.98) 0%, rgb(17 24 39 / 0.9) 38%, rgb(31 41 55 / 0.55) 68%, transparent 100%)',
           }}
         >
           <p className="text-center text-xs font-bold leading-snug tracking-tight text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.85)]">
@@ -176,7 +182,7 @@ function MobileCertRow({
         </div>
       </div>
 
-      <span className="pointer-events-none absolute right-2 top-2 rounded-full bg-white/90 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-neutral-500 opacity-0 shadow-sm backdrop-blur-sm transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100 group-active:opacity-100">
+      <span className="pointer-events-none absolute right-2 top-2 rounded-full border border-portfolio bg-portfolio-surface/95 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-portfolio-muted opacity-0 shadow-md backdrop-blur-sm transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100 group-active:opacity-100">
         View
       </span>
     </motion.button>
@@ -272,7 +278,7 @@ export function CertificatePdfStack() {
                 <button
                   type="button"
                   aria-label="Close certificate"
-                  className="absolute inset-0 touch-manipulation bg-neutral-900/55 backdrop-blur-[2px]"
+                  className="absolute inset-0 touch-manipulation bg-portfolio-bg/70 backdrop-blur-sm"
                   onClick={() => setLightbox(null)}
                 />
                 <motion.div
@@ -283,7 +289,7 @@ export function CertificatePdfStack() {
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   exit={reduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.96, y: 12 }}
                   transition={{ type: 'spring', stiffness: 420, damping: 34 }}
-                  className="relative z-10 flex min-h-0 max-h-[100dvh] w-full max-w-4xl touch-manipulation flex-col overflow-hidden overscroll-contain rounded-t-2xl border-2 border-neutral-200 bg-neutral-100 shadow-[0_32px_80px_-24px_rgba(0,0,0,0.45)] sm:max-h-[min(92vh,880px)] sm:rounded-2xl md:rounded-3xl"
+                  className="relative z-10 flex min-h-0 max-h-[100dvh] w-full max-w-4xl touch-manipulation flex-col overflow-hidden overscroll-contain rounded-t-2xl border border-portfolio bg-gradient-to-b from-portfolio-card/95 to-portfolio-bg shadow-[0_32px_80px_-24px_rgba(0,0,0,0.65),0_0_60px_-24px_rgba(6,182,212,0.12)] sm:max-h-[min(92vh,880px)] sm:rounded-2xl md:rounded-3xl"
                   onClick={(e) => e.stopPropagation()}
                 >
                   <div className="relative min-h-0 min-w-0 flex-1 p-2 pt-12 sm:p-3 sm:pt-14">
@@ -292,7 +298,7 @@ export function CertificatePdfStack() {
                         href={modalCert.src}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="truncate text-xs font-medium text-neutral-600 underline-offset-2 hover:text-neutral-900 hover:underline"
+                        className="truncate text-xs font-medium text-portfolio-muted underline-offset-2 hover:text-portfolio-cyan hover:underline"
                       >
                         Open in new tab
                       </a>
@@ -300,12 +306,12 @@ export function CertificatePdfStack() {
                     <button
                       type="button"
                       aria-label="Close"
-                      className="absolute right-3 top-3 z-[1] flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-neutral-200 bg-white text-neutral-700 shadow-md transition-colors hover:bg-neutral-100 sm:right-4 sm:top-4"
+                      className="absolute right-3 top-3 z-[1] flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-portfolio bg-portfolio-surface text-portfolio-ink shadow-md transition-colors hover:bg-portfolio-card sm:right-4 sm:top-4"
                       onClick={() => setLightbox(null)}
                     >
                       <X className="h-5 w-5" aria-hidden />
                     </button>
-                    <div className="rounded-lg bg-white sm:rounded-xl">
+                    <div className="rounded-lg border border-portfolio bg-slate-100 sm:rounded-xl">
                       <CertificatePdfViewer key={modalCert.src} url={modalCert.src} title={modalCert.title} />
                     </div>
                   </div>
@@ -392,7 +398,7 @@ export function CertificatePdfStack() {
                   onBlur={() => setHovered((h) => (h === i ? null : h))}
                   onClick={() => openCert(i)}
                 >
-                  <div className="pointer-events-none absolute inset-0 rounded-[inherit] bg-[radial-gradient(circle_at_22%_12%,rgba(255,255,255,0.75),transparent_46%),radial-gradient(circle_at_78%_88%,rgba(139,92,246,0.07),transparent_50%)]" />
+                  <div className="pointer-events-none absolute inset-0 rounded-[inherit] bg-[radial-gradient(circle_at_22%_12%,rgba(6,182,212,0.1),transparent_46%),radial-gradient(circle_at_78%_88%,rgba(139,92,246,0.1),transparent_50%)]" />
 
                   <div className={`pointer-events-none h-2 w-full shrink-0 sm:h-2.5 md:h-3 ${ACCENT[cert.accent].bar}`} aria-hidden />
                   <div className="pointer-events-none flex min-h-0 flex-1 flex-col gap-2 p-2.5 pt-2 sm:gap-3 sm:p-3.5 sm:pt-3 md:gap-4 md:p-4 md:pt-3.5">
@@ -407,30 +413,30 @@ export function CertificatePdfStack() {
                         />
                       </div>
                       <div className="flex min-w-0 flex-1 items-center">
-                        <p className="text-[clamp(0.8rem,2.5vw+0.2rem,1.25rem)] font-bold leading-tight tracking-tight text-neutral-900">
+                        <p className="text-[clamp(0.8rem,2.5vw+0.2rem,1.25rem)] font-bold leading-tight tracking-tight text-portfolio-ink-dark">
                           {cert.gist}
                         </p>
                       </div>
                     </div>
 
-                    <ul className="pointer-events-none space-y-1 border-t border-neutral-200/55 pt-2 sm:space-y-2 sm:pt-3 md:space-y-2.5 md:pt-4">
+                    <ul className="pointer-events-none space-y-1 border-t border-portfolio pt-2 sm:space-y-2 sm:pt-3 md:space-y-2.5 md:pt-4">
                       {cert.highlights.map((line) => (
                         <li
                           key={line}
-                          className="flex gap-2 text-[clamp(0.7rem,1.8vw+0.15rem,0.95rem)] font-medium leading-tight text-neutral-700 sm:gap-2.5"
+                          className="flex gap-2 text-[clamp(0.7rem,1.8vw+0.15rem,0.95rem)] font-medium leading-tight text-portfolio-muted-dark sm:gap-2.5"
                         >
-                          <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-violet-400/90 sm:mt-2 sm:h-2 sm:w-2" aria-hidden />
+                          <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-portfolio-cyan/90 shadow-[0_0_10px_rgba(6,182,212,0.45)] sm:mt-2 sm:h-2 sm:w-2" aria-hidden />
                           <span className="line-clamp-2 sm:line-clamp-1">{line}</span>
                         </li>
                       ))}
                     </ul>
 
-                    <div className="pointer-events-none mt-auto flex items-end justify-between gap-2 border-t border-neutral-200/60 pt-2 sm:pt-3">
+                    <div className="pointer-events-none mt-auto flex items-end justify-between gap-2 border-t border-portfolio pt-2 sm:pt-3">
                       <Award
-                        className="h-5 w-5 shrink-0 text-neutral-400/90 transition-colors duration-200 group-hover:text-violet-600 sm:h-6 sm:w-6 md:h-7 md:w-7"
+                        className="h-5 w-5 shrink-0 text-portfolio-muted-dark transition-colors duration-200 group-hover:text-portfolio-purple sm:h-6 sm:w-6 md:h-7 md:w-7"
                         aria-hidden
                       />
-                      <span className="font-mono text-[clamp(1.5rem,5vw+0.5rem,3rem)] font-black tabular-nums leading-none text-neutral-300/95 transition-colors duration-200 group-hover:text-neutral-400">
+                      <span className="font-mono text-[clamp(1.5rem,5vw+0.5rem,3rem)] font-black tabular-nums leading-none text-portfolio-muted-dark/45 transition-colors duration-200 group-hover:text-portfolio-cyan">
                         {String(i + 1).padStart(2, '0')}
                       </span>
                     </div>
@@ -441,7 +447,7 @@ export function CertificatePdfStack() {
                       className="rounded-b-xl px-2 py-2.5 shadow-[0_-12px_28px_-4px_rgba(0,0,0,0.35)] sm:rounded-b-2xl sm:py-3 md:rounded-b-3xl"
                       style={{
                         background:
-                          'linear-gradient(to top, rgb(10 10 12 / 0.97) 0%, rgb(23 23 26 / 0.92) 38%, rgb(38 38 42 / 0.55) 68%, transparent 100%)',
+                          'linear-gradient(to top, rgb(3 7 18 / 0.98) 0%, rgb(17 24 39 / 0.9) 38%, rgb(31 41 55 / 0.55) 68%, transparent 100%)',
                       }}
                     >
                       <p className="text-center text-[clamp(0.7rem,2vw+0.2rem,1rem)] font-bold leading-snug tracking-tight text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.85)]">
@@ -450,7 +456,7 @@ export function CertificatePdfStack() {
                     </div>
                   </div>
 
-                  <span className="pointer-events-none absolute right-2 top-10 rounded-full bg-white/90 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-neutral-500 opacity-0 shadow-sm backdrop-blur-sm transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100 sm:right-3 sm:top-12 sm:px-3 sm:py-1 sm:text-[11px]">
+                  <span className="pointer-events-none absolute right-2 top-10 rounded-full border border-portfolio bg-portfolio-surface/95 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-portfolio-muted opacity-0 shadow-md backdrop-blur-sm transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100 sm:right-3 sm:top-12 sm:px-3 sm:py-1 sm:text-[11px]">
                     View
                   </span>
                 </motion.button>

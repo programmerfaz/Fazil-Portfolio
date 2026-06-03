@@ -26,8 +26,19 @@ export const TECH_BRAND: Partial<Record<string, TechBrandSpec>> = {
   Supabase: { iconUrl: devicon('supabase/supabase-original.svg') },
   React: { iconUrl: devicon('react/react-original.svg') },
   'React Native': { iconUrl: devicon('react/react-original.svg') },
+  Expo: { iconUrl: devicon('expo/expo-original.svg') },
+  Express: { iconUrl: devicon('express/express-original.svg') },
   Vite: { iconUrl: devicon('vite/vite-original.svg') },
   'Node.js': { iconUrl: devicon('nodejs/nodejs-original.svg') },
+  Pinecone: {
+    iconUrl:
+      'https://www.pinecone.io/images/pinecone-logo.svg',
+  },
+  'Vector DB': {
+    iconUrl:
+      'https://www.pinecone.io/images/pinecone-logo.svg',
+  },
+  'GPT-4.1 mini': { iconUrl: OPENAI_LOGO },
   'HTML / CSS': { iconUrl: devicon('html5/html5-original.svg') },
   Tailwind: { iconUrl: devicon('tailwindcss/tailwindcss-original.svg') },
   'Spring Boot': { iconUrl: devicon('spring/spring-original.svg') },

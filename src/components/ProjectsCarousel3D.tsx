@@ -39,36 +39,41 @@ const INTERSECTION_RESUME_RATIO = 0.12;
 
 // Card sizing — <640px: keep cards noticeably smaller than the viewport so angled
 // side faces stay inside the screen and the ring reads cleanly on real phones.
-const CARD_W_MIN = 240;
-const CARD_W_MIN_NARROW = 188;
-const CARD_W_MAX = 440;
-const CARD_W_VIEWPORT_FRACTION = 0.62;
+const CARD_W_MIN = 280;
+const CARD_W_MIN_NARROW = 220;
+const CARD_W_MAX = 560;
+const CARD_W_VIEWPORT_FRACTION = 0.74;
 /** <640px: conservative share so 3D side cards are not clipped or “broken”. */
-const CARD_W_VIEWPORT_FRACTION_MOBILE = 0.56;
+const CARD_W_VIEWPORT_FRACTION_MOBILE = 0.66;
 /** Hard ceiling vs viewport width on mobile after other clamps (leave margin for depth). */
-const MOBILE_CARD_W_MAX_VIEWPORT_RATIO = 0.68;
+const MOBILE_CARD_W_MAX_VIEWPORT_RATIO = 0.78;
 
-// Geometry ratios (7 cards on the ring)
-//   Adjacent chord = 2·R·sin(π/7) ≈ 0.868·R; want chord > cardW so cards don't
-//   touch. R = 1.3·cardW gives ~13% headroom.
-//   Front-card perspective scale = P / (P − R). P = 3.5·R → scale ≈ 1.40,
-//   which determines how much vertical room the front card needs.
-const R_PER_CARD_W = 1.3;
+// Geometry: ring radius scales with project count so adjacent cards don’t overlap.
+//   chord between neighbours = 2·R·sin(π/n); need chord > cardW (with headroom).
+//   Front-card perspective scale = P / (P − R). P = 3.5·R → scale ≈ 1.40.
 const P_PER_R = 3.5;
 const FRONT_SCALE = P_PER_R / (P_PER_R - 1); // ≈ 1.4
-const CONTAINER_VERTICAL_PAD = 32;
-const CONTAINER_VERTICAL_PAD_MOBILE = 22;
+const RING_HEADROOM = 1.18;
+const CONTAINER_VERTICAL_PAD = 40;
+const CONTAINER_VERTICAL_PAD_MOBILE = 28;
 /** Extra height so card shadows, border radius, and 3D paint are not clipped by the fixed-height shell. */
-const CONTAINER_3D_VERTICAL_BLEED = 44;
-const CONTAINER_3D_VERTICAL_BLEED_MOBILE = 56;
+const CONTAINER_3D_VERTICAL_BLEED = 72;
+const CONTAINER_3D_VERTICAL_BLEED_MOBILE = 88;
 const PERSPECTIVE_MIN = 900;
 
-/** Card height = width × this factor (smaller denominator ⇒ taller card, less in-card overflow). */
-const CARD_HEIGHT_PER_WIDTH_DESKTOP = 440 / 380;
-/** Mobile: extra vertical room so bullets + stack fit without scrolling inside the face. */
-const CARD_HEIGHT_PER_WIDTH_MOBILE = 440 / 328;
+/** Card height = width × factor — taller cards keep stack + action buttons visible. */
+const CARD_HEIGHT_PER_WIDTH_DESKTOP = 1.42;
+const CARD_HEIGHT_PER_WIDTH_MOBILE = 1.48;
 
-function computeDim(viewportWidth: number, viewportHeight: number): Dim {
+/** Max stack chips on the card face; rest appear in a “+N” pill. */
+const MAX_STACK_VISIBLE = 7;
+
+function ringRadiusPerCardWidth(count: number): number {
+  const chord = 2 * Math.sin(Math.PI / Math.max(count, 3));
+  return RING_HEADROOM / chord;
+}
+
+function computeDim(viewportWidth: number, viewportHeight: number, projectCount: number): Dim {
   const narrow = viewportWidth < 640;
   const frac = narrow ? CARD_W_VIEWPORT_FRACTION_MOBILE : CARD_W_VIEWPORT_FRACTION;
   const floor = narrow && viewportWidth < 420 ? CARD_W_MIN_NARROW : CARD_W_MIN;
@@ -77,7 +82,7 @@ function computeDim(viewportWidth: number, viewportHeight: number): Dim {
   /** Landscape / short viewports: shrink the ring so the front card fits vertically. */
   const verticalPad = viewportWidth < 640 ? CONTAINER_VERTICAL_PAD_MOBILE : CONTAINER_VERTICAL_PAD;
   const heightPerWidth = narrow ? CARD_HEIGHT_PER_WIDTH_MOBILE : CARD_HEIGHT_PER_WIDTH_DESKTOP;
-  const maxViewportShare = viewportWidth < 640 ? 0.74 : 0.82;
+  const maxViewportShare = viewportWidth < 640 ? 0.8 : 0.9;
   const maxContainerH = Math.max(200, viewportHeight * maxViewportShare);
   const maxCardHFromViewport = (maxContainerH - verticalPad) / FRONT_SCALE;
   const maxCardWFromHeight = Math.max(140, Math.floor(maxCardHFromViewport / heightPerWidth));
@@ -93,7 +98,7 @@ function computeDim(viewportWidth: number, viewportHeight: number): Dim {
   }
 
   const cardH = Math.round(cardW * heightPerWidth);
-  const radius = Math.round(cardW * R_PER_CARD_W);
+  const radius = Math.round(cardW * ringRadiusPerCardWidth(projectCount));
   const perspective = Math.max(PERSPECTIVE_MIN, Math.round(radius * P_PER_R));
   const bleed = narrow ? CONTAINER_3D_VERTICAL_BLEED_MOBILE : CONTAINER_3D_VERTICAL_BLEED;
   const containerH = Math.round(cardH * FRONT_SCALE + verticalPad + bleed);
@@ -154,10 +159,11 @@ function useViewportSize(): { width: number; height: number } {
 }
 
 export function ProjectsCarousel3D() {
+  const total = PROJECTS.length;
   const { width: viewportWidth, height: viewportHeight } = useViewportSize();
   const dim = useMemo(
-    () => computeDim(viewportWidth, viewportHeight),
-    [viewportWidth, viewportHeight],
+    () => computeDim(viewportWidth, viewportHeight, total),
+    [viewportWidth, viewportHeight, total],
   );
   const reduceMotion = useReducedMotion();
   const [hoverCount, setHoverCount] = useState(0);
@@ -179,8 +185,6 @@ export function ProjectsCarousel3D() {
 
   const paused = hoverCount > 0 || manualPauseFromButtons;
   pausedRef.current = paused;
-
-  const total = PROJECTS.length;
   const spreadAngle = 360 / total;
 
   const applyRingTransform = useCallback(() => {
@@ -288,7 +292,7 @@ export function ProjectsCarousel3D() {
               project={project}
               dim={dim}
               angle={i * spreadAngle}
-              stackIconSize={narrowViewport ? 8 : 11}
+              stackIconSize={narrowViewport ? 9 : 13}
               onHoverStart={handleHoverStart}
               onHoverEnd={handleHoverEnd}
             />
@@ -300,7 +304,7 @@ export function ProjectsCarousel3D() {
         <button
           type="button"
           onClick={() => stepRing(-1)}
-          className="pointer-events-auto flex h-11 w-11 shrink-0 touch-manipulation items-center justify-center rounded-full border border-[#D7E2EA]/25 bg-[#0C0C0C]/75 text-[#D7E2EA] shadow-[0_12px_40px_-12px_rgba(0,0,0,0.85)] backdrop-blur-md transition-colors hover:border-[#48E5C2]/50 hover:text-[#48E5C2] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#48E5C2]/70 sm:h-12 sm:w-12"
+          className="pointer-events-auto flex h-11 w-11 shrink-0 touch-manipulation items-center justify-center rounded-full border border-portfolio bg-portfolio-deep/80 text-portfolio-ink shadow-glass-soft backdrop-blur-md transition-colors hover:border-portfolio-cyan/50 hover:text-portfolio-cyan focus:outline-none focus-visible:ring-2 focus-visible:ring-portfolio-cyan/70 sm:h-12 sm:w-12"
           aria-label="Rotate carousel left"
         >
           <ChevronLeft className="h-6 w-6 sm:h-7 sm:w-7" strokeWidth={2} aria-hidden />
@@ -308,7 +312,7 @@ export function ProjectsCarousel3D() {
         <button
           type="button"
           onClick={() => stepRing(1)}
-          className="pointer-events-auto flex h-11 w-11 shrink-0 touch-manipulation items-center justify-center rounded-full border border-[#D7E2EA]/25 bg-[#0C0C0C]/75 text-[#D7E2EA] shadow-[0_12px_40px_-12px_rgba(0,0,0,0.85)] backdrop-blur-md transition-colors hover:border-[#48E5C2]/50 hover:text-[#48E5C2] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#48E5C2]/70 sm:h-12 sm:w-12"
+          className="pointer-events-auto flex h-11 w-11 shrink-0 touch-manipulation items-center justify-center rounded-full border border-portfolio bg-portfolio-deep/80 text-portfolio-ink shadow-glass-soft backdrop-blur-md transition-colors hover:border-portfolio-cyan/50 hover:text-portfolio-cyan focus:outline-none focus-visible:ring-2 focus-visible:ring-portfolio-cyan/70 sm:h-12 sm:w-12"
           aria-label="Rotate carousel right"
         >
           <ChevronRight className="h-6 w-6 sm:h-7 sm:w-7" strokeWidth={2} aria-hidden />
@@ -328,6 +332,11 @@ type CardProps = {
 };
 
 function CarouselCard({ project, dim, angle, stackIconSize, onHoverStart, onHoverEnd }: CardProps) {
+  const visibleStack = project.stack.slice(0, MAX_STACK_VISIBLE);
+  const hiddenStackCount = project.stack.length - visibleStack.length;
+  const hiddenStackTitle =
+    hiddenStackCount > 0 ? project.stack.slice(MAX_STACK_VISIBLE).join(', ') : undefined;
+
   return (
     <div
       className="absolute left-0 top-0"
@@ -343,69 +352,81 @@ function CarouselCard({ project, dim, angle, stackIconSize, onHoverStart, onHove
       onPointerLeave={onHoverEnd}
       onPointerCancel={onHoverEnd}
     >
-      <article className="flex h-full min-w-0 flex-col overflow-hidden rounded-2xl border border-[#D7E2EA]/15 bg-gradient-to-b from-[#16161A] via-[#0F1014] to-[#0B0B0D] p-2.5 shadow-[0_30px_80px_-30px_rgba(0,0,0,0.7),0_0_0_1px_rgba(255,255,255,0.04)_inset] sm:rounded-3xl sm:p-6">
-        <header className="flex min-w-0 items-start justify-between gap-1.5 sm:gap-3">
-          <span className="min-w-0 flex-1 break-words text-[9px] font-medium uppercase leading-tight tracking-[0.14em] text-[#48E5C2] sm:text-[10px] sm:leading-snug sm:tracking-[0.22em]">
-            {project.category}
-          </span>
-          <span className="shrink-0 font-black tabular-nums leading-none text-[#D7E2EA]/15 text-[clamp(0.78rem,3.2vw,1.05rem)] sm:text-[clamp(1.35rem,5.5vw,3rem)]">
-            {project.num}
-          </span>
-        </header>
-
-        <h3 className="mt-1.5 min-w-0 break-words text-pretty text-[clamp(0.68rem,3vw,0.95rem)] font-medium uppercase leading-tight text-[#D7E2EA] [word-break:break-word] sm:mt-3 sm:text-[clamp(0.88rem,3.8vw,1.25rem)] sm:leading-tight">
-          {project.title}
-        </h3>
-        <p className="mt-1 min-w-0 break-words text-pretty text-[clamp(0.6rem,2.4vw,0.72rem)] font-light leading-tight text-[#D7E2EA]/75 [word-break:break-word] sm:mt-2 sm:text-[clamp(0.75rem,2.8vw,0.875rem)] sm:leading-snug">
-          {project.summary}
-        </p>
-
-        <ul className="mt-1.5 min-w-0 space-y-1 sm:mt-3 sm:space-y-1.5">
-          {project.bullets.slice(0, 3).map((bullet) => (
-            <li
-              key={bullet}
-              className="flex min-w-0 gap-1.5 text-[8px] leading-[1.25] text-[#D7E2EA]/70 sm:gap-2 sm:text-xs sm:leading-snug"
-            >
-              <span className="mt-1 h-0.5 w-0.5 shrink-0 rounded-full bg-[#48E5C2] sm:mt-1.5 sm:h-1 sm:w-1" aria-hidden />
-              <span className="min-w-0 flex-1 break-words [word-break:break-word]">{bullet}</span>
-            </li>
-          ))}
-        </ul>
-
-        <div className="mt-auto flex min-w-0 flex-wrap content-end gap-1 pt-1.5 sm:gap-2 sm:pt-3">
-          {project.stack.map((tech) => (
-            <span
-              key={tech}
-              title={tech}
-              className="inline-flex max-w-full min-w-0 items-center gap-0.5 rounded-full border border-[#D7E2EA]/15 py-px pl-0.5 pr-1 text-[7px] font-medium uppercase leading-none tracking-wide text-[#D7E2EA]/85 sm:gap-1.5 sm:py-0.5 sm:pl-1.5 sm:pr-2 sm:text-[10px] sm:leading-normal"
-            >
-              <TechBrandIcon
-                name={tech}
-                lucideKey={projectStackLucideKey(tech)}
-                size={stackIconSize}
-                surface="dark"
-                className="shrink-0 !p-0 sm:!p-px"
-              />
-              <span className="min-w-0 max-w-[7.5rem] truncate sm:max-w-none">{tech}</span>
+      <article className="flex h-full min-w-0 flex-col overflow-hidden rounded-2xl border border-portfolio bg-gradient-to-b from-portfolio-card/95 via-portfolio-surface/90 to-portfolio-deep p-2.5 shadow-glass-soft sm:rounded-3xl sm:p-5 md:p-6">
+        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain [scrollbar-width:thin]">
+          <header className="flex min-w-0 items-start justify-between gap-1.5 sm:gap-3">
+            <span className="min-w-0 flex-1 break-words text-[9px] font-medium uppercase leading-tight tracking-[0.14em] text-portfolio-cyan sm:text-[10px] sm:leading-snug sm:tracking-[0.22em]">
+              {project.category}
             </span>
-          ))}
+            <span className="shrink-0 font-black tabular-nums leading-none text-portfolio-ink/[0.12] text-[clamp(0.78rem,3.2vw,1.05rem)] sm:text-[clamp(1.35rem,5.5vw,3rem)]">
+              {project.num}
+            </span>
+          </header>
+
+          <h3 className="mt-1.5 min-w-0 break-words text-pretty text-[clamp(0.72rem,3.2vw,1rem)] font-medium uppercase leading-tight text-portfolio-ink [word-break:break-word] sm:mt-2.5 sm:text-[clamp(0.95rem,2.2vw,1.35rem)] sm:leading-tight">
+            {project.title}
+          </h3>
+          <p className="mt-1 min-w-0 break-words text-pretty text-[clamp(0.62rem,2.6vw,0.78rem)] font-light leading-tight text-portfolio-muted [word-break:break-word] sm:mt-1.5 sm:text-[clamp(0.8rem,1.6vw,0.95rem)] sm:leading-snug">
+            {project.summary}
+          </p>
+
+          <ul className="mt-1.5 min-w-0 space-y-1 pb-1 sm:mt-2.5 sm:space-y-1.5 sm:pb-2">
+            {project.bullets.slice(0, 3).map((bullet) => (
+              <li
+                key={bullet}
+                className="flex min-w-0 gap-1.5 text-[8px] leading-[1.25] text-portfolio-muted sm:gap-2 sm:text-sm sm:leading-snug"
+              >
+                <span className="mt-1 h-0.5 w-0.5 shrink-0 rounded-full bg-portfolio-cyan sm:mt-1.5 sm:h-1 sm:w-1" aria-hidden />
+                <span className="min-w-0 flex-1 break-words [word-break:break-word]">{bullet}</span>
+              </li>
+            ))}
+          </ul>
         </div>
 
-        {(project.liveUrl || project.repositoryUrl) ? (
-          <div className="mt-1.5 flex min-w-0 flex-wrap gap-1.5 sm:mt-3 sm:gap-2">
-            {project.liveUrl ? (
-              <CarouselLink href={project.liveUrl} label="Live" Icon={ExternalLink} />
-            ) : null}
-            {project.repositoryUrl ? (
-              <CarouselLink
-                href={project.repositoryUrl}
-                label="GitHub"
-                Icon={Github}
-                muted={Boolean(project.liveUrl)}
-              />
+        <footer className="mt-1.5 shrink-0 border-t border-portfolio/40 bg-portfolio-deep/35 pt-2 sm:mt-2 sm:pt-2.5">
+          <div className="flex min-w-0 flex-wrap gap-1 sm:gap-1.5">
+            {visibleStack.map((tech) => (
+              <span
+                key={tech}
+                title={tech}
+                className="inline-flex max-w-full min-w-0 items-center gap-0.5 rounded-full border border-portfolio bg-portfolio-surface/40 py-px pl-0.5 pr-1 text-[7px] font-medium uppercase leading-none tracking-wide text-portfolio-ink/90 sm:gap-1.5 sm:py-1 sm:pl-2 sm:pr-2.5 sm:text-[11px] sm:leading-normal"
+              >
+                <TechBrandIcon
+                  name={tech}
+                  lucideKey={projectStackLucideKey(tech)}
+                  size={stackIconSize}
+                  surface="dark"
+                  className="shrink-0 !p-0 sm:!p-px"
+                />
+                <span className="min-w-0 max-w-[7.5rem] truncate sm:max-w-none">{tech}</span>
+              </span>
+            ))}
+            {hiddenStackCount > 0 ? (
+              <span
+                title={hiddenStackTitle}
+                className="inline-flex items-center rounded-full border border-portfolio-cyan/35 bg-portfolio-surface/50 px-1.5 py-px text-[7px] font-medium uppercase tracking-wide text-portfolio-cyan sm:px-2 sm:py-0.5 sm:text-[10px]"
+              >
+                +{hiddenStackCount}
+              </span>
             ) : null}
           </div>
-        ) : null}
+
+          {(project.liveUrl || project.repositoryUrl) ? (
+            <div className="mt-2 flex min-w-0 flex-wrap gap-1.5 sm:mt-2.5 sm:gap-2">
+              {project.liveUrl ? (
+                <CarouselLink href={project.liveUrl} label="Live" Icon={ExternalLink} />
+              ) : null}
+              {project.repositoryUrl ? (
+                <CarouselLink
+                  href={project.repositoryUrl}
+                  label="GitHub"
+                  Icon={Github}
+                  muted={Boolean(project.liveUrl)}
+                />
+              ) : null}
+            </div>
+          ) : null}
+        </footer>
       </article>
     </div>
   );
@@ -424,8 +445,8 @@ function CarouselLink({ href, label, Icon, muted = false }: CarouselLinkProps) {
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className={`inline-flex max-w-full min-w-0 items-center gap-1 rounded-full border px-2 py-0.5 text-[9px] font-medium uppercase tracking-widest transition-colors hover:bg-[#D7E2EA]/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#D7E2EA]/60 sm:gap-1.5 sm:px-4 sm:py-1.5 sm:text-[11px] ${
-        muted ? 'border-[#D7E2EA]/35 text-[#D7E2EA]/85' : 'border-[#D7E2EA] text-[#D7E2EA]'
+      className={`inline-flex max-w-full min-w-0 items-center gap-1 rounded-full border px-2 py-0.5 text-[9px] font-medium uppercase tracking-widest transition-colors hover:bg-portfolio-surface/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-portfolio-cyan/60 sm:gap-1.5 sm:px-4 sm:py-1.5 sm:text-[11px] ${
+        muted ? 'border-portfolio text-portfolio-muted' : 'border-portfolio-cyan/50 text-portfolio-ink'
       }`}
     >
       <Icon className="h-3 w-3 shrink-0 sm:h-3.5 sm:w-3.5" strokeWidth={2} aria-hidden />

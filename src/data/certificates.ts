@@ -1,6 +1,6 @@
 import { publicAssetUrl } from '../utils/publicAssetUrl';
 
-export type CertificateAccent = 'microsoft' | 'nvidia' | 'coursera' | 'aws' | 'web';
+export type CertificateAccent = 'microsoft' | 'nvidia' | 'coursera' | 'aws' | 'web' | 'anthropic';
 
 export type CertificateItem = {
   title: string;
@@ -19,11 +19,32 @@ function certPath(filename: string): string {
 /** PDFs in `src/Certificates` — bundled by Vite. */
 export const CERTIFICATE_PDFS: CertificateItem[] = [
   {
-    title: 'Microsoft Learn — credentials (renewed 2025)',
+    title: 'Microsoft Learn — Azure credentials',
     gist: 'Microsoft Learn · Azure',
     accent: 'microsoft',
-    highlights: ['Cloud & AI roles', 'Renewed 2025'],
-    src: certPath('Credentials - fazilmohd-7139 _ Microsoft Learn Renewed 2025.pdf'),
+    highlights: ['Azure AI Engineer Associate', 'Cloud & AI credentials'],
+    src: certPath('Credentials - Fazilmohd-7139 _ Microsoft Learn.pdf'),
+  },
+  {
+    title: 'Anthropic — AI Fluency',
+    gist: 'Anthropic · AI Fluency',
+    accent: 'anthropic',
+    highlights: ['Responsible AI literacy', 'Practical AI workflows'],
+    src: certPath('AI Fluency Certificate.pdf'),
+  },
+  {
+    title: 'Anthropic — Claude 101',
+    gist: 'Anthropic · Claude',
+    accent: 'anthropic',
+    highlights: ['Claude fundamentals', 'Prompting & use cases'],
+    src: certPath('Claude 101.pdf'),
+  },
+  {
+    title: 'Overview of AI',
+    gist: 'AI foundations',
+    accent: 'anthropic',
+    highlights: ['Core AI concepts', 'Industry overview'],
+    src: certPath('Overview of AI.pdf'),
   },
   {
     title: 'Coursera — AWS',

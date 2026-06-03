@@ -157,6 +157,9 @@ export const ACHIEVEMENTS = [
 
 export const CERTIFICATIONS = [
   'Certified Microsoft Azure AI Engineer Associate (Microsoft)',
+  'AI Fluency (Anthropic Education)',
+  'Claude 101 (Anthropic Education)',
+  'Overview of AI',
   'Fundamentals of Deep Learning (NVIDIA)',
   'Fundamentals of Accelerated Computing with Modern CUDA C (NVIDIA)',
   'Getting Started with Data Analytics on AWS (AWS)',

@@ -6,6 +6,8 @@ const STACK_LUCIDE: Partial<Record<string, SkillTechIconKey>> = {
   Regression: 'brain',
   LoRa: 'antenna',
   Sensors: 'cpu',
+  'Vector DB': 'database',
+  'GPT-4.1 mini': 'brain',
 };
 
 export function projectStackLucideKey(tech: string): SkillTechIconKey {

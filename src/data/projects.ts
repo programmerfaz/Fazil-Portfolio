@@ -15,6 +15,31 @@ export type Project = {
 
 export const PROJECTS: Project[] = [
   {
+    num: '09',
+    category: 'AI & Mobile',
+    title: 'Siyaha BH — Bahrain tourism platform',
+    summary:
+      'AI tourism for Bahrain — AR discovery, smart itineraries, Khalid your guide, and a business owner portal.',
+    bullets: [
+      'React Native & Expo app with AR, community feed, and AI trip planning.',
+      'Node.js, Express, Supabase, PostgreSQL, OpenAI embeddings, GPT-4.1 mini, and Pinecone RAG.',
+    ],
+    stack: [
+      'React Native',
+      'Expo',
+      'JavaScript',
+      'Node.js',
+      'Express',
+      'Supabase',
+      'PostgreSQL',
+      'Pinecone',
+      'Vector DB',
+      'OpenAI',
+      'GPT-4.1 mini',
+    ],
+    liveUrl: 'https://www.siyahabh.com/',
+  },
+  {
     num: '01',
     category: 'Full-stack',
     title: 'WealthHome — Real estate platform',

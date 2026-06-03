@@ -37,18 +37,18 @@ export function CertificatePdfViewer({ url, title }: CertificatePdfViewerProps) 
   if (loadError) {
     return (
       <div className="flex flex-col items-center justify-center gap-4 px-4 py-12 text-center">
-        <p className="max-w-sm text-sm text-neutral-600">
+        <p className="max-w-sm text-sm text-portfolio-muted">
           Preview could not be loaded in the browser. Open the file in a new tab to view it.
         </p>
         <a
           href={url}
           target="_blank"
           rel="noopener noreferrer"
-          className="rounded-full border border-neutral-300 bg-white px-5 py-2 text-sm font-semibold text-neutral-900 shadow-sm transition hover:bg-neutral-50"
+          className="rounded-full border border-portfolio-cyan/40 bg-portfolio-surface px-5 py-2 text-sm font-semibold text-portfolio-ink shadow-glow-cyan transition hover:border-portfolio-purple/40 hover:shadow-glow-purple"
         >
           Open PDF
         </a>
-        <p className="text-xs text-neutral-400">{title}</p>
+        <p className="text-xs text-portfolio-muted">{title}</p>
       </div>
     );
   }
@@ -62,7 +62,7 @@ export function CertificatePdfViewer({ url, title }: CertificatePdfViewerProps) 
       <Document
         file={url}
         loading={
-          <div className="flex min-h-[200px] items-center justify-center py-12 text-sm text-neutral-500">
+          <div className="flex min-h-[200px] items-center justify-center py-12 text-sm text-portfolio-muted">
             Loading certificate…
           </div>
         }

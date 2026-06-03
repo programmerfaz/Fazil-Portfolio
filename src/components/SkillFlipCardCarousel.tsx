@@ -6,22 +6,21 @@ import { SKILL_GROUPS } from '../data/profile';
 import { useMediaQuery } from '../hooks/useMediaQuery';
 
 /**
- * Skill cards — rose / amber / lime sunset theme on all viewports (matches former “web” ≥640px look).
+ * Skill cards — cyan / violet glass stack on a deep slate shell (site-wide portfolio theme).
  */
 const P = {
-  /** Web — saturated sunset header + dark shell */
-  webHeaderTop: '#2a0410',
-  webHeaderMid: '#9f1239',
-  webHeaderBot: '#ea580c',
-  webAccentAmber: '#fcd34d',
-  webAccentLime: '#bef264',
-  webGlowA: '250, 204, 21',
-  webGlowB: '244, 63, 94',
-  webShellTop: '#1f0d14',
-  webShellMid: '#14060c',
-  webShellBot: '#0a0306',
-  webBody: '#160810',
-  webTechPanel: '#080304',
+  webHeaderTop: '#0e7490',
+  webHeaderMid: '#155e75',
+  webHeaderBot: '#5b21b6',
+  webAccentAmber: '#67e8f9',
+  webAccentLime: '#c4b5fd',
+  webGlowA: '6, 182, 212',
+  webGlowB: '139, 92, 246',
+  webShellTop: '#111827',
+  webShellMid: '#0f172a',
+  webShellBot: '#030712',
+  webBody: '#111827',
+  webTechPanel: '#030712',
 } as const;
 
 type SkillGroup = (typeof SKILL_GROUPS)[number];
@@ -160,11 +159,11 @@ function SkillFlipCard({ group, isActive }: SkillFlipCardProps) {
         role={interactive && !canHover ? 'button' : undefined}
         tabIndex={interactive ? 0 : undefined}
         aria-pressed={interactive && !canHover ? showBack : undefined}
-        className={`relative h-[min(820px,min(88dvh,calc(100svh-3rem)))] min-h-[min(640px,max(300px,calc(100svh-14rem)))] rounded-[36px] outline-none ring-offset-2 ring-offset-[#0a0306] max-sm:h-[clamp(260px,min(560px,calc(100svh-6.5rem)),560px)] max-sm:min-h-[max(240px,min(380px,calc(100svh-7rem)))] max-sm:max-h-[min(560px,calc(100svh-3rem))] max-sm:rounded-2xl ${
+        className={`relative h-[min(820px,min(88dvh,calc(100svh-3rem)))] min-h-[min(640px,max(300px,calc(100svh-14rem)))] rounded-[36px] outline-none ring-offset-2 ring-offset-portfolio-dark max-sm:h-[clamp(260px,min(560px,calc(100svh-6.5rem)),560px)] max-sm:min-h-[max(240px,min(380px,calc(100svh-7rem)))] max-sm:max-h-[min(560px,calc(100svh-3rem))] max-sm:rounded-2xl ${
           interactive && canHover
-            ? 'cursor-pointer focus-visible:ring-2 focus-visible:ring-fuchsia-400 focus-visible:ring-offset-2 max-sm:focus-visible:ring-offset-1'
+            ? 'cursor-pointer focus-visible:ring-2 focus-visible:ring-cyan-400/70 focus-visible:ring-offset-2 max-sm:focus-visible:ring-offset-1'
             : interactive && !canHover
-              ? 'cursor-pointer touch-manipulation focus-visible:ring-2 focus-visible:ring-fuchsia-400 focus-visible:ring-offset-2 max-sm:focus-visible:ring-offset-1'
+              ? 'cursor-pointer touch-manipulation focus-visible:ring-2 focus-visible:ring-cyan-400/70 focus-visible:ring-offset-2 max-sm:focus-visible:ring-offset-1'
               : ''
         }`}
         aria-hidden={!interactive}
@@ -192,7 +191,7 @@ function SkillFlipCard({ group, isActive }: SkillFlipCardProps) {
         <div
           className={`relative h-full rounded-[36px] [transform-style:preserve-3d] transition-[transform,box-shadow] duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:duration-200 max-sm:rounded-2xl ${
             interactive && (hover || focused)
-              ? 'shadow-[0_40px_90px_-20px_rgba(244,63,94,0.45)] ring-2 ring-fuchsia-400/70'
+              ? 'shadow-[0_40px_90px_-20px_rgba(6,182,212,0.35)] ring-2 ring-cyan-400/50'
               : ''
           }`}
           style={{
@@ -202,19 +201,19 @@ function SkillFlipCard({ group, isActive }: SkillFlipCardProps) {
         >
           {/* Front — vivid dark header; no white fade over headline text */}
           <div
-            className={`absolute inset-0 flex flex-col overflow-hidden rounded-2xl border-2 border-fuchsia-900/50 text-amber-50/95 shadow-[0_48px_100px_-28px_rgba(190,24,93,0.35)] [backface-visibility:hidden] sm:rounded-[36px] sm:border-[3px] sm:border-slate-800/80 ${!interactive ? 'opacity-[0.82] saturate-[0.92]' : ''} ${showBack ? 'pointer-events-none' : ''}`}
+            className={`absolute inset-0 flex flex-col overflow-hidden rounded-2xl border-2 border-cyan-500/25 text-slate-100 shadow-[0_48px_100px_-28px_rgba(6,182,212,0.22)] [backface-visibility:hidden] sm:rounded-[36px] sm:border-[3px] sm:border-slate-700/70 ${!interactive ? 'opacity-[0.82] saturate-[0.92]' : ''} ${showBack ? 'pointer-events-none' : ''}`}
             style={{
               background: `linear-gradient(180deg, ${P.webShellTop} 0%, ${P.webShellMid} 42%, ${P.webShellBot} 100%)`,
             }}
           >
             <div
-              className="relative h-[40%] shrink-0 overflow-hidden rounded-t-2xl border-b-2 border-amber-400/85 sm:rounded-t-[28px]"
+              className="relative h-[40%] shrink-0 overflow-hidden rounded-t-2xl border-b border-cyan-400/40 sm:rounded-t-[28px]"
               style={{
                 background: `linear-gradient(165deg, ${P.webHeaderTop} 0%, ${P.webHeaderMid} 42%, ${P.webHeaderBot} 100%)`,
               }}
             >
               <div
-                className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-amber-300 via-fuchsia-500 to-rose-600"
+                className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-cyan-400 via-violet-500 to-purple-500"
                 aria-hidden
               />
               <div
@@ -252,20 +251,20 @@ function SkillFlipCard({ group, isActive }: SkillFlipCardProps) {
                 {previewIcons.map((tech) => (
                   <span
                     key={`front-${tech.name}`}
-                    className="inline-flex rounded-2xl border-2 border-amber-400 bg-gradient-to-br from-white via-amber-50 to-orange-100 p-3.5 shadow-[0_4px_20px_rgba(251,191,36,0.45)] ring-2 ring-fuchsia-500/50 max-sm:rounded-xl max-sm:p-2"
+                    className="inline-flex rounded-2xl border border-cyan-400/35 bg-slate-900/75 p-3.5 shadow-[0_4px_24px_-4px_rgba(6,182,212,0.35)] ring-1 ring-violet-500/30 backdrop-blur-sm max-sm:rounded-xl max-sm:p-2"
                     title={tech.name}
                   >
                     <TechBrandIcon
                       name={tech.name}
                       lucideKey={tech.icon}
                       size={previewIconSize}
-                      surface="light"
+                      surface="dark"
                     />
                   </span>
                 ))}
               </div>
 
-              <p className="mx-auto mt-1 max-w-[96%] px-1 text-center text-xs font-medium leading-snug text-rose-100/75 max-sm:text-[10px] sm:max-w-lg sm:text-sm">
+              <p className="mx-auto mt-1 max-w-[96%] px-1 text-center text-xs font-medium leading-snug text-slate-400 max-sm:text-[10px] sm:max-w-lg sm:text-sm">
                 {interactive
                   ? canHover
                     ? 'Hover to flip — full stack and notes on the other side.'
@@ -273,7 +272,7 @@ function SkillFlipCard({ group, isActive }: SkillFlipCardProps) {
                   : 'Use arrows to bring this card forward.'}
               </p>
 
-              <div className="mt-auto flex items-center justify-end gap-2 pt-4 font-black text-lime-300 drop-shadow-[0_0_12px_rgba(190,242,100,0.55)]">
+              <div className="mt-auto flex items-center justify-end gap-2 pt-4 font-black text-cyan-300 drop-shadow-[0_0_12px_rgba(6,182,212,0.45)]">
                 <RotateCw className="h-5 w-5 sm:h-6 sm:w-6" strokeWidth={2.25} aria-hidden />
                 <span className="text-[10px] font-bold uppercase tracking-[0.22em] sm:text-[11px]">Flip</span>
               </div>
@@ -282,19 +281,19 @@ function SkillFlipCard({ group, isActive }: SkillFlipCardProps) {
 
           {/* Back — matches front energy on web */}
           <div
-            className={`absolute inset-0 flex flex-col overflow-hidden rounded-2xl border-2 border-fuchsia-900/50 text-amber-50/95 shadow-[0_48px_100px_-28px_rgba(190,24,93,0.35)] [backface-visibility:hidden] [transform:rotateY(180deg)] [transform-style:preserve-3d] sm:rounded-[36px] sm:border-[3px] sm:border-slate-800/80 ${!showBack ? 'pointer-events-none' : ''}`}
+            className={`absolute inset-0 flex flex-col overflow-hidden rounded-2xl border-2 border-cyan-500/25 text-slate-100 shadow-[0_48px_100px_-28px_rgba(139,92,246,0.2)] [backface-visibility:hidden] [transform:rotateY(180deg)] [transform-style:preserve-3d] sm:rounded-[36px] sm:border-[3px] sm:border-slate-700/70 ${!showBack ? 'pointer-events-none' : ''}`}
             style={{
               background: P.webShellMid,
             }}
           >
             <div
-              className="relative max-h-[min(280px,38vh)] shrink-0 overflow-hidden rounded-t-2xl border-b-2 border-amber-400/85 max-sm:max-h-[min(220px,42svh)] sm:max-h-[min(300px,36vh)] sm:rounded-t-[28px]"
+              className="relative max-h-[min(280px,38vh)] shrink-0 overflow-hidden rounded-t-2xl border-b border-cyan-400/40 max-sm:max-h-[min(220px,42svh)] sm:max-h-[min(300px,36vh)] sm:rounded-t-[28px]"
               style={{
                 background: `linear-gradient(165deg, ${P.webHeaderTop} 0%, ${P.webHeaderMid} 42%, ${P.webHeaderBot} 100%)`,
               }}
             >
               <div
-                className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-amber-300 via-fuchsia-500 to-rose-600"
+                className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-cyan-400 via-violet-500 to-purple-500"
                 aria-hidden
               />
               <div
@@ -322,7 +321,7 @@ function SkillFlipCard({ group, isActive }: SkillFlipCardProps) {
                   {tagline}
                 </p>
                 <p
-                  className="mx-auto mt-3 max-w-[42ch] shrink-0 text-pretty text-center text-[12px] font-bold leading-relaxed text-amber-50/95 max-sm:mt-2 max-sm:text-[11px] sm:text-[13px]"
+                  className="mx-auto mt-3 max-w-[42ch] shrink-0 text-pretty text-center text-[12px] font-bold leading-relaxed text-slate-200 max-sm:mt-2 max-sm:text-[11px] sm:text-[13px]"
                 >
                   {summary}
                 </p>
@@ -330,10 +329,10 @@ function SkillFlipCard({ group, isActive }: SkillFlipCardProps) {
             </div>
 
             <div
-              className="flex min-h-0 flex-1 flex-col gap-2 overflow-hidden border-t border-fuchsia-950/50 px-4 py-3 max-sm:gap-1.5 max-sm:px-2 max-sm:py-2 sm:gap-3 sm:px-6 sm:py-4"
+              className="flex min-h-0 flex-1 flex-col gap-2 overflow-hidden border-t border-slate-700/60 px-4 py-3 max-sm:gap-1.5 max-sm:px-2 max-sm:py-2 sm:gap-3 sm:px-6 sm:py-4"
               style={{ backgroundColor: P.webTechPanel }}
             >
-              <p className="shrink-0 text-[11px] font-black uppercase tracking-[0.24em] text-amber-200/90 max-sm:text-[10px] max-sm:tracking-[0.2em]">
+              <p className="shrink-0 text-[11px] font-black uppercase tracking-[0.24em] text-cyan-200/90 max-sm:text-[10px] max-sm:tracking-[0.2em]">
                 Technologies
               </p>
               <div className="min-h-0 flex-1 overflow-y-auto overscroll-y-contain [-webkit-overflow-scrolling:touch] pr-0.5">
@@ -342,26 +341,26 @@ function SkillFlipCard({ group, isActive }: SkillFlipCardProps) {
                     <div
                       key={`back-${tech.name}`}
                       title={tech.blurb ? `${tech.name} — ${tech.blurb}` : tech.name}
-                      className="flex min-h-0 flex-col items-center gap-1 rounded-lg border-2 border-fuchsia-500 bg-gradient-to-b from-white to-amber-50 px-1.5 py-2 text-center shadow-[0_6px_22px_-6px_rgba(217,70,239,0.45)] max-sm:gap-0.5 max-sm:rounded-md max-sm:px-1 max-sm:py-1.5 sm:rounded-xl sm:px-2 sm:py-2"
+                      className="flex min-h-0 flex-col items-center gap-1 rounded-lg border border-cyan-500/30 bg-slate-900/80 px-1.5 py-2 text-center shadow-[0_6px_22px_-6px_rgba(139,92,246,0.35)] backdrop-blur-sm max-sm:gap-0.5 max-sm:rounded-md max-sm:px-1 max-sm:py-1.5 sm:rounded-xl sm:px-2 sm:py-2"
                     >
                       <span
-                        className="inline-flex rounded-lg border-2 border-amber-400 bg-white p-1.5 shadow-sm max-sm:rounded-md max-sm:p-1 sm:rounded-xl sm:p-2"
+                        className="inline-flex rounded-lg border border-cyan-400/40 bg-slate-950/80 p-1.5 shadow-[0_0_16px_-4px_rgba(6,182,212,0.35)] max-sm:rounded-md max-sm:p-1 sm:rounded-xl sm:p-2"
                       >
                         <TechBrandIcon
                           name={tech.name}
                           lucideKey={tech.icon}
                           size={backTechIconSize}
-                          surface="light"
+                          surface="dark"
                         />
                       </span>
                       <p
-                        className="w-full truncate text-[10px] font-bold leading-tight text-fuchsia-950 max-sm:text-[9px] sm:text-[11px]"
+                        className="w-full truncate text-[10px] font-bold leading-tight text-cyan-100 max-sm:text-[9px] sm:text-[11px]"
                       >
                         {tech.name}
                       </p>
                       {tech.blurb ? (
                         <p
-                          className="line-clamp-2 w-full text-[8px] font-semibold leading-tight text-rose-800/90 max-sm:text-[7.5px] sm:text-[9px]"
+                          className="line-clamp-2 w-full text-[8px] font-semibold leading-tight text-slate-400 max-sm:text-[7.5px] sm:text-[9px]"
                         >
                           {tech.blurb}
                         </p>
@@ -407,7 +406,7 @@ export function SkillFlipCardCarousel() {
         aria-label="Skill areas"
       >
         <div
-          className="relative mx-auto h-[min(820px,max(480px,min(92dvh,calc(100svh-3rem))))] w-full max-w-[1600px] outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-400 focus-visible:ring-offset-4 focus-visible:ring-offset-[#0a0306] max-sm:h-[max(320px,min(560px,calc(100svh-8rem)))] max-sm:max-h-[calc(100svh-2.5rem)] max-sm:focus-visible:ring-offset-2 sm:h-[min(900px,max(520px,min(93dvh,calc(100svh-4rem))))]"
+          className="relative mx-auto h-[min(820px,max(480px,min(92dvh,calc(100svh-3rem))))] w-full max-w-[1600px] outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/60 focus-visible:ring-offset-4 focus-visible:ring-offset-portfolio-dark max-sm:h-[max(320px,min(560px,calc(100svh-8rem)))] max-sm:max-h-[calc(100svh-2.5rem)] max-sm:focus-visible:ring-offset-2 sm:h-[min(900px,max(520px,min(93dvh,calc(100svh-4rem))))]"
           style={{ perspective: `${perspectivePx}px` }}
           tabIndex={0}
           role="region"
@@ -464,7 +463,7 @@ export function SkillFlipCardCarousel() {
           <button
             type="button"
             onClick={() => go(-1)}
-            className="absolute left-[max(0.25rem,env(safe-area-inset-left))] top-1/2 z-[80] flex h-12 w-12 -translate-y-1/2 touch-manipulation items-center justify-center rounded-full border-2 border-amber-400/90 bg-gradient-to-br from-rose-900 to-orange-900 text-amber-200 shadow-[0_0_24px_rgba(244,63,94,0.45)] transition hover:brightness-110 hover:shadow-lg active:scale-95 max-sm:top-[42%] max-sm:h-11 max-sm:min-h-[44px] max-sm:w-11 max-sm:min-w-[44px] sm:left-3 sm:top-1/2 sm:h-14 sm:min-h-0 sm:w-14 sm:min-w-0 md:left-5"
+            className="absolute left-[max(0.25rem,env(safe-area-inset-left))] top-1/2 z-[80] flex h-12 w-12 -translate-y-1/2 touch-manipulation items-center justify-center rounded-full border-2 border-cyan-400/70 bg-gradient-to-br from-slate-900 to-indigo-950 text-cyan-200 shadow-[0_0_28px_rgba(6,182,212,0.4)] transition hover:brightness-110 hover:shadow-[0_0_36px_rgba(139,92,246,0.35)] active:scale-95 max-sm:top-[42%] max-sm:h-11 max-sm:min-h-[44px] max-sm:w-11 max-sm:min-w-[44px] sm:left-3 sm:top-1/2 sm:h-14 sm:min-h-0 sm:w-14 sm:min-w-0 md:left-5"
             aria-label="Previous skill card"
           >
             <ChevronLeft className="h-7 w-7 max-sm:h-6 max-sm:w-6 sm:h-8 sm:w-8" strokeWidth={2.25} />
@@ -472,7 +471,7 @@ export function SkillFlipCardCarousel() {
           <button
             type="button"
             onClick={() => go(1)}
-            className="absolute right-[max(0.25rem,env(safe-area-inset-right))] top-1/2 z-[80] flex h-12 w-12 -translate-y-1/2 touch-manipulation items-center justify-center rounded-full border-2 border-amber-400/90 bg-gradient-to-br from-rose-900 to-orange-900 text-amber-200 shadow-[0_0_24px_rgba(244,63,94,0.45)] transition hover:brightness-110 hover:shadow-lg active:scale-95 max-sm:top-[42%] max-sm:h-11 max-sm:min-h-[44px] max-sm:w-11 max-sm:min-w-[44px] sm:right-3 sm:top-1/2 sm:h-14 sm:min-h-0 sm:w-14 sm:min-w-0 md:right-5"
+            className="absolute right-[max(0.25rem,env(safe-area-inset-right))] top-1/2 z-[80] flex h-12 w-12 -translate-y-1/2 touch-manipulation items-center justify-center rounded-full border-2 border-cyan-400/70 bg-gradient-to-br from-slate-900 to-indigo-950 text-cyan-200 shadow-[0_0_28px_rgba(6,182,212,0.4)] transition hover:brightness-110 hover:shadow-[0_0_36px_rgba(139,92,246,0.35)] active:scale-95 max-sm:top-[42%] max-sm:h-11 max-sm:min-h-[44px] max-sm:w-11 max-sm:min-w-[44px] sm:right-3 sm:top-1/2 sm:h-14 sm:min-h-0 sm:w-14 sm:min-w-0 md:right-5"
             aria-label="Next skill card"
           >
             <ChevronRight className="h-7 w-7 max-sm:h-6 max-sm:w-6 sm:h-8 sm:w-8" strokeWidth={2.25} />
@@ -480,7 +479,7 @@ export function SkillFlipCardCarousel() {
 
           <div className="pointer-events-none absolute bottom-5 left-1/2 z-[75] -translate-x-1/2 max-sm:bottom-2 sm:bottom-8">
             <span
-              className="rounded-full border-2 border-amber-400/80 bg-gradient-to-r from-rose-950 to-orange-950 px-4 py-2 font-mono text-xs font-black tabular-nums text-amber-200 shadow-[0_0_22px_rgba(244,63,94,0.4)] backdrop-blur-sm sm:text-sm"
+              className="rounded-full border-2 border-cyan-400/50 bg-gradient-to-r from-slate-950 to-indigo-950 px-4 py-2 font-mono text-xs font-black tabular-nums text-cyan-200 shadow-[0_0_24px_rgba(139,92,246,0.35)] backdrop-blur-sm sm:text-sm"
               role="status"
               aria-live="polite"
             >

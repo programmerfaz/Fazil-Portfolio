@@ -76,13 +76,13 @@ const ITEMS: readonly Item[] = [
 ] as const;
 
 const COLORS = {
-  toggleBg: 'rgb(231, 231, 231)',
-  toggleIcon: 'rgb(47, 48, 52)',
-  wheelBg: 'rgb(47, 48, 52)',
-  iconIdle: 'rgb(197, 198, 202)',
-  iconActive: 'rgb(255, 255, 255)',
-  labelIdle: 'rgba(255, 255, 255, 0.6)',
-  labelActive: 'rgb(255, 255, 255)',
+  toggleBg: 'rgb(17, 24, 39)',
+  toggleIcon: 'rgb(6, 182, 212)',
+  wheelBg: 'rgb(15, 23, 42)',
+  iconIdle: 'rgb(156, 163, 175)',
+  iconActive: 'rgb(249, 250, 251)',
+  labelIdle: 'rgba(249, 250, 251, 0.55)',
+  labelActive: 'rgb(249, 250, 251)',
 } as const;
 
 const WHEEL_SPRING = { type: 'spring' as const, stiffness: 320, damping: 26, mass: 0.85 };
@@ -276,8 +276,7 @@ export function RadialMenu() {
             boxShadow: [
               '0 22px 60px -16px rgba(0,0,0,0.55)',
               '0 0 0 1px rgba(255,255,255,0.06) inset',
-              '0 -14px 36px -12px rgba(255,255,255,0.05) inset',
-              '0 14px 36px -12px rgba(0,0,0,0.4) inset',
+              '0 0 48px -16px rgba(6,182,212,0.12)',
             ].join(', '),
           }}
           initial={false}
@@ -327,7 +326,7 @@ export function RadialMenu() {
             marginLeft: -dim.glow / 2,
             marginTop: -dim.glow / 2,
             background:
-              'radial-gradient(circle at center, rgba(255,255,255,0.22), rgba(255,255,255,0) 65%)',
+              'radial-gradient(circle at center, rgba(6,182,212,0.2), rgba(139,92,246,0.12) 40%, rgba(255,255,255,0) 65%)',
             mixBlendMode: 'plus-lighter',
             filter: 'blur(4px)',
             pointerEvents: 'none',
@@ -356,7 +355,7 @@ export function RadialMenu() {
               onPointerLeave={() => setHover((curr) => (curr === i ? null : curr))}
               onFocus={() => setHover(i)}
               onBlur={() => setHover((curr) => (curr === i ? null : curr))}
-              className="absolute left-1/2 top-1/2 flex select-none flex-col items-center justify-center gap-[3px] overflow-hidden rounded-2xl px-px outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+              className="absolute left-1/2 top-1/2 flex select-none flex-col items-center justify-center gap-[3px] overflow-hidden rounded-2xl px-px outline-none focus-visible:ring-2 focus-visible:ring-portfolio-cyan/50"
               style={{
                 width: dim.itemW,
                 height: dim.itemH,
@@ -446,7 +445,7 @@ export function RadialMenu() {
           aria-label={open ? 'Close navigation' : 'Open navigation'}
           aria-expanded={open}
           onClick={handleToggle}
-          className="relative z-10 flex items-center justify-center overflow-hidden rounded-full outline-none focus-visible:ring-2 focus-visible:ring-black/30"
+          className="relative z-10 flex items-center justify-center overflow-hidden rounded-full outline-none focus-visible:ring-2 focus-visible:ring-portfolio-cyan/40"
           style={{
             width: dim.toggle,
             height: dim.toggle,
@@ -456,9 +455,10 @@ export function RadialMenu() {
             touchAction: 'manipulation',
             boxShadow: [
               '0 14px 36px -10px rgba(0,0,0,0.5)',
-              '0 0 32px -12px rgba(109,40,217,0.28)',
-              '0 1px 0 rgba(255,255,255,0.65) inset',
-              '0 0 0 1px rgba(0,0,0,0.06)',
+              '0 0 40px -12px rgba(6,182,212,0.25)',
+              '0 0 36px -14px rgba(139,92,246,0.2)',
+              '0 1px 0 rgba(255,255,255,0.08) inset',
+              '0 0 0 1px rgba(255,255,255,0.06)',
             ].join(', '),
           }}
           whileHover={reduceMotion ? undefined : { scale: 1.04 }}

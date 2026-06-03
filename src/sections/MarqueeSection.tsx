@@ -39,21 +39,21 @@ function MarqueeTile({ image, index, onOpen }: MarqueeTileProps) {
       <motion.button
         type="button"
         onClick={() => onOpen(src)}
-        className={`relative block cursor-zoom-in text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#BBCCD7] ${phoneFrame ? 'w-[min(340px,calc(100vw-12px))] sm:w-[230px] md:w-[248px]' : ''}`}
+        className={`relative block cursor-zoom-in text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-portfolio-cyan ${phoneFrame ? 'w-[min(340px,calc(100vw-12px))] sm:w-[230px] md:w-[248px]' : ''}`}
         aria-label="View full-size preview"
         whileTap={{ scale: 0.98 }}
       >
         <motion.div
-          className="pointer-events-none absolute -inset-3 rounded-[2rem] bg-[radial-gradient(ellipse_at_center,rgba(187,204,215,0.22)_0%,rgba(118,33,176,0.12)_45%,transparent_72%)] opacity-50 blur-xl transition-opacity duration-500 group-hover:opacity-90"
+          className="pointer-events-none absolute -inset-3 rounded-[2rem] bg-[radial-gradient(ellipse_at_center,rgba(6,182,212,0.18)_0%,rgba(139,92,246,0.14)_45%,transparent_72%)] opacity-50 blur-xl transition-opacity duration-500 group-hover:opacity-90"
           aria-hidden
         />
         <div className="relative">
           <div
-            className="absolute -inset-[1px] rounded-3xl bg-gradient-to-br from-[#D7E2EA]/35 via-[#7c3aed]/20 to-transparent opacity-70 transition duration-500 group-hover:opacity-100"
+            className="absolute -inset-[1px] rounded-3xl bg-gradient-to-br from-portfolio-cyan/30 via-portfolio-purple/25 to-transparent opacity-70 transition duration-500 group-hover:opacity-100"
             aria-hidden
           />
           <motion.div
-            className={`relative overflow-hidden rounded-3xl ring-1 ring-white/[0.08] shadow-[0_24px_60px_-20px_rgba(0,0,0,0.85),inset_0_1px_0_0_rgba(255,255,255,0.06)] ${phoneFrame ? 'bg-[#0f0f11]' : ''}`}
+            className={`relative overflow-hidden rounded-3xl border border-portfolio shadow-[0_24px_60px_-20px_rgba(0,0,0,0.75),inset_0_1px_0_0_rgba(255,255,255,0.05)] ${phoneFrame ? 'bg-portfolio-surface' : ''}`}
             whileHover={{ y: -2 }}
             transition={{ duration: 0.35, ease }}
           >
@@ -80,15 +80,15 @@ function MarqueeTile({ image, index, onOpen }: MarqueeTileProps) {
               />
             </div>
             <motion.div
-              className="pointer-events-none absolute inset-0 flex items-center justify-center bg-[#0C0C0C]/0 transition-colors duration-300 group-hover:bg-[#0C0C0C]/25"
+              className="pointer-events-none absolute inset-0 flex items-center justify-center bg-portfolio-bg/0 transition-colors duration-300 group-hover:bg-portfolio-bg/30"
               aria-hidden
             >
-              <span className="rounded-full border border-[#D7E2EA]/35 bg-[#0C0C0C]/75 px-4 py-2 text-[10px] font-medium uppercase tracking-[0.2em] text-[#D7E2EA] opacity-0 backdrop-blur-sm transition-opacity duration-300 group-hover:opacity-100 sm:text-xs">
+              <span className="rounded-full border border-portfolio bg-portfolio-surface/80 px-4 py-2 text-[10px] font-medium uppercase tracking-[0.2em] text-portfolio-ink opacity-0 shadow-glow-cyan backdrop-blur-md transition-opacity duration-300 group-hover:opacity-100 sm:text-xs">
                 View
               </span>
             </motion.div>
             <motion.div
-              className={`pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0C0C0C]/50 via-transparent to-[#0C0C0C]/25 transition duration-500 ${phoneFrame ? 'opacity-25 group-hover:opacity-15' : 'opacity-60 group-hover:opacity-40'}`}
+              className={`pointer-events-none absolute inset-0 bg-gradient-to-t from-portfolio-bg/55 via-transparent to-portfolio-bg/25 transition duration-500 ${phoneFrame ? 'opacity-25 group-hover:opacity-15' : 'opacity-60 group-hover:opacity-40'}`}
               aria-hidden
             />
           </motion.div>
@@ -136,7 +136,7 @@ function MarqueeLightbox({ src, onClose }: MarqueeLightboxProps) {
       <motion.button
         type="button"
         aria-label="Close preview"
-        className="absolute inset-0 bg-[#0C0C0C]/88 backdrop-blur-md"
+        className="absolute inset-0 bg-portfolio-bg/90 backdrop-blur-md"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
@@ -156,12 +156,12 @@ function MarqueeLightbox({ src, onClose }: MarqueeLightboxProps) {
           type="button"
           onClick={onClose}
           aria-label="Close preview"
-          className="absolute -right-1 -top-11 flex h-10 w-10 items-center justify-center rounded-full border border-[#D7E2EA]/25 bg-[#141416]/90 text-[#D7E2EA] shadow-lg transition hover:border-[#D7E2EA]/45 hover:bg-[#1a1a1c] sm:-right-2 sm:-top-12"
+          className="absolute -right-1 -top-11 flex h-10 w-10 items-center justify-center rounded-full border border-portfolio bg-portfolio-surface/95 text-portfolio-ink shadow-lg transition hover:border-portfolio-cyan/40 hover:bg-portfolio-card sm:-right-2 sm:-top-12"
         >
           <X className="h-5 w-5" aria-hidden />
         </button>
 
-        <div className="overflow-hidden rounded-2xl border border-[#D7E2EA]/20 bg-[#0C0C0C] p-1.5 shadow-[0_40px_120px_-30px_rgba(0,0,0,0.95)] sm:rounded-3xl sm:p-2">
+        <div className="overflow-hidden rounded-2xl border border-portfolio bg-portfolio-bg p-1.5 shadow-[0_40px_120px_-30px_rgba(0,0,0,0.85),0_0_60px_-24px_rgba(6,182,212,0.15)] sm:rounded-3xl sm:p-2">
           <img
             src={src}
             alt="Project preview"
@@ -215,7 +215,7 @@ export function MarqueeSection() {
   return (
     <section
       ref={sectionRef}
-      className="relative overflow-x-clip bg-[#0C0C0C] pb-14 pt-14 sm:pb-16 sm:pt-20 md:pb-20 md:pt-24"
+      className="relative overflow-x-clip bg-portfolio-light pb-14 pt-10 sm:pb-16 sm:pt-14 md:pb-20 md:pt-16"
       aria-label="Project highlights"
     >
       <div
@@ -223,7 +223,7 @@ export function MarqueeSection() {
         aria-hidden
         style={{
           background:
-            'radial-gradient(ellipse 90% 55% at 15% 40%, rgba(187, 204, 215, 0.09) 0%, transparent 55%), radial-gradient(ellipse 70% 50% at 85% 60%, rgba(118, 33, 176, 0.12) 0%, transparent 50%), radial-gradient(ellipse 60% 40% at 50% 100%, rgba(12, 12, 12, 0.95) 0%, transparent 65%)',
+            'radial-gradient(ellipse 90% 55% at 15% 40%, rgba(6, 182, 212, 0.06) 0%, transparent 55%), radial-gradient(ellipse 70% 50% at 85% 60%, rgba(139, 92, 246, 0.05) 0%, transparent 50%)',
         }}
       />
 
@@ -234,11 +234,11 @@ export function MarqueeSection() {
           viewport={{ once: true, margin: '-40px' }}
           transition={{ duration: 0.6, ease }}
         >
-          <p className="text-[11px] font-medium uppercase tracking-[0.32em] text-[#BBCCD7]/75 sm:text-xs">Highlights</p>
-          <h2 className="hero-heading mt-3 font-black uppercase leading-none tracking-tight" style={{ fontSize: 'clamp(1.75rem, 5vw, 2.75rem)' }}>
+          <p className="text-[11px] font-medium uppercase tracking-[0.32em] text-portfolio-muted-dark sm:text-xs">Highlights</p>
+          <h2 className="hero-heading-light mt-3 font-black uppercase leading-none tracking-tight" style={{ fontSize: 'clamp(1.75rem, 5vw, 2.75rem)' }}>
             Work in motion
           </h2>
-          <p className="mx-auto mt-4 max-w-md text-pretty font-light leading-relaxed text-[#D7E2EA]/55" style={{ fontSize: 'clamp(0.8rem, 1.5vw, 0.95rem)' }}>
+          <p className="mx-auto mt-4 max-w-md text-pretty font-light leading-relaxed text-portfolio-muted-dark" style={{ fontSize: 'clamp(0.8rem, 1.5vw, 0.95rem)' }}>
             A slow drift runs nonstop — scroll adds parallax, and tap any shot for a full preview.
           </p>
         </motion.div>
@@ -277,7 +277,7 @@ export function MarqueeSection() {
         </div>
       </div>
 
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[5] h-20 bg-gradient-to-t from-[#0C0C0C] via-[#0C0C0C]/40 to-transparent sm:h-24" aria-hidden />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[5] h-20 bg-gradient-to-t from-portfolio-light-alt to-transparent sm:h-24" aria-hidden />
 
       <AnimatePresence>{activeSrc ? <MarqueeLightbox src={activeSrc} onClose={closePreview} /> : null}</AnimatePresence>
     </section>
