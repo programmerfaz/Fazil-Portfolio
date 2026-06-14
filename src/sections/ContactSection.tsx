@@ -1,4 +1,4 @@
-import { Github, Linkedin, Mail, MapPin, Phone } from 'lucide-react';
+import { Github, FileText, Linkedin, Mail, MapPin, Phone } from 'lucide-react';
 import { FadeIn } from '../components/FadeIn';
 import { ContactButton } from '../components/ContactButton';
 import { ElectricContactCard } from '../components/ElectricContactCard';
@@ -37,6 +37,13 @@ export function ContactSection() {
             </div>
 
             <div className="grid w-full gap-2.5 max-sm:gap-2 sm:grid-cols-2 sm:gap-3">
+              <a href={PROFILE.cvUrl} target="_blank" rel="noopener noreferrer" className={linkRow}>
+                <FileText className="h-6 w-6 shrink-0 text-[#BBCCD7] max-sm:h-5 max-sm:w-5" aria-hidden />
+                <div className="min-w-0 text-left">
+                  <p className="text-xs uppercase tracking-widest text-[#D7E2EA]/45">CV / Resume</p>
+                  <p className="truncate text-sm font-medium text-[#D7E2EA]/90">View full resume</p>
+                </div>
+              </a>
               <a href={`mailto:${PROFILE.email}`} className={linkRow}>
                 <Mail className="h-6 w-6 shrink-0 text-[#BBCCD7] max-sm:h-5 max-sm:w-5" aria-hidden />
                 <div className="min-w-0 text-left">

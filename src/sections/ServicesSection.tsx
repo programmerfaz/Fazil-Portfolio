@@ -1,5 +1,6 @@
 import { CertificatePdfStack } from '../components/CertificatePdfStack';
 import { FadeIn } from '../components/FadeIn';
+import { ProfileLinkButtons } from '../components/ProfileLinkButtons';
 import { SkillFlipCardCarousel } from '../components/SkillFlipCardCarousel';
 import { EXPERIENCE } from '../data/profile';
 
@@ -106,6 +107,9 @@ export function ServicesSection() {
               </FadeIn>
             ))}
           </div>
+          <FadeIn delay={0.12} duration={0.65} y={20} className="mt-12 flex justify-center sm:mt-14">
+            <ProfileLinkButtons variant="light" />
+          </FadeIn>
         </div>
 
         <div

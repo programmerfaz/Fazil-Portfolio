@@ -14,6 +14,7 @@ export default {
           'Roboto',
           'sans-serif',
         ],
+        display: ['Syne', 'Inter', 'system-ui', 'sans-serif'],
       },
     },
   },

@@ -11,6 +11,7 @@ export const PROFILE = {
   name: 'Fazil Hakim',
   shortName: 'Fazil',
   role: 'Computer Science Undergraduate',
+  headerSubtitle: 'Final year computer science student',
   tagline: 'Certified Microsoft Azure AI engineer Associate | Computer science student',
   email: 'fazilmohdshahbaz@gmail.com',
   phoneDisplay: '+973 34543703',
@@ -24,10 +25,11 @@ export const PROFILE = {
   linkedinUrl: 'https://www.linkedin.com/in/fazil-shahbaz-5278a1325/',
   githubUrl: 'https://github.com/programmerfaz',
   githubReposUrl: 'https://github.com/programmerfaz?tab=repositories',
+  cvUrl: 'https://drive.google.com/file/d/1JxoSWvYWVPMrnZoydLjpfzs7j896Oos3/view?usp=drive_link',
   university: 'University of Bahrain',
   degree: 'BSc. Computer Science',
   educationPeriod: '2022 – Dec 2026',
-  cgpa: '3.81 / 4.00',
+  cgpa: '3.82 / 4.00',
   school: 'Ibn Al-Haytham Islamic School',
   schoolPeriod: '2008 – July 2022',
   dob: '10 November 2003',
@@ -38,6 +40,14 @@ export const PROFILE_SUMMARY =
   "My goal is to enhance and apply my skills as an IT student by actively engaging in real-world challenges. I'm eager to work in a highly competitive environment that fosters continuous learning and offers opportunities for professional growth.";
 
 export const EXPERIENCE = [
+  {
+    role: 'Startups Bahrain Participant',
+    org: 'StartUps (UoB)',
+    period: 'May 2026',
+    bullets: [
+      'Participated in startup workshops where we presented technology-based business ideas, including a sponsored gaming advertisement platform.',
+    ],
+  },
   {
     role: 'C# ASP.NET Developer — Part-time Intern',
     org: 'Dimuma',

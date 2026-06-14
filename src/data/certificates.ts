@@ -95,4 +95,11 @@ export const CERTIFICATE_PDFS: CertificateItem[] = [
     highlights: ['Agentic coding', 'Claude Code workflow'],
     src: certPath('Claude Code 101.pdf'),
   },
+  {
+    title: 'Claude Cowork 101',
+    gist: 'Claude Cowork 101',
+    accent: 'anthropic',
+    highlights: ['Collaborative AI', 'Team workflows'],
+    src: certPath('Claude Cowork 101 Certificate.pdf'),
+  },
 ];

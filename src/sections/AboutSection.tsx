@@ -13,7 +13,6 @@ import {
 } from 'lucide-react';
 import { FadeIn } from '../components/FadeIn';
 import { AnimatedText } from '../components/AnimatedText';
-import { ContactButton } from '../components/ContactButton';
 import { ACHIEVEMENTS, PROFILE } from '../data/profile';
 import { PROJECTS } from '../data/projects';
 
@@ -27,7 +26,7 @@ const KEYWORDS: ReadonlyArray<{ label: string; Icon: LucideIcon | null }> = [
   { label: 'OpenAI · Supabase · Postgres', Icon: null },
   { label: 'Hackathon Participant', Icon: Award },
   { label: 'Curious. Always shipping.', Icon: null },
-  { label: 'CGPA 3.81 / 4.00', Icon: null },
+  { label: 'CGPA 3.82 / 4.00', Icon: null },
 ];
 
 const cgpaMain = PROFILE.cgpa.split(' / ')[0];
@@ -168,15 +167,6 @@ export function AboutSection() {
           </SectionCard>
         </FadeIn>
 
-        <FadeIn
-          as="div"
-          delay={0.2}
-          duration={0.7}
-          y={24}
-          className="mt-12 flex justify-center sm:mt-14"
-        >
-          <ContactButton />
-        </FadeIn>
       </div>
     </section>
   );

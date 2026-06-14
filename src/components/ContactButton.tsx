@@ -1,3 +1,4 @@
+import { useReducedMotion } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 import { PROFILE } from '../data/profile';
 
@@ -5,18 +6,41 @@ type ContactButtonProps = {
   className?: string;
   /** `light` = minimal black CTA for light backgrounds (e.g. editorial hero). */
   variant?: 'dark' | 'light';
+  /** Defaults to WhatsApp; use `#contact` to scroll to the contact section. */
+  href?: string;
 };
 
-export function ContactButton({ className = '', variant = 'dark' }: ContactButtonProps) {
+export function ContactButton({ className = '', variant = 'dark', href }: ContactButtonProps) {
+  const reduceMotion = useReducedMotion();
   const isLight = variant === 'light';
   const whatsappHref = `https://wa.me/${PROFILE.phoneWhatsappDigits}?text=${encodeURIComponent(PROFILE.whatsappPrefillMessage)}`;
+  const linkHref = href ?? whatsappHref;
+  const isHashLink = linkHref.startsWith('#');
+
+  const handleClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    if (!isHashLink) return;
+
+    event.preventDefault();
+    const id = linkHref.slice(1);
+    const target = document.getElementById(id);
+    if (!target) return;
+
+    target.scrollIntoView({
+      behavior: reduceMotion ? 'auto' : 'smooth',
+      block: 'start',
+    });
+    if ('replaceState' in history) {
+      history.replaceState(null, '', linkHref);
+    }
+  };
 
   return (
     <a
-      href={whatsappHref}
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label="Message Fazil on WhatsApp"
+      href={linkHref}
+      onClick={isHashLink ? handleClick : undefined}
+      target={isHashLink ? undefined : '_blank'}
+      rel={isHashLink ? undefined : 'noopener noreferrer'}
+      aria-label={isHashLink ? 'Go to contact section' : 'Message Fazil on WhatsApp'}
       className={
         isLight
           ? `group inline-flex shrink-0 items-center gap-2 rounded-full border border-neutral-900 bg-neutral-900 px-7 py-2.5 text-[11px] font-semibold uppercase tracking-[0.16em] text-white transition-[transform,background-color,border-color] duration-200 hover:bg-neutral-800 hover:border-neutral-800 active:scale-[0.98] sm:px-9 sm:py-3 sm:text-xs md:text-sm ${className}`

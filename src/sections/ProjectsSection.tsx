@@ -1,4 +1,5 @@
 import { FadeIn } from '../components/FadeIn';
+import { ProfileLinkButtons } from '../components/ProfileLinkButtons';
 import { ProjectsCarousel3D } from '../components/ProjectsCarousel3D';
 
 export function ProjectsSection() {
@@ -19,10 +20,14 @@ export function ProjectsSection() {
           </span>
         </FadeIn>
 
-        <p className="mx-auto mb-6 max-w-2xl px-1 text-center text-[10px] font-medium uppercase leading-relaxed tracking-[0.16em] text-[#D7E2EA]/55 max-sm:leading-snug sm:mb-14 sm:px-0 sm:text-[13px] sm:tracking-[0.22em] md:mb-16">
+        <p className="mx-auto mb-6 max-w-2xl px-1 text-center text-[10px] font-medium uppercase leading-relaxed tracking-[0.16em] text-[#D7E2EA]/55 max-sm:leading-snug sm:mb-8 sm:px-0 sm:text-[13px] sm:tracking-[0.22em] md:mb-10">
           <span className="block sm:inline">Tap a card or use the arrows to pause and step.</span>{' '}
           <span className="mt-1 block sm:mt-0 sm:inline">Tap elsewhere or scroll away to spin again — on desktop, hover pauses too.</span>
         </p>
+
+        <div className="mb-8 flex justify-center sm:mb-12 md:mb-14">
+          <ProfileLinkButtons variant="dark" />
+        </div>
 
         <div className="max-sm:overflow-x-clip max-sm:px-1 max-sm:pb-2 sm:mx-0 sm:w-full sm:pb-3">
           <ProjectsCarousel3D />

@@ -215,7 +215,7 @@ export function MarqueeSection() {
   return (
     <section
       ref={sectionRef}
-      className="relative overflow-x-clip bg-[#0C0C0C] pb-14 pt-14 sm:pb-16 sm:pt-20 md:pb-20 md:pt-24"
+      className="relative overflow-x-clip bg-[#0C0C0C] pb-14 pt-12 sm:pb-16 sm:pt-16 md:pb-20 md:pt-20"
       aria-label="Project highlights"
     >
       <div
