@@ -16,7 +16,7 @@ body,
   min-height: 100%;
   min-height: 100dvh;
   overflow-x: hidden;
-  background-color: #0c0c0c;
+  background-color: #f8fafc;
   font-family:
     'Inter',
     'Inter Placeholder',
@@ -60,7 +60,7 @@ body,
 }
 
 .hero-heading {
-  background: linear-gradient(165deg, #f1f5f9 0%, #cbd5e1 42%, #94a3b8 100%);
+  background: linear-gradient(165deg, #1e293b 0%, #334155 42%, #4f46e5 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;

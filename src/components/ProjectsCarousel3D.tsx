@@ -353,7 +353,7 @@ export function ProjectsCarousel3D() {
         <button
           type="button"
           onClick={() => stepRing(-1)}
-          className="pointer-events-auto flex h-9 w-9 shrink-0 touch-manipulation items-center justify-center rounded-full border border-[#D7E2EA]/25 bg-[#0C0C0C]/85 text-[#D7E2EA] shadow-[0_12px_40px_-12px_rgba(0,0,0,0.85)] backdrop-blur-md transition-colors hover:border-[#48E5C2]/50 hover:text-[#48E5C2] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#48E5C2]/70 sm:h-12 sm:w-12"
+          className="pointer-events-auto flex h-9 w-9 shrink-0 touch-manipulation items-center justify-center rounded-full border border-slate-200 bg-white/90 text-slate-600 shadow-[0_12px_40px_-12px_rgba(15,23,42,0.35)] backdrop-blur-md transition-colors hover:border-indigo-300 hover:text-indigo-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/70 sm:h-12 sm:w-12"
           aria-label="Rotate carousel left"
         >
           <ChevronLeft className="h-6 w-6 sm:h-7 sm:w-7" strokeWidth={2} aria-hidden />
@@ -361,7 +361,7 @@ export function ProjectsCarousel3D() {
         <button
           type="button"
           onClick={() => stepRing(1)}
-          className="pointer-events-auto flex h-9 w-9 shrink-0 touch-manipulation items-center justify-center rounded-full border border-[#D7E2EA]/25 bg-[#0C0C0C]/85 text-[#D7E2EA] shadow-[0_12px_40px_-12px_rgba(0,0,0,0.85)] backdrop-blur-md transition-colors hover:border-[#48E5C2]/50 hover:text-[#48E5C2] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#48E5C2]/70 sm:h-12 sm:w-12"
+          className="pointer-events-auto flex h-9 w-9 shrink-0 touch-manipulation items-center justify-center rounded-full border border-slate-200 bg-white/90 text-slate-600 shadow-[0_12px_40px_-12px_rgba(15,23,42,0.35)] backdrop-blur-md transition-colors hover:border-indigo-300 hover:text-indigo-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/70 sm:h-12 sm:w-12"
           aria-label="Rotate carousel right"
         >
           <ChevronRight className="h-6 w-6 sm:h-7 sm:w-7" strokeWidth={2} aria-hidden />
@@ -408,19 +408,19 @@ function CarouselCard({
       onPointerLeave={onHoverEnd}
       onPointerCancel={onHoverEnd}
     >
-      <article className="box-border flex h-full w-full min-h-0 min-w-0 flex-col overflow-hidden rounded-2xl border border-[#D7E2EA]/15 bg-gradient-to-b from-[#16161A] via-[#0F1014] to-[#0B0B0D] p-3 shadow-[0_30px_80px_-30px_rgba(0,0,0,0.7),0_0_0_1px_rgba(255,255,255,0.04)_inset] sm:rounded-3xl sm:p-6">
+      <article className="box-border flex h-full w-full min-h-0 min-w-0 flex-col overflow-hidden rounded-2xl border border-slate-200 bg-gradient-to-b from-white via-white to-slate-50 p-3 shadow-[0_30px_80px_-30px_rgba(15,23,42,0.22),0_0_0_1px_rgba(15,23,42,0.02)_inset] sm:rounded-3xl sm:p-6">
         <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
           <header className="flex shrink-0 min-w-0 items-start justify-between gap-2 sm:gap-3">
-            <span className="min-w-0 flex-1 text-[9px] font-medium uppercase leading-tight tracking-[0.14em] text-[#48E5C2] sm:text-[10px] sm:leading-snug sm:tracking-[0.22em]">
+            <span className="min-w-0 flex-1 text-[9px] font-medium uppercase leading-tight tracking-[0.14em] text-indigo-500 sm:text-[10px] sm:leading-snug sm:tracking-[0.22em]">
               {project.category}
             </span>
-            <span className="shrink-0 font-black tabular-nums leading-none text-[#D7E2EA]/15 text-lg sm:text-4xl">
+            <span className="shrink-0 font-black tabular-nums leading-none text-slate-200 text-lg sm:text-4xl">
               {project.num}
             </span>
           </header>
 
           <h3
-            className={`mt-2 min-w-0 shrink-0 font-medium uppercase text-[#D7E2EA] sm:mt-3 sm:text-[1.05rem] sm:leading-tight ${
+            className={`mt-2 min-w-0 shrink-0 font-medium uppercase text-slate-900 sm:mt-3 sm:text-[1.05rem] sm:leading-tight ${
               compact
                 ? 'text-[0.8rem] leading-snug'
                 : 'line-clamp-3 text-[1.05rem] leading-tight'
@@ -429,7 +429,7 @@ function CarouselCard({
             {project.title}
           </h3>
           <p
-            className={`mt-1.5 min-w-0 shrink-0 font-light leading-snug text-[#D7E2EA]/75 sm:mt-2 sm:text-sm ${
+            className={`mt-1.5 min-w-0 shrink-0 font-light leading-snug text-slate-500 sm:mt-2 sm:text-sm ${
               compact ? 'line-clamp-3 text-[0.7rem]' : 'line-clamp-2'
             }`}
           >
@@ -440,9 +440,9 @@ function CarouselCard({
             {project.bullets.slice(0, 3).map((bullet) => (
               <li
                 key={bullet}
-                className="flex min-w-0 gap-1.5 text-[8px] leading-snug text-[#D7E2EA]/70 sm:gap-2 sm:text-xs"
+                className="flex min-w-0 gap-1.5 text-[8px] leading-snug text-slate-500 sm:gap-2 sm:text-xs"
               >
-                <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-[#48E5C2]" aria-hidden />
+                <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-indigo-500" aria-hidden />
                 <span className="line-clamp-2 min-w-0 flex-1">{bullet}</span>
               </li>
             ))}
@@ -457,13 +457,13 @@ function CarouselCard({
             <span
               key={tech}
               title={tech}
-              className="inline-flex max-w-full min-w-0 items-center gap-0.5 rounded-full border border-[#D7E2EA]/15 py-0.5 pl-1 pr-1.5 text-[7px] font-medium uppercase leading-none tracking-wide text-[#D7E2EA]/85 sm:gap-1.5 sm:py-0.5 sm:pl-1.5 sm:pr-2.5 sm:text-[10px] sm:leading-normal"
+              className="inline-flex max-w-full min-w-0 items-center gap-0.5 rounded-full border border-slate-200 bg-white py-0.5 pl-1 pr-1.5 text-[7px] font-medium uppercase leading-none tracking-wide text-slate-600 sm:gap-1.5 sm:py-0.5 sm:pl-1.5 sm:pr-2.5 sm:text-[10px] sm:leading-normal"
             >
               <TechBrandIcon
                 name={tech}
                 lucideKey={projectStackLucideKey(tech)}
                 size={stackIconSize}
-                surface="dark"
+                surface="light"
                 className="shrink-0 !p-0 sm:!p-px"
               />
               <span className="min-w-0 truncate">{tech}</span>
@@ -505,8 +505,10 @@ function CarouselLink({ href, label, Icon, muted = false }: CarouselLinkProps) {
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className={`inline-flex max-w-full min-w-0 items-center gap-1 rounded-full border px-2 py-0.5 text-[9px] font-medium uppercase tracking-widest transition-colors hover:bg-[#D7E2EA]/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#D7E2EA]/60 sm:gap-1.5 sm:px-4 sm:py-1.5 sm:text-[11px] ${
-        muted ? 'border-[#D7E2EA]/35 text-[#D7E2EA]/85' : 'border-[#D7E2EA] text-[#D7E2EA]'
+      className={`inline-flex max-w-full min-w-0 items-center gap-1 rounded-full border px-2 py-0.5 text-[9px] font-medium uppercase tracking-widest transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/50 sm:gap-1.5 sm:px-4 sm:py-1.5 sm:text-[11px] ${
+        muted
+          ? 'border-slate-200 text-slate-500 hover:bg-slate-100'
+          : 'border-slate-900 bg-slate-900 text-white hover:bg-slate-800'
       }`}
     >
       <Icon className="h-3 w-3 shrink-0 sm:h-3.5 sm:w-3.5" strokeWidth={2} aria-hidden />

@@ -135,7 +135,7 @@ export function PortfolioSplash() {
     >
       <button
         type="button"
-        className="absolute right-[max(1rem,env(safe-area-inset-right))] top-[max(1rem,env(safe-area-inset-top))] text-[10px] font-medium uppercase tracking-[0.2em] text-white/40 transition-colors hover:text-[#48E5C2] sm:right-8 sm:top-8 sm:text-[11px]"
+        className="absolute right-[max(1rem,env(safe-area-inset-right))] top-[max(1rem,env(safe-area-inset-top))] text-[10px] font-medium uppercase tracking-[0.2em] text-white/40 transition-colors hover:text-indigo-300 sm:right-8 sm:top-8 sm:text-[11px]"
         onClick={finish}
       >
         Skip

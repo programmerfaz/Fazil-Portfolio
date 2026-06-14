@@ -9,7 +9,7 @@ import { ServicesSection } from './sections/ServicesSection';
 
 function App() {
   return (
-    <div className="min-h-[100dvh] min-h-screen overflow-x-clip overflow-y-visible bg-[#0C0C0C] text-[#D7E2EA]">
+    <div className="min-h-[100dvh] min-h-screen overflow-x-clip overflow-y-visible bg-slate-50 text-slate-700">
       <PortfolioSplash />
       <HeroSection />
       <MarqueeSection />

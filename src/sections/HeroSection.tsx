@@ -113,9 +113,9 @@ export function HeroSection() {
         </a>
       </div>
 
-      {/* Smooth fade into the next dark section */}
+      {/* Smooth fade into the next section */}
       <div
-        className="pointer-events-none absolute inset-x-0 bottom-0 z-30 h-24 bg-gradient-to-b from-transparent via-[#0C0C0C]/55 to-[#0C0C0C] sm:h-28 md:h-32"
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-30 h-24 bg-gradient-to-b from-transparent via-slate-100/55 to-slate-100 sm:h-28 md:h-32"
         aria-hidden
       />
     </section>

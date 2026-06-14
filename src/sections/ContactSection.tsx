@@ -14,7 +14,7 @@ export function ContactSection() {
       className="px-4 py-16 max-sm:mt-8 max-sm:px-3 max-sm:pt-24 sm:mt-0 sm:px-8 md:px-10 md:py-24 pb-[max(6rem,calc(env(safe-area-inset-bottom)+5rem))]"
       style={{
         background:
-          'linear-gradient(to bottom, #0C0C0C 0px, rgba(12,12,12,0) min(220px, 28vw)), radial-gradient(ellipse 130% 85% at 50% 6%, rgba(109, 40, 217, 0.26) 0%, transparent 52%), radial-gradient(ellipse 90% 55% at 85% 105%, rgba(49, 46, 129, 0.35) 0%, transparent 42%), #0C0C0C',
+          'radial-gradient(ellipse 130% 85% at 50% 6%, rgba(99, 102, 241, 0.1) 0%, transparent 52%), radial-gradient(ellipse 90% 55% at 85% 105%, rgba(67, 56, 202, 0.1) 0%, transparent 42%), #f8fafc',
       }}
     >
       <FadeIn duration={0.62} y={18}>
@@ -24,7 +24,9 @@ export function ContactSection() {
               <span className="rounded-full border border-white/12 bg-white/[0.05] px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-[#e2e8f0] max-sm:px-3 max-sm:py-1 max-sm:text-[9px] max-sm:tracking-[0.18em] sm:text-[11px]">
                 Open to opportunities
               </span>
-              <h2 className="hero-heading mt-5 font-black uppercase leading-[0.92] tracking-tight text-[clamp(1.85rem,7vw,3.75rem)] max-sm:mt-4 max-sm:text-[clamp(1.65rem,10vw,2.65rem)] sm:mt-6 md:mt-7">
+              <h2
+                className="mt-5 bg-gradient-to-br from-white via-[#e2e8f0] to-indigo-400 bg-clip-text font-black uppercase leading-[0.92] tracking-tight text-transparent text-[clamp(1.85rem,7vw,3.75rem)] max-sm:mt-4 max-sm:text-[clamp(1.65rem,10vw,2.65rem)] sm:mt-6 md:mt-7"
+              >
                 Contact
               </h2>
               <p className="mx-auto mt-3 max-w-lg text-sm font-light leading-snug text-[#D7E2EA]/75 max-sm:mt-2.5 max-sm:text-[0.875rem] sm:mt-4 sm:text-base sm:leading-relaxed md:text-lg">
