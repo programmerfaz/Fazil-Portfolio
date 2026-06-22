@@ -36,6 +36,8 @@ type Dim = {
 
 const ROTATE_DURATION_SEC = 55;
 const ROTATE_SPEED_DEG_PER_MS = 360 / (ROTATE_DURATION_SEC * 1000);
+/** Auto-spin direction: -1 = cards drift left → right; 1 = right → left. */
+const AUTO_ROTATE_DIRECTION = -1;
 /** When the carousel is barely visible after using arrows, resume auto-spin (scroll-away / touch). */
 const INTERSECTION_RESUME_RATIO = 0.12;
 
@@ -251,7 +253,7 @@ export function ProjectsCarousel3D() {
       const dt = Math.min(now - prev, 64);
       prev = now;
       if (!pausedRef.current) {
-        rotationRef.current += ROTATE_SPEED_DEG_PER_MS * dt;
+        rotationRef.current += AUTO_ROTATE_DIRECTION * ROTATE_SPEED_DEG_PER_MS * dt;
       }
       applyRingTransform();
       raf = requestAnimationFrame(loop);

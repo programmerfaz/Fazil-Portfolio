@@ -18,8 +18,15 @@ function WhatsAppIcon({ className }: { className?: string }) {
   );
 }
 
-export function HeroQuickLinks({ className = '' }: { className?: string }) {
+export function HeroQuickLinks({
+  className = '',
+  variant = 'dark',
+}: {
+  className?: string;
+  variant?: 'dark' | 'light';
+}) {
   const whatsappHref = `https://wa.me/${PROFILE.phoneWhatsappDigits}?text=${encodeURIComponent(PROFILE.whatsappPrefillMessage)}`;
+  const isLight = variant === 'light';
 
   const links: QuickLink[] = [
     {
@@ -27,30 +34,40 @@ export function HeroQuickLinks({ className = '' }: { className?: string }) {
       label: 'CV',
       ariaLabel: 'View resume on Google Drive',
       icon: <FileText className="h-[1.125rem] w-[1.125rem] shrink-0" strokeWidth={2} />,
-      pillClass:
-        'bg-[var(--surface-accent-strong)] text-[var(--surface-dark)] shadow-[0_6px_16px_-10px_rgba(238,244,250,0.45)] hover:bg-white active:scale-[0.96]',
+      pillClass: isLight
+        ? 'border-2 border-neutral-900 bg-neutral-900 text-white shadow-[0_8px_24px_-12px_rgba(23,23,23,0.45)] hover:border-neutral-700 hover:bg-neutral-800 active:scale-[0.98]'
+        : 'bg-[var(--surface-accent-strong)] text-[var(--surface-dark)] shadow-[0_6px_16px_-10px_rgba(238,244,250,0.45)] hover:bg-white active:scale-[0.96]',
     },
     {
       href: PROFILE.linkedinUrl,
       label: 'LinkedIn',
       ariaLabel: 'Open LinkedIn profile',
       icon: <Linkedin className="h-[1.125rem] w-[1.125rem] shrink-0 fill-current" strokeWidth={0} />,
-      pillClass:
-        'bg-[#0A66C2] text-white shadow-[0_6px_16px_-10px_rgba(10,102,194,0.55)] hover:bg-[#004182] active:scale-[0.96]',
+      pillClass: isLight
+        ? 'border-2 border-[#0A66C2] bg-[#0A66C2] text-white shadow-[0_8px_24px_-12px_rgba(10,102,194,0.45)] hover:border-[#004182] hover:bg-[#004182] active:scale-[0.98]'
+        : 'bg-[#0A66C2] text-white shadow-[0_6px_16px_-10px_rgba(10,102,194,0.55)] hover:bg-[#004182] active:scale-[0.96]',
     },
     {
       href: whatsappHref,
       label: 'Chat',
       ariaLabel: 'Message Fazil on WhatsApp',
       icon: <WhatsAppIcon className="h-[1.125rem] w-[1.125rem] shrink-0" />,
-      pillClass:
-        'bg-[#25D366] text-white shadow-[0_6px_16px_-10px_rgba(37,211,102,0.45)] hover:bg-[#1DA851] active:scale-[0.96]',
+      pillClass: isLight
+        ? 'border-2 border-[#25D366] bg-[#25D366] text-white shadow-[0_8px_24px_-12px_rgba(37,211,102,0.45)] hover:border-[#1DA851] hover:bg-[#1DA851] active:scale-[0.98]'
+        : 'bg-[#25D366] text-white shadow-[0_6px_16px_-10px_rgba(37,211,102,0.45)] hover:bg-[#1DA851] active:scale-[0.96]',
     },
   ];
 
+  const listClass = 'grid w-full grid-cols-3 gap-2 sm:gap-2.5';
+
+  const linkClass =
+    variant === 'light'
+      ? 'group relative flex h-full w-full min-h-[2.75rem] flex-row items-center justify-center gap-1 overflow-hidden rounded-lg px-1.5 py-2.5 text-[9px] font-bold uppercase tracking-[0.04em] transition-[transform,box-shadow,background-color] duration-200 sm:min-h-[3rem] sm:gap-1.5 sm:px-2 sm:py-3 sm:text-[10px] xl:px-3 xl:text-[11px] xl:tracking-[0.08em]'
+      : 'group relative flex h-full w-full min-h-[2.75rem] flex-row items-center justify-center gap-1.5 overflow-hidden rounded-xl px-1.5 py-2.5 text-[10px] font-semibold uppercase tracking-[0.05em] transition-[transform,box-shadow,background-color] duration-200 sm:min-h-[3rem] sm:gap-2 sm:px-2 sm:py-3 sm:text-[11px] sm:tracking-[0.06em]';
+
   return (
     <nav className={className} aria-label="Resume and social links">
-      <ul className="grid w-full grid-cols-3 gap-2 sm:gap-2.5">
+      <ul className={listClass}>
         {links.map((link) => (
           <li key={link.label} className="min-w-0">
             <a
@@ -58,7 +75,7 @@ export function HeroQuickLinks({ className = '' }: { className?: string }) {
               target="_blank"
               rel="noopener noreferrer"
               aria-label={link.ariaLabel}
-              className={`group relative flex h-full w-full min-h-[2.75rem] flex-row items-center justify-center gap-1.5 overflow-hidden rounded-xl px-1.5 py-2.5 text-[10px] font-semibold uppercase tracking-[0.05em] transition-[transform,box-shadow,background-color] duration-200 sm:min-h-[3rem] sm:gap-2 sm:px-2 sm:py-3 sm:text-[11px] sm:tracking-[0.06em] ${link.pillClass}`}
+              className={`${linkClass} ${link.pillClass}`}
             >
               <span
                 className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-700 group-hover:translate-x-full"

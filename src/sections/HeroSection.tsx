@@ -1,6 +1,6 @@
 import { motion, useReducedMotion, type Variants } from 'framer-motion';
 import { useMemo } from 'react';
-import { ChevronDown, FileText, Linkedin } from 'lucide-react';
+import { ChevronDown, Mail } from 'lucide-react';
 import { ContactButton } from '../components/ContactButton';
 import { HeroQuickLinks } from '../components/HeroQuickLinks';
 import portraitImg from '../assets/fazil.jpeg';
@@ -103,11 +103,31 @@ const mobilePortraitImageVariants: Variants = {
   },
 };
 
-const linkButtonMotion = {
-  whileHover: { y: -2, scale: 1.02 },
-  whileTap: { scale: 0.98 },
-  transition: { type: 'spring', stiffness: 420, damping: 28 },
-} as const;
+function HeroEmailLink({ variant = 'dark', className = '' }: { variant?: 'dark' | 'light'; className?: string }) {
+  const isLight = variant === 'light';
+
+  return (
+    <a
+      href={`mailto:${PROFILE.email}`}
+      className={`group flex max-w-full items-center justify-center gap-2 transition-colors duration-200 ${className} ${
+        isLight
+          ? 'text-sm font-medium text-neutral-600 hover:text-neutral-900 sm:text-base'
+          : 'text-sm font-medium tracking-[0.01em] text-[color-mix(in_srgb,var(--surface-accent)_88%,transparent)] hover:text-[#48E5C2] sm:text-base'
+      }`}
+    >
+      <Mail
+        className={`shrink-0 transition-transform duration-200 group-hover:scale-110 ${
+          isLight
+            ? 'h-4 w-4 text-neutral-500 group-hover:text-neutral-800 sm:h-[1.125rem] sm:w-[1.125rem]'
+            : 'h-4 w-4 text-[#48E5C2] sm:h-[1.125rem] sm:w-[1.125rem]'
+        }`}
+        strokeWidth={2}
+        aria-hidden
+      />
+      <span className="truncate">{PROFILE.email}</span>
+    </a>
+  );
+}
 
 /** Full-height bridge at the text/image boundary — wide, soft fade. */
 const SEAM_BLEND =
@@ -118,7 +138,6 @@ const PORTRAIT_LEFT_WASH =
 
 export function HeroSection() {
   const reduceMotion = useReducedMotion();
-  const whatsappHref = `https://wa.me/${PROFILE.phoneWhatsappDigits}?text=${encodeURIComponent(PROFILE.whatsappPrefillMessage)}`;
   const mobileNameChars = useMemo(() => PROFILE.name.split(''), []);
 
   return (
@@ -184,113 +203,41 @@ export function HeroSection() {
       {/* Editorial layout: copy + oversized portrait (desktop image bleeds right) */}
       <div className="relative z-10 flex min-h-[100dvh] w-full flex-1 flex-col font-hero">
         <motion.header
-          className="relative z-30 hidden shrink-0 px-5 pt-[max(0.75rem,env(safe-area-inset-top))] pb-3 sm:px-10 sm:pb-4 lg:absolute lg:inset-x-0 lg:top-0 lg:flex lg:flex-wrap lg:items-center lg:justify-between lg:gap-x-6 lg:gap-y-3 lg:px-10 lg:pb-12 lg:pt-5 xl:pl-16 xl:pr-10"
+          className="relative z-30 hidden shrink-0 px-5 pt-[max(0.75rem,env(safe-area-inset-top))] pb-3 sm:px-10 sm:pb-4 lg:absolute lg:inset-x-0 lg:top-0 lg:block lg:px-10 lg:pb-12 lg:pt-5 xl:pl-16 xl:pr-10"
           initial={reduceMotion ? false : { opacity: 0, y: -18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: smoothEase }}
         >
           <motion.div
-            className="flex w-full flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-x-6 sm:gap-y-3"
+            className="flex w-full max-w-[calc(100vw-min(58vw,820px)-2.5rem)] flex-col gap-4"
             variants={reduceMotion ? undefined : headerContainerVariants}
             initial={reduceMotion ? false : 'hidden'}
             animate="visible"
           >
             <motion.div
               variants={reduceMotion ? undefined : headerItemVariants}
-              className="relative z-40 hidden min-w-0 flex-col gap-1 sm:flex lg:max-w-[42%]"
+              className="relative z-40 hidden min-w-0 flex-col gap-1.5 sm:flex"
             >
               <p className="hidden font-hero text-base font-extrabold uppercase tracking-[0.12em] text-[var(--surface-accent)] sm:block sm:text-xl md:text-2xl lg:text-neutral-900">
                 {PROFILE.name}
               </p>
-              <p
-                className="text-[11px] font-semibold leading-snug text-[color-mix(in_srgb,var(--surface-accent)_82%,transparent)] sm:text-sm lg:text-neutral-900 lg:[text-shadow:0_1px_14px_rgba(242,241,239,0.95),0_0_2px_rgba(242,241,239,0.8)]"
-              >
+              <p className="max-w-[min(100%,20rem)] text-pretty text-[11px] font-semibold leading-snug text-[color-mix(in_srgb,var(--surface-accent)_82%,transparent)] sm:max-w-[21rem] sm:text-sm lg:max-w-[min(20rem,calc(100vw-min(58vw,820px)-4rem))] lg:text-neutral-900 lg:[text-shadow:0_1px_14px_rgba(242,241,239,0.95),0_0_2px_rgba(242,241,239,0.8)] xl:max-w-[22rem]">
                 {PROFILE.headerSubtitle}
               </p>
             </motion.div>
             <motion.div
               variants={reduceMotion ? undefined : headerItemVariants}
-              className="w-full shrink-0 sm:ml-auto sm:mr-0 sm:w-fit lg:-translate-x-8 lg:translate-y-0.5 xl:-translate-x-12"
+              className="hidden w-full min-w-0 shrink-0 sm:block"
             >
-              <div className="hidden lg:rounded-2xl lg:bg-[#f2f1ef]/95 lg:px-3.5 lg:py-3 lg:shadow-[0_10px_40px_-10px_rgba(242,241,239,1),0_2px_12px_rgba(23,23,23,0.06)] lg:ring-1 lg:ring-white/60">
-                <motion.nav
-                  className="flex flex-nowrap items-center justify-center gap-2.5 sm:gap-3"
-                  aria-label="Resume and social links"
-                >
-              <motion.a
-                href={PROFILE.cvUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                {...(reduceMotion ? {} : linkButtonMotion)}
-                className="group relative inline-flex shrink-0 items-center gap-2 overflow-hidden whitespace-nowrap rounded-lg border-2 border-neutral-900 bg-neutral-900 px-3.5 py-2.5 text-xs font-bold uppercase tracking-[0.12em] text-white transition-[background-color,box-shadow,border-color] duration-300 ease-out hover:border-neutral-700 hover:bg-neutral-800 hover:shadow-[0_10px_28px_-12px_rgba(23,23,23,0.55)] sm:px-5 sm:py-3 sm:tracking-[0.16em]"
-              >
-                <span
-                  className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/15 to-transparent transition-transform duration-700 ease-out group-hover:translate-x-full"
-                  aria-hidden
-                />
-                <FileText
-                  className="relative h-4 w-4 shrink-0 transition-transform duration-300 ease-out group-hover:scale-110 sm:h-[1.125rem] sm:w-[1.125rem]"
-                  strokeWidth={2}
-                  aria-hidden
-                />
-                <span className="whitespace-nowrap">View CV</span>
-              </motion.a>
-              <motion.span
-                variants={reduceMotion ? undefined : headerItemVariants}
-                className="hidden h-6 w-px shrink-0 origin-center bg-neutral-300 sm:block"
-                aria-hidden
-              />
-              <motion.a
-                href={PROFILE.linkedinUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                {...(reduceMotion ? {} : linkButtonMotion)}
-                className="group relative inline-flex shrink-0 items-center gap-2 overflow-hidden whitespace-nowrap rounded-lg border-2 border-[#0A66C2] bg-[#0A66C2] px-3.5 py-2.5 text-xs font-bold uppercase tracking-[0.12em] text-white shadow-none transition-[background-color,box-shadow,border-color] duration-300 ease-out hover:border-[#004182] hover:bg-[#004182] sm:px-5 sm:py-3 sm:tracking-[0.16em] sm:shadow-[0_8px_24px_-10px_rgba(10,102,194,0.65)] sm:hover:shadow-[0_12px_32px_-8px_rgba(10,102,194,0.75)]"
-              >
-                <span
-                  className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-700 ease-out group-hover:translate-x-full"
-                  aria-hidden
-                />
-                <Linkedin
-                  className="relative h-4 w-4 shrink-0 fill-white transition-transform duration-300 ease-out group-hover:scale-110 sm:h-[1.125rem] sm:w-[1.125rem]"
-                  strokeWidth={0}
-                  aria-hidden
-                />
-                <span className="whitespace-nowrap">LinkedIn</span>
-              </motion.a>
-              <motion.span
-                variants={reduceMotion ? undefined : headerItemVariants}
-                className="hidden h-6 w-px shrink-0 origin-center bg-neutral-300 sm:block"
-                aria-hidden
-              />
-              <motion.a
-                href={whatsappHref}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Message Fazil on WhatsApp"
-                {...(reduceMotion ? {} : linkButtonMotion)}
-                className="group relative inline-flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-lg border-2 border-[#25D366] bg-[#25D366] text-white shadow-[0_8px_24px_-10px_rgba(37,211,102,0.55)] transition-[background-color,box-shadow,border-color] duration-300 ease-out hover:border-[#1DA851] hover:bg-[#1DA851] hover:shadow-[0_12px_32px_-8px_rgba(37,211,102,0.7)] sm:h-12 sm:w-12"
-              >
-                <span
-                  className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/25 to-transparent transition-transform duration-700 ease-out group-hover:translate-x-full"
-                  aria-hidden
-                />
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  className="relative h-5 w-5 transition-transform duration-300 ease-out group-hover:scale-110 sm:h-[1.35rem] sm:w-[1.35rem]"
-                  aria-hidden
-                >
-                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.435 9.884-9.884 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
-                </svg>
-              </motion.a>
-                </motion.nav>
+              <div className="flex w-full max-w-[min(24rem,calc(100vw-min(58vw,820px)-3rem))] flex-col gap-3 rounded-2xl bg-[#f2f1ef]/95 px-3.5 py-3 shadow-[0_10px_40px_-10px_rgba(242,241,239,1),0_2px_12px_rgba(23,23,23,0.06)] ring-1 ring-white/60">
+                <HeroQuickLinks variant="light" className="w-full" />
+                <HeroEmailLink variant="light" className="w-full justify-center sm:justify-start" />
               </div>
             </motion.div>
           </motion.div>
         </motion.header>
 
-        <div className="relative flex min-h-0 flex-1 flex-col pt-[max(1.25rem,calc(env(safe-area-inset-top)+0.5rem))] sm:pt-[max(1.5rem,calc(env(safe-area-inset-top)+0.5rem))] lg:flex-row lg:items-stretch lg:pt-32">
+        <div className="relative flex min-h-0 flex-1 flex-col pt-[max(1.25rem,calc(env(safe-area-inset-top)+0.5rem))] sm:pt-[max(1.5rem,calc(env(safe-area-inset-top)+0.5rem))] lg:flex-row lg:items-stretch lg:pt-60">
           {/* Mobile name — first below header (max-lg only) */}
           <motion.div
             className="relative z-20 order-1 px-5 pt-1 pb-0 font-hero text-center sm:px-10 sm:pt-2 lg:hidden"
@@ -382,18 +329,19 @@ export function HeroSection() {
 
           {/* Mobile quick links — single row below portrait */}
           <motion.div
-            className="relative z-20 order-3 w-full px-5 pt-1 pb-5 sm:px-10 sm:pb-6 lg:hidden"
+            className="relative z-20 order-3 w-full px-5 pt-1 pb-0 sm:px-10 lg:hidden"
             initial={reduceMotion ? false : { opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.65, delay: reduceMotion ? 0 : 1.55, ease }}
           >
             <HeroQuickLinks className="mx-auto w-full max-w-[min(340px,94vw)] sm:max-w-[min(380px,90vw)]" />
+            <HeroEmailLink className="mx-auto mt-4 flex w-full max-w-[min(340px,94vw)] justify-center px-1 sm:mt-4.5 sm:max-w-[min(380px,90vw)]" />
           </motion.div>
 
           {/* Copy */}
-          <div className="relative z-20 order-4 flex flex-col justify-center px-5 py-6 pb-12 pt-6 sm:px-10 sm:py-8 sm:pt-7 lg:order-1 lg:w-[46%] lg:max-w-2xl lg:shrink-0 lg:py-16 lg:pl-12 lg:pt-16 xl:pl-16 xl:pr-8">
+          <div className="relative z-20 order-4 flex flex-col justify-center px-5 pb-12 pt-2 sm:px-10 sm:pt-3 lg:order-1 lg:w-[46%] lg:max-w-2xl lg:shrink-0 lg:py-16 lg:pl-12 lg:pt-16 xl:pl-16 xl:pr-8">
             <motion.div
-              className="flex flex-col gap-5 sm:gap-8 max-lg:items-center max-lg:text-center lg:gap-10 lg:items-stretch lg:text-left"
+              className="flex flex-col gap-5 sm:gap-8 max-lg:items-center max-lg:gap-4 max-lg:text-center lg:gap-10 lg:items-stretch lg:text-left"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.05, ease }}
