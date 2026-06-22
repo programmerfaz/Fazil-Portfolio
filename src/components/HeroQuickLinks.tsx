@@ -7,7 +7,7 @@ type QuickLink = {
   label: string;
   ariaLabel: string;
   icon: ReactNode;
-  iconWrapClass: string;
+  pillClass: string;
 };
 
 function WhatsAppIcon({ className }: { className?: string }) {
@@ -24,54 +24,52 @@ export function HeroQuickLinks({ className = '' }: { className?: string }) {
   const links: QuickLink[] = [
     {
       href: PROFILE.cvUrl,
-      label: 'Resume',
+      label: 'CV',
       ariaLabel: 'View resume on Google Drive',
-      icon: <FileText className="h-[1.125rem] w-[1.125rem]" strokeWidth={2} />,
-      iconWrapClass:
-        'bg-[color-mix(in_srgb,var(--surface-accent-strong)_14%,transparent)] text-[var(--surface-accent-strong)] ring-1 ring-[var(--surface-border-subtle)]',
+      icon: <FileText className="h-[1.125rem] w-[1.125rem] shrink-0" strokeWidth={2} />,
+      pillClass:
+        'bg-[var(--surface-accent-strong)] text-[var(--surface-dark)] shadow-[0_6px_16px_-10px_rgba(238,244,250,0.45)] hover:bg-white active:scale-[0.96]',
     },
     {
       href: PROFILE.linkedinUrl,
       label: 'LinkedIn',
       ariaLabel: 'Open LinkedIn profile',
-      icon: <Linkedin className="h-[1.125rem] w-[1.125rem] fill-current" strokeWidth={0} />,
-      iconWrapClass: 'bg-[#0A66C2] text-white shadow-[0_6px_16px_-8px_rgba(10,102,194,0.85)]',
+      icon: <Linkedin className="h-[1.125rem] w-[1.125rem] shrink-0 fill-current" strokeWidth={0} />,
+      pillClass:
+        'bg-[#0A66C2] text-white shadow-[0_6px_16px_-10px_rgba(10,102,194,0.55)] hover:bg-[#004182] active:scale-[0.96]',
     },
     {
       href: whatsappHref,
-      label: 'WhatsApp',
+      label: 'Chat',
       ariaLabel: 'Message Fazil on WhatsApp',
-      icon: <WhatsAppIcon className="h-[1.2rem] w-[1.2rem]" />,
-      iconWrapClass: 'bg-[#25D366] text-white shadow-[0_6px_16px_-8px_rgba(37,211,102,0.8)]',
+      icon: <WhatsAppIcon className="h-[1.125rem] w-[1.125rem] shrink-0" />,
+      pillClass:
+        'bg-[#25D366] text-white shadow-[0_6px_16px_-10px_rgba(37,211,102,0.45)] hover:bg-[#1DA851] active:scale-[0.96]',
     },
   ];
 
   return (
     <nav className={className} aria-label="Resume and social links">
-      <div className="rounded-xl border border-[var(--surface-border-subtle)] bg-[color-mix(in_srgb,var(--surface-dark)_72%,transparent)] p-0.5 shadow-[0_8px_28px_-18px_rgba(0,0,0,0.85),inset_0_1px_0_0_rgba(255,255,255,0.05)] backdrop-blur-md sm:rounded-2xl sm:p-1">
-        <ul className="grid grid-cols-3 divide-x divide-[var(--surface-border-subtle)]">
-          {links.map((link) => (
-            <li key={link.label}>
-              <a
-                href={link.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={link.ariaLabel}
-                className="group flex flex-col items-center gap-1.5 rounded-[0.75rem] px-1.5 py-2.5 transition-[background-color,transform] duration-200 active:scale-[0.97] hover:bg-[color-mix(in_srgb,var(--surface-accent)_8%,transparent)] sm:gap-2 sm:rounded-[0.875rem] sm:px-2 sm:py-3"
-              >
-                <span
-                  className={`flex h-8 w-8 items-center justify-center rounded-full transition-transform duration-200 group-hover:scale-105 sm:h-9 sm:w-9 ${link.iconWrapClass}`}
-                >
-                  {link.icon}
-                </span>
-                <span className="text-[9px] font-semibold uppercase tracking-[0.14em] text-[var(--surface-accent-strong)] sm:text-[10px] sm:tracking-[0.16em]">
-                  {link.label}
-                </span>
-              </a>
-            </li>
-          ))}
-        </ul>
-      </div>
+      <ul className="grid w-full grid-cols-3 gap-2 sm:gap-2.5">
+        {links.map((link) => (
+          <li key={link.label} className="min-w-0">
+            <a
+              href={link.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={link.ariaLabel}
+              className={`group relative flex h-full w-full min-h-[2.75rem] flex-row items-center justify-center gap-1.5 overflow-hidden rounded-xl px-1.5 py-2.5 text-[10px] font-semibold uppercase tracking-[0.05em] transition-[transform,box-shadow,background-color] duration-200 sm:min-h-[3rem] sm:gap-2 sm:px-2 sm:py-3 sm:text-[11px] sm:tracking-[0.06em] ${link.pillClass}`}
+            >
+              <span
+                className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-700 group-hover:translate-x-full"
+                aria-hidden
+              />
+              <span className="relative shrink-0">{link.icon}</span>
+              <span className="relative whitespace-nowrap">{link.label}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
     </nav>
   );
 }

@@ -109,7 +109,7 @@ export function HeroSection() {
       {/* Editorial layout: copy + oversized portrait (desktop image bleeds right) */}
       <div className="relative z-10 flex min-h-[100dvh] w-full flex-1 flex-col font-hero">
         <motion.header
-          className="relative z-30 shrink-0 px-5 pt-[max(0.75rem,env(safe-area-inset-top))] pb-3 sm:px-10 sm:pb-4 lg:absolute lg:inset-x-0 lg:top-0 lg:flex lg:flex-wrap lg:items-center lg:justify-between lg:gap-x-6 lg:gap-y-3 lg:px-10 lg:pb-12 lg:pt-5 xl:pl-16 xl:pr-10"
+          className="relative z-30 hidden shrink-0 px-5 pt-[max(0.75rem,env(safe-area-inset-top))] pb-3 sm:px-10 sm:pb-4 lg:absolute lg:inset-x-0 lg:top-0 lg:flex lg:flex-wrap lg:items-center lg:justify-between lg:gap-x-6 lg:gap-y-3 lg:px-10 lg:pb-12 lg:pt-5 xl:pl-16 xl:pr-10"
           initial={reduceMotion ? false : { opacity: 0, y: -18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: smoothEase }}
@@ -137,8 +137,6 @@ export function HeroSection() {
               variants={reduceMotion ? undefined : headerItemVariants}
               className="w-full shrink-0 sm:ml-auto sm:mr-0 sm:w-fit lg:-translate-x-8 lg:translate-y-0.5 xl:-translate-x-12"
             >
-              <HeroQuickLinks className="w-full lg:hidden" />
-
               <div className="hidden lg:rounded-2xl lg:bg-[#f2f1ef]/95 lg:px-3.5 lg:py-3 lg:shadow-[0_10px_40px_-10px_rgba(242,241,239,1),0_2px_12px_rgba(23,23,23,0.06)] lg:ring-1 lg:ring-white/60">
                 <motion.nav
                   className="flex flex-nowrap items-center justify-center gap-2.5 sm:gap-3"
@@ -217,7 +215,7 @@ export function HeroSection() {
           </motion.div>
         </motion.header>
 
-        <div className="relative flex min-h-0 flex-1 flex-col pt-1 sm:pt-2 lg:flex-row lg:items-stretch lg:pt-32">
+        <div className="relative flex min-h-0 flex-1 flex-col pt-[max(1.25rem,calc(env(safe-area-inset-top)+0.5rem))] sm:pt-[max(1.5rem,calc(env(safe-area-inset-top)+0.5rem))] lg:flex-row lg:items-stretch lg:pt-32">
           {/* Mobile name — first below header (max-lg only) */}
           <motion.div
             className="relative z-20 order-1 px-5 pt-1 pb-0 font-hero text-center sm:px-10 sm:pt-2 lg:hidden"
@@ -237,7 +235,7 @@ export function HeroSection() {
                 <span className="text-[#48E5C2]">.</span>
               </p>
               <div
-                className="pointer-events-none mx-auto mt-3 h-8 w-[min(12rem,75%)] bg-[radial-gradient(ellipse_at_center,rgba(72,229,194,0.35)_0%,rgba(72,229,194,0.08)_42%,transparent_72%)]"
+                className="pointer-events-none mx-auto mt-1.5 h-5 w-[min(10rem,68%)] bg-[radial-gradient(ellipse_at_center,rgba(72,229,194,0.35)_0%,rgba(72,229,194,0.08)_42%,transparent_72%)]"
                 aria-hidden
               />
             </div>
@@ -250,9 +248,9 @@ export function HeroSection() {
           </motion.div>
 
           {/* Mobile portrait — second on small screens */}
-          <div className="relative order-2 flex w-full shrink-0 items-center justify-center px-5 pb-1 pt-1 sm:px-10 sm:pb-3 lg:hidden">
+          <div className="relative order-2 flex w-full shrink-0 items-center justify-center px-5 pb-4 pt-0 sm:px-10 sm:pb-5 lg:hidden">
             <motion.div
-              className="relative aspect-[3/4] w-full max-w-[min(260px,72vw)] overflow-hidden rounded-2xl shadow-[0_0_0_1px_rgba(184,208,232,0.12),0_24px_60px_-20px_rgba(0,0,0,0.75),0_0_48px_-12px_rgba(72,229,194,0.18)] sm:max-w-[min(300px,68vw)]"
+              className="relative aspect-[3/4] w-full max-w-[min(260px,72vw)] overflow-hidden rounded-2xl border-2 border-[color-mix(in_srgb,var(--surface-border-light)_75%,#48E5C2)] shadow-[0_24px_60px_-20px_rgba(0,0,0,0.75),0_0_40px_-14px_rgba(72,229,194,0.22)] sm:max-w-[min(300px,68vw)]"
               initial={{ opacity: 0, scale: 1.03 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.85, delay: 0.08, ease }}
@@ -269,8 +267,18 @@ export function HeroSection() {
             </motion.div>
           </div>
 
+          {/* Mobile quick links — single row below portrait */}
+          <motion.div
+            className="relative z-20 order-3 w-full px-5 pt-1 pb-5 sm:px-10 sm:pb-6 lg:hidden"
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1, ease }}
+          >
+            <HeroQuickLinks className="mx-auto w-full max-w-[min(340px,94vw)] sm:max-w-[min(380px,90vw)]" />
+          </motion.div>
+
           {/* Copy */}
-          <div className="relative z-20 order-3 flex flex-col justify-center px-5 py-6 pb-12 pt-2 sm:px-10 sm:py-8 lg:order-1 lg:w-[46%] lg:max-w-2xl lg:shrink-0 lg:py-16 lg:pl-12 lg:pt-16 xl:pl-16 xl:pr-8">
+          <div className="relative z-20 order-4 flex flex-col justify-center px-5 py-6 pb-12 pt-6 sm:px-10 sm:py-8 sm:pt-7 lg:order-1 lg:w-[46%] lg:max-w-2xl lg:shrink-0 lg:py-16 lg:pl-12 lg:pt-16 xl:pl-16 xl:pr-8">
             <motion.div
               className="flex flex-col gap-5 sm:gap-8 max-lg:items-center max-lg:text-center lg:gap-10 lg:items-stretch lg:text-left"
               initial={{ opacity: 0, y: 20 }}
