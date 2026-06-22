@@ -1,4 +1,5 @@
-import { motion, useReducedMotion } from 'framer-motion';
+import { motion, useReducedMotion, type Variants } from 'framer-motion';
+import { useMemo } from 'react';
 import { ChevronDown, FileText, Linkedin } from 'lucide-react';
 import { ContactButton } from '../components/ContactButton';
 import { HeroQuickLinks } from '../components/HeroQuickLinks';
@@ -29,6 +30,79 @@ const headerItemVariants = {
   },
 };
 
+/** Mobile hero load-in — slower letter reveal + portrait curtain rise. */
+const MOBILE_LETTER_STAGGER = 0.11;
+
+const mobileIntroRootVariants: Variants = {
+  hidden: {},
+  visible: {
+    transition: { staggerChildren: 0.28, delayChildren: 0.35 },
+  },
+};
+
+const mobileGreetingVariants: Variants = {
+  hidden: { opacity: 0, y: 16 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.85, ease: smoothEase },
+  },
+};
+
+const mobileNameRowVariants: Variants = {
+  hidden: {},
+  visible: {
+    transition: { staggerChildren: MOBILE_LETTER_STAGGER, delayChildren: 0.16 },
+  },
+};
+
+const mobileLetterVariants: Variants = {
+  hidden: { opacity: 0, y: 26 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { type: 'spring', stiffness: 185, damping: 26, mass: 1.05 },
+  },
+};
+
+const mobileNameDividerVariants: Variants = {
+  hidden: { scaleX: 0, opacity: 0 },
+  visible: {
+    scaleX: 1,
+    opacity: 1,
+    transition: { duration: 0.8, ease: smoothEase },
+  },
+};
+
+const mobileNameTaglineVariants: Variants = {
+  hidden: { opacity: 0, y: 10 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.7, ease: smoothEase },
+  },
+};
+
+const mobilePortraitShellVariants: Variants = {
+  hidden: {
+    opacity: 0,
+    clipPath: 'inset(100% 0 0 0 round 1rem)',
+  },
+  visible: {
+    opacity: 1,
+    clipPath: 'inset(0% 0 0 0 round 1rem)',
+    transition: { duration: 1.05, ease: smoothEase, delay: 0.85 },
+  },
+};
+
+const mobilePortraitImageVariants: Variants = {
+  hidden: { scale: 1.1 },
+  visible: {
+    scale: 1,
+    transition: { duration: 1.2, ease: smoothEase, delay: 0.85 },
+  },
+};
+
 const linkButtonMotion = {
   whileHover: { y: -2, scale: 1.02 },
   whileTap: { scale: 0.98 },
@@ -45,12 +119,13 @@ const PORTRAIT_LEFT_WASH =
 export function HeroSection() {
   const reduceMotion = useReducedMotion();
   const whatsappHref = `https://wa.me/${PROFILE.phoneWhatsappDigits}?text=${encodeURIComponent(PROFILE.whatsappPrefillMessage)}`;
+  const mobileNameChars = useMemo(() => PROFILE.name.split(''), []);
 
   return (
     <section className="relative flex min-h-[100dvh] w-full flex-col overflow-hidden bg-[var(--surface-dark)] pl-[env(safe-area-inset-left)] pr-[env(safe-area-inset-right)] font-hero text-[var(--surface-accent)] lg:bg-[#f2f1ef] lg:text-neutral-900">
-      {/* Giant watermark — reference-style depth */}
+      {/* Giant watermark — desktop only */}
       <div
-        className="pointer-events-none absolute inset-0 flex select-none items-center justify-center overflow-hidden"
+        className="pointer-events-none absolute inset-0 hidden select-none items-center justify-center overflow-hidden lg:flex"
         aria-hidden
       >
         <span
@@ -219,48 +294,86 @@ export function HeroSection() {
           {/* Mobile name — first below header (max-lg only) */}
           <motion.div
             className="relative z-20 order-1 px-5 pt-1 pb-0 font-hero text-center sm:px-10 sm:pt-2 lg:hidden"
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.04, ease }}
+            variants={reduceMotion ? undefined : mobileIntroRootVariants}
+            initial={reduceMotion ? false : 'hidden'}
+            animate="visible"
           >
             <div className="sm:hidden">
-              <p className="text-[0.9375rem] font-normal tracking-[0.04em] text-[var(--surface-accent)]">
+              <motion.p
+                variants={reduceMotion ? undefined : mobileGreetingVariants}
+                className="text-[0.9375rem] font-normal tracking-[0.04em] text-[var(--surface-accent)]"
+              >
                 Hi, I{'\u2019'}m
-              </p>
-              <p
-                className="relative mt-1.5 font-bold leading-[1.05] tracking-[-0.02em] text-[var(--surface-accent-strong)]"
+              </motion.p>
+              <motion.p
+                variants={reduceMotion ? undefined : mobileNameRowVariants}
+                className="relative mt-1.5 flex flex-wrap items-baseline justify-center font-bold leading-[1.05] tracking-[-0.02em] text-[var(--surface-accent-strong)]"
                 style={{ fontSize: 'clamp(2.25rem, 9vw, 4.75rem)' }}
               >
-                {PROFILE.name}
-                <span className="text-[#48E5C2]">.</span>
-              </p>
-              <div
-                className="pointer-events-none mx-auto mt-1.5 h-5 w-[min(10rem,68%)] bg-[radial-gradient(ellipse_at_center,rgba(72,229,194,0.35)_0%,rgba(72,229,194,0.08)_42%,transparent_72%)]"
+                <motion.span
+                  variants={reduceMotion ? undefined : mobileLetterVariants}
+                  className="inline-block text-[#48E5C2]"
+                  aria-hidden
+                >
+                  {'<'}
+                </motion.span>
+                {mobileNameChars.map((char, i) => {
+                  const display = char === ' ' ? '\u00A0' : char;
+                  return (
+                    <motion.span
+                      key={`mobile-name-${i}-${char}`}
+                      variants={reduceMotion ? undefined : mobileLetterVariants}
+                      className={`inline-block ${char === ' ' ? 'w-[0.28em]' : ''}`}
+                    >
+                      {display}
+                    </motion.span>
+                  );
+                })}
+                <motion.span
+                  variants={reduceMotion ? undefined : mobileLetterVariants}
+                  className="inline-block text-[#48E5C2]"
+                  aria-hidden
+                >
+                  {'/>'}
+                </motion.span>
+                <span className="sr-only">{PROFILE.name}</span>
+              </motion.p>
+              <motion.p
+                variants={reduceMotion ? undefined : mobileNameTaglineVariants}
+                className="mx-auto mt-2 max-w-[min(19rem,90vw)] text-sm font-normal leading-snug tracking-[0.02em] text-[color-mix(in_srgb,var(--surface-accent-strong)_92%,transparent)]"
+              >
+                {PROFILE.role}
+              </motion.p>
+              <motion.div
+                variants={reduceMotion ? undefined : mobileNameDividerVariants}
+                className="mx-auto mt-3 h-[2px] w-[min(12rem,78%)] origin-center rounded-full bg-gradient-to-r from-transparent via-[#48E5C2] to-transparent shadow-[0_0_12px_rgba(72,229,194,0.35)]"
                 aria-hidden
               />
             </div>
-            <p
+            <motion.p
+              variants={reduceMotion ? undefined : mobileGreetingVariants}
               className="hidden font-bold leading-[0.92] tracking-[-0.02em] text-[var(--surface-accent-strong)] sm:block"
               style={{ fontSize: 'clamp(3.5rem, 12vw, 7.25rem)' }}
             >
               Hi.
-            </p>
+            </motion.p>
           </motion.div>
 
           {/* Mobile portrait — second on small screens */}
           <div className="relative order-2 flex w-full shrink-0 items-center justify-center px-5 pb-4 pt-0 sm:px-10 sm:pb-5 lg:hidden">
             <motion.div
               className="relative aspect-[3/4] w-full max-w-[min(260px,72vw)] overflow-hidden rounded-2xl border-2 border-[color-mix(in_srgb,var(--surface-border-light)_75%,#48E5C2)] shadow-[0_24px_60px_-20px_rgba(0,0,0,0.75),0_0_40px_-14px_rgba(72,229,194,0.22)] sm:max-w-[min(300px,68vw)]"
-              initial={{ opacity: 0, scale: 1.03 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.85, delay: 0.08, ease }}
+              variants={reduceMotion ? undefined : mobilePortraitShellVariants}
+              initial={reduceMotion ? false : 'hidden'}
+              animate="visible"
             >
-              <img
+              <motion.img
                 src={portraitImg}
                 alt={PROFILE.name}
                 width={840}
                 height={1120}
                 draggable={false}
+                variants={reduceMotion ? undefined : mobilePortraitImageVariants}
                 className="h-full w-full object-cover object-[center_18%]"
                 style={{ filter: 'grayscale(1) contrast(1.05) brightness(1.02)' }}
               />
@@ -270,9 +383,9 @@ export function HeroSection() {
           {/* Mobile quick links — single row below portrait */}
           <motion.div
             className="relative z-20 order-3 w-full px-5 pt-1 pb-5 sm:px-10 sm:pb-6 lg:hidden"
-            initial={{ opacity: 0, y: 12 }}
+            initial={reduceMotion ? false : { opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1, ease }}
+            transition={{ duration: 0.65, delay: reduceMotion ? 0 : 1.55, ease }}
           >
             <HeroQuickLinks className="mx-auto w-full max-w-[min(340px,94vw)] sm:max-w-[min(380px,90vw)]" />
           </motion.div>
