@@ -6,9 +6,9 @@ export function ProjectsSection() {
   return (
     <section
       id="projects"
-      className="relative z-10 -mt-10 overflow-x-clip overflow-y-visible rounded-t-[40px] bg-[#0C0C0C] sm:-mt-12 sm:rounded-t-[50px] md:-mt-14 md:rounded-t-[60px]"
+      className="relative z-10 overflow-x-clip overflow-y-visible border-t border-[var(--surface-border-subtle)] bg-[var(--surface-dark)] pt-16 lg:-mt-14 lg:rounded-t-[60px] lg:border-t-0 lg:pt-20"
     >
-      <div className="px-5 pt-20 pb-[max(8rem,calc(env(safe-area-inset-bottom)+6rem))] max-sm:pb-[max(15rem,calc(env(safe-area-inset-bottom)+9.5rem))] sm:px-8 sm:pb-[max(9rem,calc(env(safe-area-inset-bottom)+6.5rem))] md:px-10 md:pb-[max(10rem,calc(env(safe-area-inset-bottom)+7rem))]">
+      <div className="px-5 pb-[max(8rem,calc(env(safe-area-inset-bottom)+6rem))] max-sm:pb-[max(3.5rem,calc(env(safe-area-inset-bottom)+2rem))] sm:px-8 sm:pb-[max(9rem,calc(env(safe-area-inset-bottom)+6.5rem))] md:px-10 md:pb-[max(10rem,calc(env(safe-area-inset-bottom)+7rem))]">
         <FadeIn
           as="h2"
           className="hero-heading mb-6 px-4 text-center font-black uppercase leading-none tracking-tight sm:mb-14 sm:px-6 md:mb-16"

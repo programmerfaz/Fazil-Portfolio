@@ -2,46 +2,39 @@ import { useCallback, useEffect, useMemo, useRef, useState, type SyntheticEvent 
 import { createPortal } from 'react-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { X } from 'lucide-react';
-import { pickMarqueeRows, tripleImages, type MarqueeImage } from '../data/marqueeWorkImages';
+import { pickMarqueeRows, duplicateMarqueeLoop, type MarqueeImage } from '../data/marqueeWorkImages';
 
 const ease = [0.25, 0.1, 0.25, 1] as const;
-
-type MarqueeTileProps = {
-  image: MarqueeImage;
-  index: number;
-  onOpen: (src: string) => void;
-};
 
 /** Tall phone-style frame (e.g. 9:19); avoids 4:3 portrait photos (~1.33) */
 const PHONE_ASPECT_MIN = 1.52;
 
-function MarqueeTile({ image, index, onOpen }: MarqueeTileProps) {
+type MarqueeTileProps = {
+  image: MarqueeImage;
+  onOpen: (src: string) => void;
+  mobileLoop?: boolean;
+};
+
+function MarqueeTile({ image, onOpen, mobileLoop = false }: MarqueeTileProps) {
   const { src, layout, desktopLock } = image;
   const [tallPhoneAspect, setTallPhoneAspect] = useState(false);
 
   const onImgLoad = (e: SyntheticEvent<HTMLImageElement>) => {
-    if (desktopLock) return;
+    if (desktopLock || mobileLoop) return;
     const { naturalWidth: nw, naturalHeight: nh } = e.currentTarget;
     if (nw <= 0) return;
     if (nh / nw >= PHONE_ASPECT_MIN) setTallPhoneAspect(true);
   };
 
-  const phoneFrame = layout === 'mobile' || tallPhoneAspect;
+  const phoneFrame = !mobileLoop && (layout === 'mobile' || tallPhoneAspect);
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 14 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '80px' }}
-      transition={{ duration: 0.45, delay: Math.min(index * 0.03, 0.35), ease }}
-      className="group relative shrink-0"
-    >
-      <motion.button
+    <div className="group relative shrink-0">
+      <button
         type="button"
         onClick={() => onOpen(src)}
-        className={`relative block cursor-zoom-in text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#BBCCD7] ${phoneFrame ? 'w-[min(340px,calc(100vw-12px))] sm:w-[230px] md:w-[248px]' : ''}`}
+        className={`relative block cursor-zoom-in text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#BBCCD7] ${phoneFrame ? 'w-[min(340px,calc(100vw-12px))] sm:w-[230px] md:w-[248px]' : mobileLoop ? 'w-[min(300px,78vw)]' : 'w-[min(420px,calc(100vw-12px))] sm:w-[min(420px,calc(100vw-3rem))]'}`}
         aria-label="View full-size preview"
-        whileTap={{ scale: 0.98 }}
       >
         <motion.div
           className="pointer-events-none absolute -inset-3 rounded-[2rem] bg-[radial-gradient(ellipse_at_center,rgba(187,204,215,0.22)_0%,rgba(118,33,176,0.12)_45%,transparent_72%)] opacity-50 blur-xl transition-opacity duration-500 group-hover:opacity-90"
@@ -52,10 +45,8 @@ function MarqueeTile({ image, index, onOpen }: MarqueeTileProps) {
             className="absolute -inset-[1px] rounded-3xl bg-gradient-to-br from-[#D7E2EA]/35 via-[#7c3aed]/20 to-transparent opacity-70 transition duration-500 group-hover:opacity-100"
             aria-hidden
           />
-          <motion.div
-            className={`relative overflow-hidden rounded-3xl ring-1 ring-white/[0.08] shadow-[0_24px_60px_-20px_rgba(0,0,0,0.85),inset_0_1px_0_0_rgba(255,255,255,0.06)] ${phoneFrame ? 'bg-[#0f0f11]' : ''}`}
-            whileHover={{ y: -2 }}
-            transition={{ duration: 0.35, ease }}
+          <div
+            className={`relative overflow-hidden rounded-3xl ring-1 ring-white/[0.08] shadow-[0_24px_60px_-20px_rgba(0,0,0,0.85),inset_0_1px_0_0_rgba(255,255,255,0.06)] transition-transform duration-300 group-hover:-translate-y-0.5 ${phoneFrame ? 'bg-[#0f0f11]' : ''}`}
           >
             <div
               className={
@@ -67,7 +58,8 @@ function MarqueeTile({ image, index, onOpen }: MarqueeTileProps) {
               <img
                 src={src}
                 alt=""
-                loading="lazy"
+                loading="eager"
+                decoding="async"
                 width={phoneFrame ? 260 : 420}
                 height={270}
                 draggable={false}
@@ -79,22 +71,14 @@ function MarqueeTile({ image, index, onOpen }: MarqueeTileProps) {
                 }
               />
             </div>
-            <motion.div
-              className="pointer-events-none absolute inset-0 flex items-center justify-center bg-[#0C0C0C]/0 transition-colors duration-300 group-hover:bg-[#0C0C0C]/25"
-              aria-hidden
-            >
-              <span className="rounded-full border border-[#D7E2EA]/35 bg-[#0C0C0C]/75 px-4 py-2 text-[10px] font-medium uppercase tracking-[0.2em] text-[#D7E2EA] opacity-0 backdrop-blur-sm transition-opacity duration-300 group-hover:opacity-100 sm:text-xs">
-                View
-              </span>
-            </motion.div>
-            <motion.div
-              className={`pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0C0C0C]/50 via-transparent to-[#0C0C0C]/25 transition duration-500 ${phoneFrame ? 'opacity-25 group-hover:opacity-15' : 'opacity-60 group-hover:opacity-40'}`}
+            <div
+              className={`pointer-events-none absolute inset-0 bg-gradient-to-t from-[color-mix(in_srgb,var(--surface-dark)_50%,transparent)] via-transparent to-[color-mix(in_srgb,var(--surface-dark)_25%,transparent)] transition duration-500 ${phoneFrame ? 'opacity-25 group-hover:opacity-15' : 'opacity-60 group-hover:opacity-40'}`}
               aria-hidden
             />
-          </motion.div>
+          </div>
         </div>
-      </motion.button>
-    </motion.div>
+      </button>
+    </div>
   );
 }
 
@@ -136,7 +120,7 @@ function MarqueeLightbox({ src, onClose }: MarqueeLightboxProps) {
       <motion.button
         type="button"
         aria-label="Close preview"
-        className="absolute inset-0 bg-[#0C0C0C]/88 backdrop-blur-md"
+        className="absolute inset-0 bg-[color-mix(in_srgb,var(--surface-dark)_88%,transparent)] backdrop-blur-md"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
@@ -161,7 +145,7 @@ function MarqueeLightbox({ src, onClose }: MarqueeLightboxProps) {
           <X className="h-5 w-5" aria-hidden />
         </button>
 
-        <div className="overflow-hidden rounded-2xl border border-[#D7E2EA]/20 bg-[#0C0C0C] p-1.5 shadow-[0_40px_120px_-30px_rgba(0,0,0,0.95)] sm:rounded-3xl sm:p-2">
+        <div className="overflow-hidden rounded-2xl border border-[#D7E2EA]/20 bg-[var(--surface-dark)] p-1.5 shadow-[0_40px_120px_-30px_rgba(0,0,0,0.95)] sm:rounded-3xl sm:p-2">
           <img
             src={src}
             alt="Project preview"
@@ -174,14 +158,33 @@ function MarqueeLightbox({ src, onClose }: MarqueeLightboxProps) {
   );
 }
 
+const MOBILE_MAX_PX = 639;
+
+function useParallaxEnabled() {
+  const [enabled, setEnabled] = useState(() =>
+    typeof window !== 'undefined' ? window.innerWidth > MOBILE_MAX_PX : false,
+  );
+
+  useEffect(() => {
+    const mq = window.matchMedia(`(min-width: ${MOBILE_MAX_PX + 1}px)`);
+    const sync = () => setEnabled(mq.matches);
+    sync();
+    mq.addEventListener('change', sync);
+    return () => mq.removeEventListener('change', sync);
+  }, []);
+
+  return enabled;
+}
+
 export function MarqueeSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const [offset, setOffset] = useState(0);
   const [activeSrc, setActiveSrc] = useState<string | null>(null);
+  const parallaxEnabled = useParallaxEnabled();
 
   const [row1, row2] = useMemo(() => {
     const [a, b] = pickMarqueeRows();
-    return [tripleImages(a), tripleImages(b)] as const;
+    return [duplicateMarqueeLoop(a), duplicateMarqueeLoop(b)] as const;
   }, []);
 
   const openPreview = useCallback((src: string) => {
@@ -193,20 +196,24 @@ export function MarqueeSection() {
   }, []);
 
   useEffect(() => {
+    if (!parallaxEnabled) {
+      setOffset(0);
+      return;
+    }
+
     const onScroll = () => {
       const el = sectionRef.current;
       if (!el) return;
       const rect = el.getBoundingClientRect();
       const sectionTop = rect.top + window.scrollY;
-      const factor = window.innerWidth < 640 ? 0.12 : 0.3;
-      const y = (window.scrollY - sectionTop + window.innerHeight) * factor;
+      const y = (window.scrollY - sectionTop + window.innerHeight) * 0.3;
       setOffset(y);
     };
 
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
-  }, []);
+  }, [parallaxEnabled]);
 
   if (row1.length === 0 && row2.length === 0) {
     return null;
@@ -215,7 +222,7 @@ export function MarqueeSection() {
   return (
     <section
       ref={sectionRef}
-      className="relative overflow-x-clip bg-[#0C0C0C] pb-14 pt-12 sm:pb-16 sm:pt-16 md:pb-20 md:pt-20"
+      className="relative overflow-x-clip bg-[var(--surface-dark)] pb-14 pt-12 sm:pb-16 sm:pt-16 md:pb-20 md:pt-20"
       aria-label="Project highlights"
     >
       <div
@@ -244,32 +251,40 @@ export function MarqueeSection() {
         </motion.div>
       </div>
 
-      <div className="relative z-10">
-        <div className="marquee-edge-fade mx-auto w-full">
+      <div className="relative z-10 w-full overflow-hidden">
+        <div className="marquee-edge-fade w-full">
           <div className="flex flex-col gap-3 sm:gap-5 md:gap-6">
             <div
-              className="overflow-hidden max-sm:pl-0 sm:pl-2 md:pl-4"
-              style={{
-                transform: `translate3d(${offset - 200}px, 0, 0)`,
-                willChange: 'transform',
-              }}
+              className="min-h-[min(270px,42svh)] overflow-hidden sm:pl-2 md:pl-4"
+              style={
+                parallaxEnabled
+                  ? {
+                      transform: `translate3d(${offset - 200}px, 0, 0)`,
+                      willChange: 'transform',
+                    }
+                  : undefined
+              }
             >
-              <div className="marquee-drift-right flex w-max gap-3 sm:gap-4 md:gap-5">
+              <div className="marquee-drift-right flex w-max min-w-full gap-3 sm:gap-4 md:gap-5">
                 {row1.map((item, i) => (
-                  <MarqueeTile key={`r1-${i}`} image={item} index={i} onOpen={openPreview} />
+                  <MarqueeTile key={`r1-${i}`} image={item} onOpen={openPreview} mobileLoop />
                 ))}
               </div>
             </div>
             <div
-              className="overflow-hidden max-sm:pr-0 sm:pr-2 md:pr-4"
-              style={{
-                transform: `translate3d(${-(offset - 200)}px, 0, 0)`,
-                willChange: 'transform',
-              }}
+              className="min-h-[min(270px,42svh)] overflow-hidden sm:pr-2 md:pr-4"
+              style={
+                parallaxEnabled
+                  ? {
+                      transform: `translate3d(${-(offset - 200)}px, 0, 0)`,
+                      willChange: 'transform',
+                    }
+                  : undefined
+              }
             >
-              <div className="marquee-drift-left flex w-max gap-3 sm:gap-4 md:gap-5">
+              <div className="marquee-drift-left flex w-max min-w-full gap-3 sm:gap-4 md:gap-5">
                 {row2.map((item, i) => (
-                  <MarqueeTile key={`r2-${i}`} image={item} index={i} onOpen={openPreview} />
+                  <MarqueeTile key={`r2-${i}`} image={item} onOpen={openPreview} mobileLoop />
                 ))}
               </div>
             </div>
@@ -277,7 +292,6 @@ export function MarqueeSection() {
         </div>
       </div>
 
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[5] h-20 bg-gradient-to-t from-[#0C0C0C] via-[#0C0C0C]/40 to-transparent sm:h-24" aria-hidden />
 
       <AnimatePresence>{activeSrc ? <MarqueeLightbox src={activeSrc} onClose={closePreview} /> : null}</AnimatePresence>
     </section>

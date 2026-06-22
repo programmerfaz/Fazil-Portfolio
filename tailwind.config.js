@@ -5,8 +5,7 @@ export default {
     extend: {
       fontFamily: {
         sans: [
-          'Inter',
-          'Inter Placeholder',
+          'Montserrat',
           'system-ui',
           '-apple-system',
           'BlinkMacSystemFont',
@@ -14,7 +13,8 @@ export default {
           'Roboto',
           'sans-serif',
         ],
-        display: ['Syne', 'Inter', 'system-ui', 'sans-serif'],
+        display: ['Montserrat', 'system-ui', 'sans-serif'],
+        hero: ['Montserrat', 'system-ui', 'sans-serif'],
       },
     },
   },

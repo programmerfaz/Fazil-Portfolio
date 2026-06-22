@@ -353,7 +353,7 @@ export function ProjectsCarousel3D() {
         <button
           type="button"
           onClick={() => stepRing(-1)}
-          className="pointer-events-auto flex h-9 w-9 shrink-0 touch-manipulation items-center justify-center rounded-full border border-[#D7E2EA]/25 bg-[#0C0C0C]/85 text-[#D7E2EA] shadow-[0_12px_40px_-12px_rgba(0,0,0,0.85)] backdrop-blur-md transition-colors hover:border-[#48E5C2]/50 hover:text-[#48E5C2] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#48E5C2]/70 sm:h-12 sm:w-12"
+          className="pointer-events-auto flex h-9 w-9 shrink-0 touch-manipulation items-center justify-center rounded-full border border-[color-mix(in_srgb,var(--surface-accent)_28%,transparent)] bg-[color-mix(in_srgb,var(--surface-dark)_85%,transparent)] text-[var(--surface-accent)] shadow-[0_12px_40px_-12px_rgba(0,0,0,0.85)] backdrop-blur-md transition-colors hover:border-[#48E5C2]/50 hover:text-[#48E5C2] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#48E5C2]/70 sm:h-12 sm:w-12"
           aria-label="Rotate carousel left"
         >
           <ChevronLeft className="h-6 w-6 sm:h-7 sm:w-7" strokeWidth={2} aria-hidden />
@@ -361,7 +361,7 @@ export function ProjectsCarousel3D() {
         <button
           type="button"
           onClick={() => stepRing(1)}
-          className="pointer-events-auto flex h-9 w-9 shrink-0 touch-manipulation items-center justify-center rounded-full border border-[#D7E2EA]/25 bg-[#0C0C0C]/85 text-[#D7E2EA] shadow-[0_12px_40px_-12px_rgba(0,0,0,0.85)] backdrop-blur-md transition-colors hover:border-[#48E5C2]/50 hover:text-[#48E5C2] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#48E5C2]/70 sm:h-12 sm:w-12"
+          className="pointer-events-auto flex h-9 w-9 shrink-0 touch-manipulation items-center justify-center rounded-full border border-[color-mix(in_srgb,var(--surface-accent)_28%,transparent)] bg-[color-mix(in_srgb,var(--surface-dark)_85%,transparent)] text-[var(--surface-accent)] shadow-[0_12px_40px_-12px_rgba(0,0,0,0.85)] backdrop-blur-md transition-colors hover:border-[#48E5C2]/50 hover:text-[#48E5C2] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#48E5C2]/70 sm:h-12 sm:w-12"
           aria-label="Rotate carousel right"
         >
           <ChevronRight className="h-6 w-6 sm:h-7 sm:w-7" strokeWidth={2} aria-hidden />

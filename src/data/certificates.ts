@@ -102,4 +102,11 @@ export const CERTIFICATE_PDFS: CertificateItem[] = [
     highlights: ['Collaborative AI', 'Team workflows'],
     src: certPath('Claude Cowork 101 Certificate.pdf'),
   },
+  {
+    title: 'Claude Developer Platform',
+    gist: 'Claude developer platform',
+    accent: 'anthropic',
+    highlights: ['API & integrations', 'Build with Claude'],
+    src: certPath('Claude developer platform .pdf'),
+  },
 ];

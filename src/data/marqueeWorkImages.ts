@@ -92,6 +92,12 @@ export function pickMarqueeRows(): [MarqueeImage[], MarqueeImage[]] {
   return [row1.length ? row1 : pool, row2.length ? row2 : pool];
 }
 
+export function duplicateMarqueeLoop(items: MarqueeImage[]): MarqueeImage[] {
+  if (items.length === 0) return [];
+  return [...items, ...items];
+}
+
+/** @deprecated Use duplicateMarqueeLoop — kept for callers expecting triple */
 export function tripleImages(items: MarqueeImage[]): MarqueeImage[] {
   if (items.length === 0) return [];
   return [...items, ...items, ...items];

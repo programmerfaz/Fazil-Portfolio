@@ -11,8 +11,9 @@ export const PROFILE = {
   name: 'Fazil Hakim',
   shortName: 'Fazil',
   role: 'Computer Science Undergraduate',
-  headerSubtitle: 'Final year computer science student',
-  tagline: 'Certified Microsoft Azure AI engineer Associate | Computer science student',
+  headerSubtitle: 'BSc Computer Science · graduating Dec 2026 · open to software & AI roles',
+  tagline:
+    'Microsoft Certified Azure AI Engineer · Built Siyaha BH with RAG, vector DBs & AI · Seeking internships & grad roles',
   email: 'fazilmohdshahbaz@gmail.com',
   phoneDisplay: '+973 34543703',
   phoneTel: 'tel:+97334543703',
@@ -37,7 +38,7 @@ export const PROFILE = {
 } as const;
 
 export const PROFILE_SUMMARY =
-  "My goal is to enhance and apply my skills as an IT student by actively engaging in real-world challenges. I'm eager to work in a highly competitive environment that fosters continuous learning and offers opportunities for professional growth.";
+  'I build full-stack and AI-powered products — including Siyaha BH, a live Bahrain tourism platform that uses RAG, vector databases, and LLM integrations for semantic search and smart itineraries. I am Microsoft Certified as an Azure AI Engineer Associate and have shipped production work with ASP.NET, Azure DevOps, React, and OpenAI. Graduating Dec 2026 — open to software engineering and AI internships in Bahrain or remote.';
 
 export const EXPERIENCE = [
   {

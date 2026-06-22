@@ -11,17 +11,17 @@ export function ContactSection() {
   return (
     <section
       id="contact"
-      className="px-4 py-16 max-sm:mt-8 max-sm:px-3 max-sm:pt-24 sm:mt-0 sm:px-8 md:px-10 md:py-24 pb-[max(6rem,calc(env(safe-area-inset-bottom)+5rem))]"
+      className="px-4 py-16 max-sm:mt-0 max-sm:px-3 max-sm:py-10 max-sm:pt-8 sm:mt-0 sm:px-8 md:px-10 md:py-24 pb-[max(6rem,calc(env(safe-area-inset-bottom)+5rem))]"
       style={{
         background:
-          'linear-gradient(to bottom, #0C0C0C 0px, rgba(12,12,12,0) min(220px, 28vw)), radial-gradient(ellipse 130% 85% at 50% 6%, rgba(109, 40, 217, 0.26) 0%, transparent 52%), radial-gradient(ellipse 90% 55% at 85% 105%, rgba(49, 46, 129, 0.35) 0%, transparent 42%), #0C0C0C',
+          'linear-gradient(to bottom, var(--surface-dark) 0px, rgb(var(--surface-dark-rgb) / 0) min(220px, 28vw)), radial-gradient(ellipse 130% 85% at 50% 6%, rgba(109, 40, 217, 0.26) 0%, transparent 52%), radial-gradient(ellipse 90% 55% at 85% 105%, rgba(49, 46, 129, 0.35) 0%, transparent 42%), var(--surface-dark)',
       }}
     >
       <FadeIn duration={0.62} y={18}>
         <ElectricContactCard>
           <>
             <div className="flex flex-col items-center text-center">
-              <span className="rounded-full border border-white/12 bg-white/[0.05] px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-[#e2e8f0] max-sm:px-3 max-sm:py-1 max-sm:text-[9px] max-sm:tracking-[0.18em] sm:text-[11px]">
+              <span className="rounded-full border border-[var(--surface-border-subtle)] bg-[color-mix(in_srgb,var(--surface-accent)_8%,transparent)] px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-[var(--surface-accent-strong)] max-sm:px-3 max-sm:py-1 max-sm:text-[9px] max-sm:tracking-[0.18em] sm:text-[11px]">
                 Open to opportunities
               </span>
               <h2 className="hero-heading mt-5 font-black uppercase leading-[0.92] tracking-tight text-[clamp(1.85rem,7vw,3.75rem)] max-sm:mt-4 max-sm:text-[clamp(1.65rem,10vw,2.65rem)] sm:mt-6 md:mt-7">
@@ -74,7 +74,7 @@ export function ContactSection() {
               </a>
             </div>
 
-            <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 border-t border-white/[0.06] pt-5 text-center text-[#D7E2EA]/55 max-sm:px-1 max-sm:pt-4 max-sm:text-xs sm:gap-3 sm:pt-6">
+            <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 border-t border-[var(--surface-border-subtle)] pt-5 text-center text-[color-mix(in_srgb,var(--surface-accent)_58%,transparent)] max-sm:px-1 max-sm:pt-4 max-sm:text-xs sm:gap-3 sm:pt-6">
               <MapPin className="h-4 w-4 shrink-0 text-[#BBCCD7]/80 max-sm:h-3.5 max-sm:w-3.5 sm:h-5 sm:w-5" aria-hidden />
               <span className="max-w-[min(100%,42ch)] text-pretty text-sm uppercase tracking-wide sm:text-sm">{PROFILE.location}</span>
             </div>

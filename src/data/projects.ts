@@ -17,6 +17,20 @@ export const PROJECTS: Project[] = [
   {
     num: '01',
     category: 'Full-stack',
+    title: 'Siyaha BH — AI tourism & local discovery',
+    summary:
+      'Bahrain tourism platform with an AI-powered feed, trip itineraries, and AR-guided local discovery.',
+    bullets: [
+      'OpenAI and Pinecone for semantic search, recommendations, and smart itineraries.',
+      'PostgreSQL with REST APIs for feeds, places, and user data.',
+      'React and Vite front end for discovery, planning, and immersive AR experiences.',
+    ],
+    stack: ['React', 'Vite', 'Node.js', 'PostgreSQL', 'Pinecone', 'OpenAI', 'REST'],
+    liveUrl: 'https://www.siyahabh.com/',
+  },
+  {
+    num: '02',
+    category: 'Full-stack',
     title: 'WealthHome — Real estate platform',
     summary:
       'Property discovery for Bahrain with AI-assisted guidance, advanced filters, and a modern React stack.',
@@ -30,7 +44,7 @@ export const PROJECTS: Project[] = [
     repositoryUrl: 'https://github.com/programmerfaz/Real-estate',
   },
   {
-    num: '02',
+    num: '03',
     category: 'Frontend',
     title: 'Movie Explorer',
     summary: 'Discover trending and searchable films via the TMDB API with a fast Vite + React UI.',
@@ -43,7 +57,7 @@ export const PROJECTS: Project[] = [
     repositoryUrl: 'https://github.com/programmerfaz/Movie-Site-React',
   },
   {
-    num: '03',
+    num: '04',
     category: 'Backend',
     title: 'Library management system',
     summary: 'Spring Boot library app with roles, borrowing flows, and clean REST APIs over PostgreSQL.',
@@ -55,7 +69,7 @@ export const PROJECTS: Project[] = [
     repositoryUrl: 'https://github.com/7ax/LibraryOS',
   },
   {
-    num: '04',
+    num: '05',
     category: 'Full-stack',
     title: 'University room booking system',
     summary: 'Conflict-aware booking with a PHP + MySQL backend and a responsive HTML/CSS/JS front end.',
@@ -67,7 +81,7 @@ export const PROJECTS: Project[] = [
     repositoryUrl: 'https://github.com/StoicTylerDurden/itcs333-project',
   },
   {
-    num: '05',
+    num: '06',
     category: 'Machine learning',
     title: 'ML portfolio — classification & regression',
     summary:
@@ -80,7 +94,7 @@ export const PROJECTS: Project[] = [
     repositoryUrl: 'https://github.com/programmerfaz/Machine-learning-Projects',
   },
   {
-    num: '06',
+    num: '07',
     category: 'IoT',
     title: 'Smart parking system',
     summary: 'IoT parking slots with long-range wireless telemetry to reduce congestion.',
@@ -91,7 +105,7 @@ export const PROJECTS: Project[] = [
     stack: ['Arduino', 'LoRa', 'ESP32', 'Sensors', 'Embedded C'],
   },
   {
-    num: '07',
+    num: '08',
     category: 'Frontend',
     title: 'Amazon home page clone',
     summary: 'Static clone focused on layout fidelity and vanilla JavaScript interactions.',
@@ -102,7 +116,7 @@ export const PROJECTS: Project[] = [
     repositoryUrl: 'https://github.com/programmerfaz/Amazon-Website-Clone-HTML-CSS-',
   },
   {
-    num: '08',
+    num: '09',
     category: 'Frontend',
     title: 'Sessioner — Audio transcription studio',
     summary:
@@ -115,20 +129,6 @@ export const PROJECTS: Project[] = [
     stack: ['React', 'Vite', 'Tailwind', 'OpenAI'],
     liveUrl: 'https://sessioner.vercel.app/',
     repositoryUrl: 'https://github.com/programmerfaz/Sessioner',
-  },
-  {
-    num: '09',
-    category: 'Full-stack',
-    title: 'Siyaha BH — AI tourism & local discovery',
-    summary:
-      'Bahrain tourism platform with an AI-powered feed, trip itineraries, and AR-guided local discovery.',
-    bullets: [
-      'OpenAI and Pinecone for semantic search, recommendations, and smart itineraries.',
-      'PostgreSQL with REST APIs for feeds, places, and user data.',
-      'React and Vite front end for discovery, planning, and immersive AR experiences.',
-    ],
-    stack: ['React', 'Vite', 'Node.js', 'PostgreSQL', 'Pinecone', 'OpenAI', 'REST'],
-    liveUrl: 'https://www.siyahabh.com/',
   },
 ];
 

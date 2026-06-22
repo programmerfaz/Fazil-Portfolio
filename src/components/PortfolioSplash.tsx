@@ -32,6 +32,14 @@ function makeRowVariants(delayChildren: number): Variants {
 
 const WORD1 = 'PORTFOLIO';
 
+/** Match Tailwind `sm` — splash is desktop/tablet only */
+const MOBILE_MAX_PX = 639;
+
+function isMobileViewport(): boolean {
+  if (typeof window === 'undefined') return false;
+  return window.innerWidth <= MOBILE_MAX_PX;
+}
+
 /** Extra scale after letters finish — kept modest because font size jumps to fill ~70vh */
 function scaleForWidth(w: number): number {
   if (w < 380) return 1.01;
@@ -68,12 +76,21 @@ export function PortfolioSplash() {
   const scaleTarget = useMemo(() => scaleForWidth(vw), [vw]);
 
   useEffect(() => {
-    const onResize = () => setVw(window.innerWidth);
+    const onResize = () => {
+      const w = window.innerWidth;
+      setVw(w);
+      if (w <= MOBILE_MAX_PX) {
+        setOpen(false);
+        document.body.style.overflow = '';
+      }
+    };
     window.addEventListener('resize', onResize);
     return () => window.removeEventListener('resize', onResize);
   }, []);
 
-  const [open, setOpen] = useState(() => !prefersReducedMotion());
+  const [open, setOpen] = useState(
+    () => !prefersReducedMotion() && !isMobileViewport(),
+  );
   const [exiting, setExiting] = useState(false);
   const [phase, setPhase] = useState<'letters' | 'zoom'>('letters');
 
@@ -108,7 +125,7 @@ export function PortfolioSplash() {
     [],
   );
 
-  if (!open) return null;
+  if (!open || vw <= MOBILE_MAX_PX) return null;
 
   const zoom = phase === 'zoom';
 
@@ -162,7 +179,7 @@ export function PortfolioSplash() {
           }`}
         >
           <motion.div
-            className="flex max-w-full flex-wrap justify-center font-black uppercase leading-[0.9] text-white transition-[font-size] duration-[420ms] ease-out [text-wrap:balance]"
+            className="flex max-w-full flex-wrap justify-center font-hero font-black uppercase leading-[0.9] text-white transition-[font-size] duration-[420ms] ease-out [text-wrap:balance]"
             style={{ fontSize: fs1 }}
             variants={row1}
             initial="hidden"
@@ -176,7 +193,7 @@ export function PortfolioSplash() {
           </motion.div>
 
           <motion.div
-            className="flex max-w-full flex-wrap justify-center font-black uppercase leading-[0.9] text-white transition-[font-size] duration-[420ms] ease-out [text-wrap:balance]"
+            className="flex max-w-full flex-wrap justify-center font-hero font-black uppercase leading-[0.9] text-white transition-[font-size] duration-[420ms] ease-out [text-wrap:balance]"
             style={{ fontSize: fs2 }}
             variants={row2}
             initial="hidden"

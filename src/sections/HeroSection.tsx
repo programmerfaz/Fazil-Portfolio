@@ -1,6 +1,7 @@
 import { motion, useReducedMotion } from 'framer-motion';
 import { ChevronDown, FileText, Linkedin } from 'lucide-react';
 import { ContactButton } from '../components/ContactButton';
+import { HeroQuickLinks } from '../components/HeroQuickLinks';
 import portraitImg from '../assets/fazil.jpeg';
 import { PROJECTS } from '../data/projects';
 import { PROFILE } from '../data/profile';
@@ -46,14 +47,14 @@ export function HeroSection() {
   const whatsappHref = `https://wa.me/${PROFILE.phoneWhatsappDigits}?text=${encodeURIComponent(PROFILE.whatsappPrefillMessage)}`;
 
   return (
-    <section className="relative flex min-h-[100dvh] flex-col overflow-hidden bg-[#f2f1ef] pl-[env(safe-area-inset-left)] pr-[env(safe-area-inset-right)] text-neutral-900">
+    <section className="relative flex min-h-[100dvh] w-full flex-col overflow-hidden bg-[var(--surface-dark)] pl-[env(safe-area-inset-left)] pr-[env(safe-area-inset-right)] font-hero text-[var(--surface-accent)] lg:bg-[#f2f1ef] lg:text-neutral-900">
       {/* Giant watermark — reference-style depth */}
       <div
         className="pointer-events-none absolute inset-0 flex select-none items-center justify-center overflow-hidden"
         aria-hidden
       >
         <span
-          className="whitespace-nowrap font-black uppercase leading-none tracking-[-0.04em] text-neutral-900/[0.045]"
+          className="whitespace-nowrap font-hero font-black uppercase leading-none tracking-[-0.04em] text-[color-mix(in_srgb,var(--surface-accent-strong)_14%,transparent)] lg:text-neutral-900/[0.045]"
           style={{ fontSize: 'clamp(4.5rem, 24vw, 20rem)' }}
         >
           Portfolio
@@ -106,9 +107,9 @@ export function HeroSection() {
       />
 
       {/* Editorial layout: copy + oversized portrait (desktop image bleeds right) */}
-      <div className="relative z-10 flex min-h-[100dvh] flex-1 flex-col">
+      <div className="relative z-10 flex min-h-[100dvh] w-full flex-1 flex-col font-hero">
         <motion.header
-          className="absolute inset-x-0 top-0 z-30 flex flex-wrap items-center justify-between gap-x-6 gap-y-3 px-5 pt-4 pb-2 sm:px-10 sm:pt-5 sm:pb-12 lg:pl-12 xl:pl-16 xl:pr-10"
+          className="relative z-30 shrink-0 px-5 pt-[max(0.75rem,env(safe-area-inset-top))] pb-3 sm:px-10 sm:pb-4 lg:absolute lg:inset-x-0 lg:top-0 lg:flex lg:flex-wrap lg:items-center lg:justify-between lg:gap-x-6 lg:gap-y-3 lg:px-10 lg:pb-12 lg:pt-5 xl:pl-16 xl:pr-10"
           initial={reduceMotion ? false : { opacity: 0, y: -18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: smoothEase }}
@@ -123,23 +124,24 @@ export function HeroSection() {
               variants={reduceMotion ? undefined : headerItemVariants}
               className="relative z-40 hidden min-w-0 flex-col gap-1 sm:flex lg:max-w-[42%]"
             >
-              <p className="hidden font-display text-base font-extrabold uppercase tracking-[0.12em] text-neutral-900 sm:block sm:text-xl md:text-2xl">
+              <p className="hidden font-hero text-base font-extrabold uppercase tracking-[0.12em] text-[var(--surface-accent)] sm:block sm:text-xl md:text-2xl lg:text-neutral-900">
                 {PROFILE.name}
               </p>
               <p
-                className="text-[11px] font-semibold leading-snug text-neutral-900 sm:text-sm"
-                style={{ textShadow: '0 1px 14px rgba(242, 241, 239, 0.95), 0 0 2px rgba(242, 241, 239, 0.8)' }}
+                className="text-[11px] font-semibold leading-snug text-[color-mix(in_srgb,var(--surface-accent)_82%,transparent)] sm:text-sm lg:text-neutral-900 lg:[text-shadow:0_1px_14px_rgba(242,241,239,0.95),0_0_2px_rgba(242,241,239,0.8)]"
               >
                 {PROFILE.headerSubtitle}
               </p>
             </motion.div>
             <motion.div
               variants={reduceMotion ? undefined : headerItemVariants}
-              className="mx-auto w-fit shrink-0 sm:ml-auto sm:mr-0 lg:-translate-x-8 lg:translate-y-0.5 xl:-translate-x-12"
+              className="w-full shrink-0 sm:ml-auto sm:mr-0 sm:w-fit lg:-translate-x-8 lg:translate-y-0.5 xl:-translate-x-12"
             >
-              <div className="rounded-2xl bg-[#f2f1ef]/95 px-2.5 py-2.5 shadow-[0_10px_40px_-10px_rgba(242,241,239,1),0_2px_12px_rgba(23,23,23,0.06)] backdrop-blur-md ring-1 ring-white/60 sm:px-3.5 sm:py-3 max-lg:shadow-[0_8px_28px_-6px_rgba(242,241,239,0.95)]">
+              <HeroQuickLinks className="w-full lg:hidden" />
+
+              <div className="hidden lg:rounded-2xl lg:bg-[#f2f1ef]/95 lg:px-3.5 lg:py-3 lg:shadow-[0_10px_40px_-10px_rgba(242,241,239,1),0_2px_12px_rgba(23,23,23,0.06)] lg:ring-1 lg:ring-white/60">
                 <motion.nav
-                  className="flex flex-nowrap items-center justify-center gap-2 sm:gap-3"
+                  className="flex flex-nowrap items-center justify-center gap-2.5 sm:gap-3"
                   aria-label="Resume and social links"
                 >
               <motion.a
@@ -215,84 +217,42 @@ export function HeroSection() {
           </motion.div>
         </motion.header>
 
-        <div className="relative flex min-h-0 flex-1 flex-col pt-[5.25rem] sm:pt-[6.75rem] lg:flex-row lg:items-stretch lg:pt-32">
-          {/* Copy */}
-          <div className="relative z-20 order-2 flex flex-col justify-center px-5 py-10 pb-12 pt-6 sm:px-10 sm:py-12 lg:order-1 lg:w-[46%] lg:max-w-2xl lg:shrink-0 lg:py-16 lg:pl-12 xl:pl-16 xl:pr-8">
-            <motion.div
-              className="flex flex-col gap-8 sm:gap-10 max-lg:items-center max-lg:text-center lg:items-stretch lg:text-left"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.05, ease }}
+        <div className="relative flex min-h-0 flex-1 flex-col pt-1 sm:pt-2 lg:flex-row lg:items-stretch lg:pt-32">
+          {/* Mobile name — first below header (max-lg only) */}
+          <motion.div
+            className="relative z-20 order-1 px-5 pt-1 pb-0 font-hero text-center sm:px-10 sm:pt-2 lg:hidden"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.04, ease }}
+          >
+            <div className="sm:hidden">
+              <p className="text-[0.9375rem] font-normal tracking-[0.04em] text-[var(--surface-accent)]">
+                Hi, I{'\u2019'}m
+              </p>
+              <p
+                className="relative mt-1.5 font-bold leading-[1.05] tracking-[-0.02em] text-[var(--surface-accent-strong)]"
+                style={{ fontSize: 'clamp(2.25rem, 9vw, 4.75rem)' }}
+              >
+                {PROFILE.name}
+                <span className="text-[#48E5C2]">.</span>
+              </p>
+              <div
+                className="pointer-events-none mx-auto mt-3 h-8 w-[min(12rem,75%)] bg-[radial-gradient(ellipse_at_center,rgba(72,229,194,0.35)_0%,rgba(72,229,194,0.08)_42%,transparent_72%)]"
+                aria-hidden
+              />
+            </div>
+            <p
+              className="hidden font-bold leading-[0.92] tracking-[-0.02em] text-[var(--surface-accent-strong)] sm:block"
+              style={{ fontSize: 'clamp(3.5rem, 12vw, 7.25rem)' }}
             >
-              <div className="flex flex-wrap justify-center gap-x-10 gap-y-3 border-b border-neutral-200/90 pb-8 text-sm text-neutral-500 lg:justify-start">
-                <p>
-                  <span className="block text-2xl font-light tabular-nums text-neutral-900 sm:text-3xl">{PROJECTS.length}+</span>
-                  <span className="mt-1 block text-xs font-medium uppercase tracking-[0.14em] text-neutral-400">Projects</span>
-                </p>
-                <p>
-                  <span className="block text-2xl font-light tabular-nums text-neutral-900 sm:text-3xl">
-                    {PROFILE.cgpa.split(' / ')[0]}
-                  </span>
-                  <span className="mt-1 block text-xs font-medium uppercase tracking-[0.14em] text-neutral-400">CGPA</span>
-                </p>
-              </div>
+              Hi.
+            </p>
+          </motion.div>
 
-              <div>
-                <p
-                  className="text-center leading-[0.92] tracking-tight text-neutral-900 sm:hidden"
-                  style={{ fontSize: 'clamp(2.25rem, 9vw, 4.5rem)' }}
-                >
-                  <span className="font-extralight">Hi,</span>{' '}
-                  <span className="font-semibold">{PROFILE.name}</span>
-                </p>
-                <p
-                  className="hidden font-extralight leading-[0.92] tracking-tight text-neutral-900 sm:block"
-                  style={{ fontSize: 'clamp(3.5rem, 12vw, 7.25rem)' }}
-                >
-                  Hi.
-                </p>
-                <p className="mt-5 hidden max-w-md text-lg font-normal leading-snug text-neutral-600 sm:block sm:text-xl">
-                  <span className="text-neutral-400">—</span> I{"\u2019"}m{' '}
-                  <span className="font-semibold text-neutral-900">{PROFILE.name}</span>, {PROFILE.role.toLowerCase()}.
-                </p>
-                <div className="mt-3 flex justify-center lg:hidden">
-                  <motion.a
-                    href="#about"
-                    className="group inline-flex items-center gap-2.5"
-                    whileHover={reduceMotion ? undefined : { y: 2 }}
-                    transition={{ type: 'spring', stiffness: 400, damping: 28 }}
-                  >
-                    <span
-                      className="h-px w-8 bg-neutral-300 transition-all duration-300 group-hover:w-11 group-hover:bg-neutral-900"
-                      aria-hidden
-                    />
-                    <span className="font-display text-[11px] font-bold uppercase tracking-[0.26em] text-neutral-500 transition-colors duration-300 group-hover:text-neutral-900">
-                      About me
-                    </span>
-                    <span className="flex h-7 w-7 items-center justify-center rounded-full border border-neutral-300/90 bg-white/50 transition-all duration-300 group-hover:border-neutral-900 group-hover:bg-neutral-900">
-                      <ChevronDown
-                        className="h-3.5 w-3.5 text-neutral-500 transition-all duration-300 group-hover:translate-y-0.5 group-hover:text-white"
-                        strokeWidth={2}
-                        aria-hidden
-                      />
-                    </span>
-                  </motion.a>
-                </div>
-                <p className="mx-auto mt-6 max-w-lg text-pretty text-base font-light leading-relaxed text-neutral-500 sm:text-lg lg:mx-0 lg:text-left">
-                  {PROFILE.tagline}
-                </p>
-              </div>
-
-              <div className="flex flex-col items-center gap-6 sm:flex-row sm:items-center sm:gap-8 lg:items-start">
-                <ContactButton variant="light" href="#contact" />
-              </div>
-            </motion.div>
-          </div>
-
-          {/* Mobile portrait — below header with spacing so the face stays visible */}
-          <div className="relative order-1 -mt-2 h-[min(52svh,440px)] w-full shrink-0 overflow-hidden sm:-mt-3 sm:h-[min(58vh,520px)] md:-mt-4 md:h-[min(62vh,580px)] lg:hidden">
+          {/* Mobile portrait — second on small screens */}
+          <div className="relative order-2 flex w-full shrink-0 items-center justify-center px-5 pb-1 pt-1 sm:px-10 sm:pb-3 lg:hidden">
             <motion.div
-              className="h-full w-full"
+              className="relative aspect-[3/4] w-full max-w-[min(260px,72vw)] overflow-hidden rounded-2xl shadow-[0_0_0_1px_rgba(184,208,232,0.12),0_24px_60px_-20px_rgba(0,0,0,0.75),0_0_48px_-12px_rgba(72,229,194,0.18)] sm:max-w-[min(300px,68vw)]"
               initial={{ opacity: 0, scale: 1.03 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.85, delay: 0.08, ease }}
@@ -307,18 +267,79 @@ export function HeroSection() {
                 style={{ filter: 'grayscale(1) contrast(1.05) brightness(1.02)' }}
               />
             </motion.div>
-            <div
-              className="pointer-events-none absolute inset-x-0 top-0 z-10 h-[clamp(3rem,10%,4.5rem)]"
-              style={{
-                background:
-                  'linear-gradient(to bottom, #f2f1ef 0%, rgba(242,241,239,0.55) 55%, transparent 100%)',
-              }}
-              aria-hidden
-            />
-            <div
-              className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#f2f1ef] via-[#f2f1ef]/50 to-transparent sm:h-28"
-              aria-hidden
-            />
+          </div>
+
+          {/* Copy */}
+          <div className="relative z-20 order-3 flex flex-col justify-center px-5 py-6 pb-12 pt-2 sm:px-10 sm:py-8 lg:order-1 lg:w-[46%] lg:max-w-2xl lg:shrink-0 lg:py-16 lg:pl-12 lg:pt-16 xl:pl-16 xl:pr-8">
+            <motion.div
+              className="flex flex-col gap-5 sm:gap-8 max-lg:items-center max-lg:text-center lg:gap-10 lg:items-stretch lg:text-left"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.05, ease }}
+            >
+              {/* Greeting — desktop only (mobile name is above portrait) */}
+              <div className="hidden lg:order-2 lg:block">
+                <p
+                  className="font-extralight leading-[0.92] tracking-tight text-neutral-900"
+                  style={{ fontSize: 'clamp(3.5rem, 12vw, 7.25rem)' }}
+                >
+                  Hi.
+                </p>
+                <p className="mt-5 max-w-md text-lg font-normal leading-snug text-neutral-600 sm:text-xl">
+                  <span className="text-neutral-400">—</span> I{"\u2019"}m{' '}
+                  <span className="font-semibold text-neutral-900">{PROFILE.name}</span>, {PROFILE.role.toLowerCase()}.
+                </p>
+              </div>
+
+              {/* Stats — mobile: after portrait; desktop: first */}
+              <div className="flex flex-wrap justify-center gap-x-10 gap-y-3 border-b border-[var(--surface-border-subtle)] pb-8 text-sm text-[color-mix(in_srgb,var(--surface-accent)_58%,transparent)] max-lg:order-1 max-lg:border-b-0 max-lg:pb-0 lg:order-1 lg:justify-start lg:border-neutral-200/90 lg:border-b lg:pb-8 lg:text-neutral-500">
+                <p className="max-lg:order-1 lg:order-2">
+                  <span className="block text-2xl font-light tabular-nums text-[var(--surface-accent-strong)] sm:text-3xl lg:text-neutral-900">
+                    {PROFILE.cgpa.split(' / ')[0]}
+                  </span>
+                  <span className="mt-1 block text-xs font-medium uppercase tracking-[0.14em] text-[var(--surface-accent-muted)] lg:text-neutral-400">CGPA</span>
+                </p>
+                <p className="max-lg:order-2 lg:order-1">
+                  <span className="block text-2xl font-light tabular-nums text-[var(--surface-accent-strong)] sm:text-3xl lg:text-neutral-900">{PROJECTS.length}+</span>
+                  <span className="mt-1 block text-xs font-medium uppercase tracking-[0.14em] text-[var(--surface-accent-muted)] lg:text-neutral-400">Projects</span>
+                </p>
+              </div>
+
+              {/* About + tagline — mobile: after stats; desktop: with greeting block */}
+              <div className="max-lg:order-2 lg:order-2">
+                <div className="mt-0 flex justify-center lg:hidden">
+                  <motion.a
+                    href="#about"
+                    className="group inline-flex items-center gap-2.5"
+                    whileHover={reduceMotion ? undefined : { y: 2 }}
+                    transition={{ type: 'spring', stiffness: 400, damping: 28 }}
+                  >
+                    <span
+                      className="h-px w-8 bg-[color-mix(in_srgb,var(--surface-accent)_58%,transparent)] transition-all duration-300 group-hover:w-11 group-hover:bg-[#48E5C2]"
+                      aria-hidden
+                    />
+                    <span className="font-hero text-[11px] font-bold uppercase tracking-[0.26em] text-[var(--surface-accent-strong)] transition-colors duration-300 group-hover:text-[#48E5C2]">
+                      About me
+                    </span>
+                    <span className="flex h-7 w-7 items-center justify-center rounded-full border border-[var(--surface-border-subtle)] bg-[color-mix(in_srgb,var(--surface-accent)_10%,transparent)] transition-all duration-300 group-hover:border-[#48E5C2] group-hover:bg-[#48E5C2]">
+                      <ChevronDown
+                        className="h-3.5 w-3.5 text-[var(--surface-accent-strong)] transition-all duration-300 group-hover:translate-y-0.5 group-hover:text-[var(--surface-dark)]"
+                        strokeWidth={2}
+                        aria-hidden
+                      />
+                    </span>
+                  </motion.a>
+                </div>
+                <p className="mx-auto mt-6 max-w-lg text-pretty text-base font-light leading-relaxed text-[color-mix(in_srgb,var(--surface-accent)_58%,transparent)] sm:text-lg lg:mx-0 lg:mt-6 lg:text-left lg:text-neutral-500">
+                  {PROFILE.tagline}
+                </p>
+              </div>
+
+              <div className="flex flex-col items-center gap-6 max-lg:order-3 sm:flex-row sm:items-center sm:gap-8 lg:order-3 lg:items-start">
+                <ContactButton variant="light" href="#contact" className="max-lg:!hidden" />
+                <ContactButton variant="dark" href="#contact" className="lg:!hidden" />
+              </div>
+            </motion.div>
           </div>
         </div>
 
@@ -331,9 +352,9 @@ export function HeroSection() {
         </a>
       </div>
 
-      {/* Smooth fade into the next dark section */}
+      {/* Smooth fade into the next dark section — desktop / light hero only */}
       <div
-        className="pointer-events-none absolute inset-x-0 bottom-0 z-30"
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-30 hidden lg:block"
         style={{
           height: 'clamp(8rem, 22vw, 14rem)',
           background:
