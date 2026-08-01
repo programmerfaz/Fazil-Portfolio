@@ -11,9 +11,9 @@ export const PROFILE = {
   name: 'Fazil Hakim',
   shortName: 'Fazil',
   role: 'Computer Science Undergraduate',
-  headerSubtitle: 'BSc Computer Science · graduating Dec 2026 · open to software & AI roles',
+  headerSubtitle: 'BSc Computer Science · graduating Dec 2026 · Intern at Seen Solution',
   tagline:
-    'Microsoft Certified Azure AI Engineer · Built Siyaha BH with RAG, vector DBs & AI · Seeking internships & grad roles',
+    'Microsoft Certified Azure AI Engineer · Intern at Seen Solution · Built Siyaha BH with RAG, vector DBs & AI',
   email: 'fazilmohdshahbaz@gmail.com',
   phoneDisplay: '+973 34543703',
   phoneTel: 'tel:+97334543703',
@@ -42,11 +42,28 @@ export const PROFILE_SUMMARY =
 
 export const EXPERIENCE = [
   {
+    role: 'Software Intern',
+    org: 'Seen Solution',
+    period: '2026 – Present',
+    bullets: [
+      'Building and iterating on AI conversation products (Ai-Octopus) — chatbots, APIs, AI agents, and related customer flows.',
+      'Working with Meta Business Partner tooling and production web stacks in a live company environment.',
+    ],
+  },
+  {
     role: 'Startups Bahrain Participant',
     org: 'StartUps (UoB)',
     period: 'May 2026',
     bullets: [
       'Participated in startup workshops where we presented technology-based business ideas, including a sponsored gaming advertisement platform.',
+    ],
+  },
+  {
+    role: 'HackerRank Orchestrate Participant',
+    org: 'HackerRank',
+    period: 'June 2026 (1st week)',
+    bullets: [
+      'Built and deployed an AI agent in the June 2026 Orchestrate edition — final rank #489 of 1,773 participants.',
     ],
   },
   {

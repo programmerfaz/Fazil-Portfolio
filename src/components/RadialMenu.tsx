@@ -257,7 +257,7 @@ export function RadialMenu() {
   return (
     <div
       ref={containerRef}
-      className="pointer-events-none fixed bottom-[max(6.75rem,env(safe-area-inset-bottom)+5.5rem)] left-1/2 z-[120] -translate-x-1/2 sm:bottom-[max(7.5rem,env(safe-area-inset-bottom)+6.5rem)]"
+      className="pointer-events-none fixed bottom-[max(1.25rem,env(safe-area-inset-bottom)+0.75rem)] left-1/2 z-[120] -translate-x-1/2 sm:bottom-[max(1.5rem,env(safe-area-inset-bottom)+1rem)]"
     >
       <div
         className="pointer-events-auto relative"
