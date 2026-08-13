@@ -1,6 +1,6 @@
 import seenImg from '../assets/seen.jpeg';
 import orchestrateCertImg from '../assets/Certificate.png';
-import hackathonWaitingImg from '../assets/hackathon waiting result.png';
+import orchestrateAugCertImg from '../assets/32516528_image.png';
 import type { CarouselItem } from '../components/BoxCarousel';
 
 export type CurrentlyDoingItem = {
@@ -25,7 +25,7 @@ export const CURRENTLY_DOING: readonly CurrentlyDoingItem[] = [
   },
   {
     period: '1st week of June 2026',
-    title: 'HackerRank Orchestrate',
+    title: 'Orchestrate — June',
     detail:
       'Took part in HackerRank’s Orchestrate (June 2026) — built and deployed an AI agent. Final rank #489 of 1,773 participants.',
     status: 'Rank #489',
@@ -33,13 +33,13 @@ export const CURRENTLY_DOING: readonly CurrentlyDoingItem[] = [
     imageAlt: 'HackerRank Orchestrate certificate — final rank #489 of 1,773',
   },
   {
-    period: 'Aug 2026',
-    title: 'Orchestrate — awaiting results',
+    period: 'August 2026',
+    title: 'Orchestrate — August',
     detail:
-      'Live evaluation in progress on HackerRank Orchestrate — chat transcripts through final code review, with results rolling out Aug 4–7.',
-    status: 'Evaluating',
-    image: hackathonWaitingImg,
-    imageAlt: 'HackerRank Orchestrate leaderboard — live evaluation in progress',
+      'Took part in the August 2026 Orchestrate — built and deployed an AI agent. Final rank #632 of 1,983.',
+    status: 'Rank #632',
+    image: orchestrateAugCertImg,
+    imageAlt: 'HackerRank Orchestrate August 2026 certificate — final rank #632 of 1,983',
   },
 ];
 

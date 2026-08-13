@@ -1,7 +1,6 @@
 import { motion, useReducedMotion, type Variants } from 'framer-motion';
 import { useMemo } from 'react';
 import { ChevronDown, Mail } from 'lucide-react';
-import fazilPhoto from '../assets/fazil.jpeg';
 import { ContactButton } from '../components/ContactButton';
 import { HeroQuickLinks } from '../components/HeroQuickLinks';
 import { PROJECTS } from '../data/projects';
@@ -205,22 +204,6 @@ export function HeroSection() {
           </motion.p>
         </motion.div>
 
-        <div className="relative flex w-full shrink-0 items-center justify-center py-2 sm:py-3">
-          <motion.div
-            className="relative h-[min(38dvh,260px)] w-full max-w-[min(380px,92vw)] overflow-hidden rounded-2xl border border-[color-mix(in_srgb,var(--surface-border-light)_40%,#48E5C2)] bg-[linear-gradient(160deg,#1a2a30_0%,#121c22_55%,#0e161c_100%)] shadow-[0_20px_50px_-20px_rgba(0,0,0,0.8),0_0_36px_-14px_rgba(72,229,194,0.2)] sm:h-[min(40dvh,300px)]"
-            initial={reduceMotion ? false : { opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: reduceMotion ? 0 : 0.5, ease: smoothEase }}
-          >
-            <img
-              src={fazilPhoto}
-              alt={PROFILE.name}
-              className="absolute inset-0 h-full w-full object-cover object-[center_18%]"
-              draggable={false}
-            />
-          </motion.div>
-        </div>
-
         <motion.div
           className="relative z-20 w-full shrink-0"
           initial={reduceMotion ? false : { opacity: 0, y: 14 }}
@@ -266,8 +249,8 @@ export function HeroSection() {
         </motion.div>
       </div>
 
-      {/* ——— Desktop: copy left + portrait right — fits one viewport ——— */}
-      <div className="relative z-10 mx-auto hidden min-h-[100dvh] w-full max-w-6xl flex-1 grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] items-center gap-8 px-10 py-10 xl:gap-12 xl:px-14 lg:grid">
+      {/* ——— Desktop: copy only — character lives in the cursor ——— */}
+      <div className="relative z-10 mx-auto hidden min-h-[100dvh] w-full max-w-3xl flex-1 flex-col items-start justify-center px-10 py-10 lg:flex xl:px-14">
         <motion.div
           className="relative flex min-w-0 flex-col items-start justify-center gap-4 pr-4 xl:gap-5"
           initial={reduceMotion ? false : { opacity: 0, x: -18 }}
@@ -330,22 +313,6 @@ export function HeroSection() {
 
           <div className="relative z-[2]">
             <ContactButton variant="dark" href="#contact" />
-          </div>
-        </motion.div>
-
-        <motion.div
-          className="relative flex h-[min(78dvh,560px)] min-h-0 w-full items-center justify-center lg:justify-end"
-          initial={reduceMotion ? false : { opacity: 0, x: 22 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.75, delay: reduceMotion ? 0 : 0.12, ease: smoothEase }}
-        >
-          <div className="relative h-full w-full max-w-xl overflow-hidden rounded-2xl border border-[color-mix(in_srgb,var(--surface-border-light)_40%,#48E5C2)] bg-[linear-gradient(160deg,#1a2a30_0%,#121c22_55%,#0e161c_100%)] shadow-[0_28px_80px_-28px_rgba(0,0,0,0.85),0_0_40px_-18px_rgba(72,229,194,0.22)]">
-            <img
-              src={fazilPhoto}
-              alt={PROFILE.name}
-              className="absolute inset-0 h-full w-full object-cover object-[center_18%] hero-portrait-edge"
-              draggable={false}
-            />
           </div>
         </motion.div>
       </div>

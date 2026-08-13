@@ -18,7 +18,12 @@ function pathKey(fullPath: string): string {
 
 function isExcluded(path: string): boolean {
   const k = pathKey(path);
-  return k === 'hero.png';
+  if (k === 'hero.png') return true;
+  if (k.startsWith('fazil-char-')) return true;
+  if (k.startsWith('fazil-pixar-')) return true;
+  if (k.startsWith('fazil-coding-')) return true;
+  if (k.startsWith('fazil-ghibli-')) return true;
+  return false;
 }
 
 /** Likely SiyahaBH / tourism UI captures — show at most a couple per marquee */

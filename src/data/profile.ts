@@ -61,6 +61,14 @@ export const EXPERIENCE = [
   {
     role: 'HackerRank Orchestrate Participant',
     org: 'HackerRank',
+    period: 'August 2026',
+    bullets: [
+      'Built and deployed an AI agent in the August 2026 Orchestrate edition — final rank #632 of 1,983 participants.',
+    ],
+  },
+  {
+    role: 'HackerRank Orchestrate Participant',
+    org: 'HackerRank',
     period: 'June 2026 (1st week)',
     bullets: [
       'Built and deployed an AI agent in the June 2026 Orchestrate edition — final rank #489 of 1,773 participants.',
