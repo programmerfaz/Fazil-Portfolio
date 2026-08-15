@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
-import { speakAbout } from '../data/cursorGuide';
+import { useReducedMotion } from 'framer-motion';
 
-type Mood = 'idle' | 'run' | 'wave' | 'think';
+type Mood = 'idle' | 'run' | 'wave';
 
 function FazilMini({ mood, flip }: { mood: Mood; flip: boolean }) {
   return (
@@ -43,12 +42,9 @@ export function FazilCursorBuddy() {
   const cursorRef = useRef<HTMLDivElement>(null);
   const pos = useRef({ x: 80, y: 80 });
   const target = useRef({ x: 80, y: 80 });
-  const lastSpeak = useRef(0);
-  const lastKey = useRef('');
   const [visible, setVisible] = useState(false);
   const [flip, setFlip] = useState(false);
   const [mood, setMood] = useState<Mood>('idle');
-  const [line, setLine] = useState("That's me — Fazil. Hover around, I'll tell you what's what.");
   const [hoveringLink, setHoveringLink] = useState(false);
 
   useEffect(() => {
@@ -88,16 +84,6 @@ export function FazilCursorBuddy() {
       const overLink = Boolean(hit);
       setHoveringLink(overLink);
       setMood(overLink ? 'wave' : 'run');
-
-      const now = performance.now();
-      const section = (e.target as HTMLElement | null)?.closest('section[id], [id]');
-      const link = (e.target as HTMLElement | null)?.closest('a');
-      const key = `${section?.id ?? ''}|${link?.getAttribute('href') ?? ''}|${(e.target as HTMLElement | null)?.innerText?.slice(0, 40) ?? ''}`;
-      if (key !== lastKey.current || now - lastSpeak.current > 3200) {
-        lastKey.current = key;
-        lastSpeak.current = now;
-        setLine(speakAbout(e.target as Element | null));
-      }
     };
 
     const onStop = () => {
@@ -119,7 +105,7 @@ export function FazilCursorBuddy() {
     if (reduceMotion || hoveringLink) return;
     const id = window.setTimeout(() => setMood('idle'), 420);
     return () => window.clearTimeout(id);
-  }, [line, hoveringLink, reduceMotion]);
+  }, [hoveringLink, reduceMotion]);
 
   if (reduceMotion) return null;
 
@@ -133,18 +119,6 @@ export function FazilCursorBuddy() {
       style={{ willChange: 'transform' }}
     >
       <div className={`relative ${mood === 'run' ? 'fazil-buddy-bob' : ''}`}>
-        <AnimatePresence mode="wait">
-          <motion.p
-            key={line}
-            initial={{ opacity: 0, y: 8, scale: 0.86 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -6, scale: 0.9 }}
-            transition={{ duration: 0.22 }}
-            className="absolute -top-2 left-[88%] z-10 w-[min(16.5rem,58vw)] rounded-2xl rounded-bl-sm border border-[#48E5C2]/35 bg-[#0b1216]/92 px-3 py-2 font-sans text-[11px] font-medium leading-snug text-[#d7e2ea] shadow-[0_10px_24px_-12px_rgba(0,0,0,0.8)] sm:text-xs"
-          >
-            {line}
-          </motion.p>
-        </AnimatePresence>
         <FazilMini mood={mood} flip={flip} />
       </div>
     </div>

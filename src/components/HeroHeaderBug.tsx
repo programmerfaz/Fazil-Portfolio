@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 
-const KILL_RADIUS = 56;
-const AWAY_MS = 3800;
-const HELLO_MS = 2400;
+const AWAY_MS = 5 * 60 * 1000;
+const FIRST_APPEAR_MS = 2500;
+const VISIT_MS = 18_000;
+const HELLO_MS = 2200;
 
 type Phase = 'live' | 'dying' | 'away' | 'hello';
 
@@ -56,22 +57,12 @@ export function SiteBug() {
   const wrapRef = useRef<HTMLDivElement>(null);
   const pos = useRef({ x: 80, y: 120 });
   const vel = useRef({ x: 1.1, y: 0.6 });
-  const pointer = useRef({ x: -999, y: -999 });
   const angleRef = useRef(0);
-  const [phase, setPhase] = useState<Phase>('live');
+  const [phase, setPhase] = useState<Phase>('away');
   const [spot, setSpot] = useState({ x: 80, y: 120, angle: 0 });
+  const firstVisit = useRef(true);
 
   const crawling = phase === 'live';
-
-  useEffect(() => {
-    if (reduceMotion) return;
-    const onMove = (e: PointerEvent) => {
-      pointer.current.x = e.clientX;
-      pointer.current.y = e.clientY;
-    };
-    window.addEventListener('pointermove', onMove, { passive: true });
-    return () => window.removeEventListener('pointermove', onMove);
-  }, [reduceMotion]);
 
   useEffect(() => {
     if (reduceMotion || !crawling) return;
@@ -114,16 +105,6 @@ export function SiteBug() {
         pos.current.y = Math.min(maxY, Math.max(pad, pos.current.y));
       }
 
-      const dx = pointer.current.x - pos.current.x;
-      const dy = pointer.current.y - pos.current.y;
-      if (Math.hypot(dx, dy) < KILL_RADIUS) {
-        const angle = (Math.atan2(vel.current.y, vel.current.x) * 180) / Math.PI + 90;
-        angleRef.current = angle;
-        setSpot({ x: pos.current.x, y: pos.current.y, angle });
-        setPhase('dying');
-        return;
-      }
-
       const angle = (Math.atan2(vel.current.y, vel.current.x) * 180) / Math.PI + 90;
       angleRef.current = angle;
       wrap.style.transform = `translate3d(${pos.current.x}px, ${pos.current.y}px, 0) translate(-50%, -50%) rotate(${angle}deg)`;
@@ -142,10 +123,18 @@ export function SiteBug() {
 
   useEffect(() => {
     if (phase !== 'away') return;
+    const wait = firstVisit.current ? FIRST_APPEAR_MS : AWAY_MS;
     const id = window.setTimeout(() => {
+      firstVisit.current = false;
       setSpot(randomViewportSpot());
       setPhase('hello');
-    }, AWAY_MS);
+    }, wait);
+    return () => window.clearTimeout(id);
+  }, [phase]);
+
+  useEffect(() => {
+    if (phase !== 'live') return;
+    const id = window.setTimeout(() => setPhase('away'), VISIT_MS);
     return () => window.clearTimeout(id);
   }, [phase]);
 

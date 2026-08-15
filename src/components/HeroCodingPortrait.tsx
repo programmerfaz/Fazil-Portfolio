@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import { useReducedMotion } from 'framer-motion';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import codingShot from '../assets/fazil-coding-hero-v2.png';
+import fazilPhoto from '../assets/fazil.jpeg';
 import { PROFILE } from '../data/profile';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -48,9 +48,9 @@ export function HeroCodingPortrait({ className = '', objectClassName = '' }: Her
     <div ref={rootRef} className={`relative h-full w-full overflow-hidden bg-[#0b1418] ${className}`}>
       <img
         ref={imgRef}
-        src={codingShot}
-        alt={`${PROFILE.name} coding`}
-        className={`absolute inset-0 h-full w-full object-cover object-[center_40%] ${objectClassName}`}
+        src={fazilPhoto}
+        alt={PROFILE.name}
+        className={`absolute inset-0 h-full w-full object-cover object-[center_16%] ${objectClassName}`}
         draggable={false}
       />
     </div>
