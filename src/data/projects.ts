@@ -7,6 +7,8 @@ export type Project = {
   stack: string[];
   liveUrl?: string;
   repositoryUrl?: string;
+  /** Short note shown on the project card (e.g. best viewed on desktop). */
+  cardNote?: string;
   /** Optional showcase images — omit until you add your own under `/public/projects/` */
   col1a?: string;
   col1b?: string;
@@ -30,6 +32,21 @@ export const PROJECTS: Project[] = [
   },
   {
     num: '02',
+    category: 'Frontend',
+    title: 'KyBoard — Product landing experience',
+    summary:
+      'Scroll-driven marketing site for a modern mechanical keyboard — quiet aesthetics, interactive finishes, and a pre-order flow.',
+    bullets: [
+      'Full-bleed scroll storytelling: hero, “see inside,” and sticky finish picker with Ink, Nebula, Ember, and Solar colorways.',
+      'Interactive keyboard mock — hover keys, scroll to shift finishes, and explore gasket mount / lubed stabs / battery details.',
+      'Pre-order modal with name, email, colorway, and quantity — built as a polished desktop-first product page.',
+    ],
+    stack: ['React', 'Vite', 'Tailwind', 'Framer Motion'],
+    liveUrl: 'https://ky-board-orcin.vercel.app/',
+    cardNote: 'Best on laptop / desktop — open the live site in a wide browser window.',
+  },
+  {
+    num: '03',
     category: 'Full-stack',
     title: 'WealthHome — Real estate platform',
     summary:
@@ -44,7 +61,7 @@ export const PROJECTS: Project[] = [
     repositoryUrl: 'https://github.com/programmerfaz/Real-estate',
   },
   {
-    num: '03',
+    num: '04',
     category: 'Frontend',
     title: 'Movie Explorer',
     summary: 'Discover trending and searchable films via the TMDB API with a fast Vite + React UI.',
@@ -57,7 +74,7 @@ export const PROJECTS: Project[] = [
     repositoryUrl: 'https://github.com/programmerfaz/Movie-Site-React',
   },
   {
-    num: '04',
+    num: '05',
     category: 'Backend',
     title: 'Library management system',
     summary: 'Spring Boot library app with roles, borrowing flows, and clean REST APIs over PostgreSQL.',
@@ -69,7 +86,7 @@ export const PROJECTS: Project[] = [
     repositoryUrl: 'https://github.com/7ax/LibraryOS',
   },
   {
-    num: '05',
+    num: '06',
     category: 'Full-stack',
     title: 'University room booking system',
     summary: 'Conflict-aware booking with a PHP + MySQL backend and a responsive HTML/CSS/JS front end.',
@@ -81,7 +98,7 @@ export const PROJECTS: Project[] = [
     repositoryUrl: 'https://github.com/StoicTylerDurden/itcs333-project',
   },
   {
-    num: '06',
+    num: '07',
     category: 'Machine learning',
     title: 'ML portfolio — classification & regression',
     summary:
@@ -94,7 +111,7 @@ export const PROJECTS: Project[] = [
     repositoryUrl: 'https://github.com/programmerfaz/Machine-learning-Projects',
   },
   {
-    num: '07',
+    num: '08',
     category: 'IoT',
     title: 'Smart parking system',
     summary: 'IoT parking slots with long-range wireless telemetry to reduce congestion.',
@@ -105,7 +122,7 @@ export const PROJECTS: Project[] = [
     stack: ['Arduino', 'LoRa', 'ESP32', 'Sensors', 'Embedded C'],
   },
   {
-    num: '08',
+    num: '09',
     category: 'Frontend',
     title: 'Amazon home page clone',
     summary: 'Static clone focused on layout fidelity and vanilla JavaScript interactions.',
@@ -116,7 +133,7 @@ export const PROJECTS: Project[] = [
     repositoryUrl: 'https://github.com/programmerfaz/Amazon-Website-Clone-HTML-CSS-',
   },
   {
-    num: '09',
+    num: '10',
     category: 'Frontend',
     title: 'Sessioner — Audio transcription studio',
     summary:

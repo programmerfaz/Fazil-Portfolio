@@ -4,15 +4,15 @@ function pick(lines: readonly string[]): string {
 
 const HERO = [
   'That’s me — Fazil. CS at University of Bahrain, graduating Dec 2026.',
-  'Intern at Seen Solution right now. Azure AI certified, building real stuff.',
+  'Backend intern at SYNTECXHUB right now. Azure AI certified, building real stuff.',
   'Grab the CV or WhatsApp if you want to talk. I’m around.',
 ];
 
 const NOW = [
-  'This is what I’ve been on lately — internship, NeetCode, hackathons.',
-  'Seen Solution internship: chatbots, APIs, AI agents. Two months in.',
+  'This is what I’ve been on lately — SYNTECXHUB backend internship, Seen wrap-up, Orchestrate.',
+  'SYNTECXHUB: remote Backend Development internship starting Sep 2026.',
+  'Finished Seen Solution training — Certificate of Completion dated 6 Sep 2026.',
   'August Orchestrate I landed #632 of 1,983. Built and shipped an AI agent.',
-  'June Orchestrate was #489 of 1,773. Same idea — deploy an agent, see where you stand.',
 ];
 
 const WORK = [
@@ -33,7 +33,8 @@ const SKILLS = [
 ];
 
 const EXPERIENCE = [
-  'Seen Solution now — AI conversation products, live company work.',
+  'SYNTECXHUB now — Backend Development virtual internship, remote.',
+  'Seen Solution done — AI conversation products; training completed Sep 2026.',
   'Dimuma was my ASP.NET internship. Stored procs, ESG reporting, Azure DevOps.',
   'StartUps Bahrain, hackathons, Forsati — I show up and build.',
 ];
@@ -45,7 +46,8 @@ const CERTS = [
 
 const PROJECTS = [
   'Siyaha BH is the one I’m proudest of — live tourism app with RAG and itineraries.',
-  'Nine projects here. Full-stack, ML, IoT. Click one if you want the story.',
+  'KyBoard is a scroll-driven keyboard landing page — best opened on a laptop desktop view.',
+  'Ten projects here. Full-stack, ML, IoT. Click one if you want the story.',
 ];
 
 const CONTACT = [
@@ -125,7 +127,7 @@ const RULES: readonly Rule[] = [
   },
   {
     test: ({ text }) => /seen solution|octopus/i.test(text),
-    lines: ['Seen Solution internship. I’m on AI chat, agents, and Meta partner tooling.'],
+    lines: ['SYNTECXHUB backend internship now. Seen Solution training wrapped Sep 2026.'],
   },
   {
     test: ({ text }) => /orchestrate|hackerrank|#632|#489/i.test(text),

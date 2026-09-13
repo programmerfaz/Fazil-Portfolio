@@ -438,6 +438,16 @@ function CarouselCard({
             {project.summary}
           </p>
 
+          {project.cardNote ? (
+            <p
+              className={`mt-1.5 min-w-0 shrink-0 rounded-md border border-[#48E5C2]/25 bg-[#48E5C2]/10 px-2 py-1 font-medium leading-snug text-[#48E5C2] sm:mt-2 sm:px-2.5 sm:py-1.5 ${
+                compact ? 'text-[0.65rem]' : 'text-[0.7rem] sm:text-xs'
+              }`}
+            >
+              {project.cardNote}
+            </p>
+          ) : null}
+
           <ul className="mt-2 hidden min-h-0 flex-1 space-y-1 overflow-hidden sm:mt-3 sm:block sm:space-y-1.5">
             {project.bullets.slice(0, 3).map((bullet) => (
               <li

@@ -44,7 +44,7 @@ export function CurrentlyDoingSection() {
           className="text-center"
         >
           <p className="text-[11px] font-medium uppercase tracking-[0.32em] text-[#BBCCD7]/75 sm:text-xs">
-            Last 1–2 months
+            Last 3 months
           </p>
           <h2
             id="currently-doing-heading"
@@ -57,7 +57,7 @@ export function CurrentlyDoingSection() {
             className="mx-auto mt-4 max-w-lg text-pretty font-light leading-relaxed text-[#D7E2EA]/55"
             style={{ fontSize: 'clamp(0.8rem, 1.5vw, 0.95rem)' }}
           >
-            Two-month internship at Seen, grinding NeetCode problems, and jumping into hackathons when I can.
+            Backend internship at SYNTECXHUB, wrapping Seen training, and shipping agents in Orchestrate.
           </p>
         </motion.div>
 
@@ -121,6 +121,16 @@ export function CurrentlyDoingSection() {
               >
                 {active.detail}
               </p>
+              {active.href ? (
+                <a
+                  href={active.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-3 inline-flex text-sm font-semibold text-teal-300/90 underline-offset-4 transition-colors hover:text-teal-200 hover:underline"
+                >
+                  {active.hrefLabel ?? 'Open attachment'}
+                </a>
+              ) : null}
             </motion.div>
           </AnimatePresence>
 

@@ -28,6 +28,8 @@ export type CarouselItem = {
   /** Text face when type is "card" (or fallback when image src is missing). */
   label?: string;
   sublabel?: string;
+  /** Image object-fit; defaults to cover. Use contain for documents. */
+  objectFit?: 'cover' | 'contain';
 };
 
 export type Direction = 'left' | 'right' | 'top' | 'bottom';
@@ -503,7 +505,7 @@ function FaceContent({ item }: { item: CarouselItem | undefined }) {
   }
 
   return (
-    <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+    <div style={{ position: 'relative', width: '100%', height: '100%', background: '#0b1014' }}>
       <img
         src={src}
         alt={item.alt || ''}
@@ -511,7 +513,7 @@ function FaceContent({ item }: { item: CarouselItem | undefined }) {
         style={{
           width: '100%',
           height: '100%',
-          objectFit: 'cover',
+          objectFit: item.objectFit ?? 'cover',
           display: 'block',
           pointerEvents: 'none',
           userSelect: 'none',

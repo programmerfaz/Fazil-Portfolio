@@ -11,9 +11,9 @@ export const PROFILE = {
   name: 'Fazil Hakim',
   shortName: 'Fazil',
   role: 'Computer Science Undergraduate',
-  headerSubtitle: 'BSc Computer Science · graduating Dec 2026 · Intern at Seen Solution',
+  headerSubtitle: 'BSc Computer Science · graduating Dec 2026 · Backend Intern at SYNTECXHUB',
   tagline:
-    'Microsoft Certified Azure AI Engineer · Intern at Seen Solution · Built Siyaha BH with RAG, vector DBs & AI',
+    'Microsoft Certified Azure AI Engineer · Backend Intern at SYNTECXHUB · Built Siyaha BH with RAG, vector DBs & AI',
   email: 'fazilmohdshahbaz@gmail.com',
   phoneDisplay: '+973 34543703',
   phoneTel: 'tel:+97334543703',
@@ -26,7 +26,7 @@ export const PROFILE = {
   linkedinUrl: 'https://www.linkedin.com/in/fazil-shahbaz-5278a1325/',
   githubUrl: 'https://github.com/programmerfaz',
   githubReposUrl: 'https://github.com/programmerfaz?tab=repositories',
-  cvUrl: 'https://drive.google.com/file/d/1_eCcTHOc7Iza6oxspqOSsIwLxPM3vr1y/view?usp=sharing',
+  cvUrl: 'https://drive.google.com/file/d/1tCr1g6v7kmu8JxMlUrQbDcwPHWSkMwaX/view?usp=sharing',
   university: 'University of Bahrain',
   degree: 'BSc. Computer Science',
   educationPeriod: '2022 – Dec 2026',
@@ -38,16 +38,26 @@ export const PROFILE = {
 } as const;
 
 export const PROFILE_SUMMARY =
-  'I build full-stack and AI-powered products — including Siyaha BH, a live Bahrain tourism platform that uses RAG, vector databases, and LLM integrations for semantic search and smart itineraries. I am Microsoft Certified as an Azure AI Engineer Associate and have shipped production work with ASP.NET, Azure DevOps, React, and OpenAI. Graduating Dec 2026 — open to software engineering and AI internships in Bahrain or remote.';
+  'I build full-stack and AI-powered products — including Siyaha BH, a live Bahrain tourism platform that uses RAG, vector databases, and LLM integrations for semantic search and smart itineraries. I am Microsoft Certified as an Azure AI Engineer Associate and have shipped production work with ASP.NET, Azure DevOps, React, and OpenAI. Graduating Dec 2026 — open to software engineering and AI roles in Bahrain or remote.';
 
 export const EXPERIENCE = [
   {
-    role: 'Software Intern',
-    org: 'Seen Solution',
-    period: '2026 – Present',
+    role: 'Backend Development Intern',
+    org: 'SYNTECXHUB',
+    period: 'Sep 2026 – Present',
     bullets: [
-      'Building and iterating on AI conversation products (Ai-Octopus) — chatbots, APIs, AI agents, and related customer flows.',
-      'Working with Meta Business Partner tooling and production web stacks in a live company environment.',
+      'Selected for the SYNTECXHUB Virtual Internship Program (remote) in Backend Development.',
+      'Building hands-on backend experience on real-world projects, with portfolio deliverables and a completion certificate on finish.',
+    ],
+  },
+  {
+    role: 'Software Intern',
+    org: 'Seen Solution (The Seen Business Solutions W.L.L.)',
+    period: '2026 – Sep 2026',
+    bullets: [
+      'Completed a training internship on AI conversation products (Ai-Octopus) — chatbots, APIs, AI agents, and related customer flows.',
+      'Worked with Meta Business Partner tooling and production web stacks in a live company environment.',
+      'Awarded a Certificate of Training Completion (6 September 2026).',
     ],
   },
   {
