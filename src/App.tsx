@@ -1,4 +1,3 @@
-import { FazilCursorBuddy } from './components/FazilCursorBuddy';
 import { PortfolioSplash } from './components/PortfolioSplash';
 import { RadialMenu } from './components/RadialMenu';
 import { AboutSection } from './sections/AboutSection';
@@ -20,7 +19,6 @@ function App() {
       <ServicesSection />
       <ProjectsSection />
       <ContactSection />
-      <FazilCursorBuddy />
       <RadialMenu />
     </div>
   );

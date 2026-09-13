@@ -206,58 +206,6 @@ body,
   }
 }
 
-@media (min-width: 1024px) {
-  html.fazil-buddy-on,
-  html.fazil-buddy-on * {
-    cursor: none !important;
-  }
-}
-
-@keyframes fazil-buddy-bob {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-3px);
-  }
-}
-
-.fazil-buddy-bob {
-  animation: fazil-buddy-bob 0.28s ease-in-out infinite;
-}
-
-@keyframes fazil-buddy-wave {
-  0%,
-  100% {
-    transform: rotate(0deg);
-  }
-  50% {
-    transform: rotate(-28deg);
-  }
-}
-
-.fazil-buddy-wave {
-  transform-origin: 24px 64px;
-  animation: fazil-buddy-wave 0.28s ease-in-out infinite;
-}
-
-@keyframes fazil-buddy-blink {
-  0%,
-  86%,
-  100% {
-    opacity: 1;
-  }
-  90%,
-  94% {
-    opacity: 0;
-  }
-}
-
-.fazil-buddy-blink {
-  animation: fazil-buddy-blink 2.4s steps(1) infinite;
-}
-
 /* Hero portrait — soft left edge on desktop only (keeps right-column layout) */
 @media (min-width: 1024px) {
   .hero-portrait-edge {
