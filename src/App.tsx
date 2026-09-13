@@ -1,7 +1,6 @@
 import { FazilCursorBuddy } from './components/FazilCursorBuddy';
 import { PortfolioSplash } from './components/PortfolioSplash';
 import { RadialMenu } from './components/RadialMenu';
-import { SiteBug } from './components/HeroHeaderBug';
 import { AboutSection } from './sections/AboutSection';
 import { ContactSection } from './sections/ContactSection';
 import { CurrentlyDoingSection } from './sections/CurrentlyDoingSection';
@@ -21,7 +20,6 @@ function App() {
       <ServicesSection />
       <ProjectsSection />
       <ContactSection />
-      <SiteBug />
       <FazilCursorBuddy />
       <RadialMenu />
     </div>

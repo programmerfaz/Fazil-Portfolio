@@ -26,7 +26,7 @@ export const PROFILE = {
   linkedinUrl: 'https://www.linkedin.com/in/fazil-shahbaz-5278a1325/',
   githubUrl: 'https://github.com/programmerfaz',
   githubReposUrl: 'https://github.com/programmerfaz?tab=repositories',
-  cvUrl: 'https://drive.google.com/file/d/1JxoSWvYWVPMrnZoydLjpfzs7j896Oos3/view?usp=drive_link',
+  cvUrl: 'https://drive.google.com/file/d/1_eCcTHOc7Iza6oxspqOSsIwLxPM3vr1y/view?usp=sharing',
   university: 'University of Bahrain',
   degree: 'BSc. Computer Science',
   educationPeriod: '2022 – Dec 2026',
