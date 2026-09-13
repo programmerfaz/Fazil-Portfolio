@@ -63,7 +63,7 @@ export function HeroQuickLinks({
   const linkClass =
     variant === 'light'
       ? 'group relative flex h-full w-full min-h-[2.75rem] flex-row items-center justify-center gap-1 overflow-hidden rounded-lg px-1.5 py-2.5 text-[9px] font-bold uppercase tracking-[0.04em] transition-[transform,box-shadow,background-color] duration-200 sm:min-h-[3rem] sm:gap-1.5 sm:px-2 sm:py-3 sm:text-[10px] xl:px-3 xl:text-[11px] xl:tracking-[0.08em]'
-      : 'group relative flex h-full w-full min-h-[2.75rem] flex-row items-center justify-center gap-1.5 overflow-hidden rounded-xl px-1.5 py-2.5 text-[10px] font-semibold uppercase tracking-[0.05em] transition-[transform,box-shadow,background-color] duration-200 sm:min-h-[3rem] sm:gap-2 sm:px-2 sm:py-3 sm:text-[11px] sm:tracking-[0.06em]';
+      : 'group relative flex h-full w-full min-h-[2.75rem] flex-row items-center justify-center gap-1.5 overflow-hidden rounded-xl px-1.5 py-2.5 text-[10px] font-semibold tracking-[0.02em] transition-[transform,box-shadow,background-color] duration-200 sm:min-h-[3rem] sm:gap-2 sm:px-2 sm:py-3 sm:text-[11px]';
 
   return (
     <nav className={className} aria-label="Resume and social links">

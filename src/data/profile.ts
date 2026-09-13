@@ -11,7 +11,7 @@ export const PROFILE = {
   name: 'Fazil Hakim',
   shortName: 'Fazil',
   role: 'Computer Science Undergraduate',
-  headerSubtitle: 'BSc Computer Science · graduating Dec 2026 · Intern at Seen Solution',
+  headerSubtitle: 'BSc computer science · graduating Dec 2026 · intern at Seen Solution',
   tagline:
     'Microsoft Certified Azure AI Engineer · Intern at Seen Solution · Built Siyaha BH with RAG, vector DBs & AI',
   email: 'fazilmohdshahbaz@gmail.com',

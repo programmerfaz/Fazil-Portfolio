@@ -1,74 +1,21 @@
-import { motion, useReducedMotion, type Variants } from 'framer-motion';
-import { useMemo } from 'react';
+import { useEffect, useRef } from 'react';
+import { useReducedMotion } from 'framer-motion';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ChevronDown, Mail } from 'lucide-react';
 import { ContactButton } from '../components/ContactButton';
-import { HeroCodingPortrait } from '../components/HeroCodingPortrait';
 import { HeroQuickLinks } from '../components/HeroQuickLinks';
+import { HeroVideoBackdrop } from '../components/HeroVideoBackdrop';
 import { PROJECTS } from '../data/projects';
 import { PROFILE } from '../data/profile';
 
-const ease = [0.25, 0.1, 0.25, 1] as const;
-const smoothEase = [0.22, 1, 0.36, 1] as const;
+gsap.registerPlugin(ScrollTrigger);
 
-const MOBILE_LETTER_STAGGER = 0.11;
-
-const mobileIntroRootVariants: Variants = {
-  hidden: {},
-  visible: {
-    transition: { staggerChildren: 0.28, delayChildren: 0.35 },
-  },
-};
-
-const mobileGreetingVariants: Variants = {
-  hidden: { opacity: 0, y: 16 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.85, ease: smoothEase },
-  },
-};
-
-const mobileNameRowVariants: Variants = {
-  hidden: {},
-  visible: {
-    transition: { staggerChildren: MOBILE_LETTER_STAGGER, delayChildren: 0.16 },
-  },
-};
-
-const mobileLetterVariants: Variants = {
-  hidden: { opacity: 0, y: 26 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { type: 'spring', stiffness: 185, damping: 26, mass: 1.05 },
-  },
-};
-
-const mobileNameDividerVariants: Variants = {
-  hidden: { scaleX: 0, opacity: 0 },
-  visible: {
-    scaleX: 1,
-    opacity: 1,
-    transition: { duration: 0.8, ease: smoothEase },
-  },
-};
-
-const mobileNameTaglineVariants: Variants = {
-  hidden: { opacity: 0, y: 10 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.7, ease: smoothEase },
-  },
-};
-
-function HeroEmailLink({ className = '', align = 'center' }: { className?: string; align?: 'center' | 'start' }) {
+function HeroEmailLink({ className = '' }: { className?: string }) {
   return (
     <a
       href={`mailto:${PROFILE.email}`}
-      className={`group flex max-w-full items-center gap-2 text-sm font-medium tracking-[0.01em] text-[color-mix(in_srgb,var(--surface-accent)_92%,transparent)] transition-colors duration-200 hover:text-[#48E5C2] sm:text-base ${
-        align === 'start' ? 'justify-start' : 'justify-center'
-      } ${className}`}
+      className={`group flex max-w-full items-center gap-2 text-sm font-medium tracking-[0.01em] text-[color-mix(in_srgb,var(--surface-accent)_92%,transparent)] transition-colors duration-200 hover:text-[#48E5C2] sm:text-base ${className}`}
     >
       <Mail
         className="h-4 w-4 shrink-0 text-[#48E5C2] transition-transform duration-200 group-hover:scale-110 sm:h-[1.125rem] sm:w-[1.125rem]"
@@ -83,19 +30,19 @@ function HeroEmailLink({ className = '', align = 'center' }: { className?: strin
 function HeroStats({ className = '' }: { className?: string }) {
   return (
     <div className={`flex flex-wrap gap-x-10 gap-y-2 text-sm ${className}`}>
-      <p>
+      <p data-hero-stat>
         <span className="block text-xl font-light tabular-nums text-[var(--surface-accent-strong)] sm:text-2xl lg:text-[1.65rem]">
           {PROFILE.cgpa.split(' / ')[0]}
         </span>
-        <span className="mt-0.5 block text-[10px] font-medium uppercase tracking-[0.14em] text-[var(--surface-accent-muted)] sm:text-xs">
+        <span className="mt-0.5 block text-[10px] font-medium tracking-[0.04em] text-[var(--surface-accent-muted)] sm:text-xs">
           CGPA
         </span>
       </p>
-      <p>
+      <p data-hero-stat>
         <span className="block text-xl font-light tabular-nums text-[var(--surface-accent-strong)] sm:text-2xl lg:text-[1.65rem]">
           {PROJECTS.length}+
         </span>
-        <span className="mt-0.5 block text-[10px] font-medium uppercase tracking-[0.14em] text-[var(--surface-accent-muted)] sm:text-xs">
+        <span className="mt-0.5 block text-[10px] font-medium tracking-[0.04em] text-[var(--surface-accent-muted)] sm:text-xs">
           Projects
         </span>
       </p>
@@ -105,239 +52,266 @@ function HeroStats({ className = '' }: { className?: string }) {
 
 export function HeroSection() {
   const reduceMotion = useReducedMotion();
-  const mobileNameChars = useMemo(() => PROFILE.name.split(''), []);
+  const sectionRef = useRef<HTMLElement>(null);
+  const stickyRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const videoWrapRef = useRef<HTMLDivElement>(null);
+  const scrollHintRef = useRef<HTMLParagraphElement>(null);
+  const greetingRef = useRef<HTMLHeadingElement>(null);
+  const detailsRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    const sticky = stickyRef.current;
+    const video = videoRef.current;
+    const greeting = greetingRef.current;
+    const details = detailsRef.current;
+    const scrollHint = scrollHintRef.current;
+    if (!section || !sticky || !video || !greeting || !details || reduceMotion) return;
+
+    const tagline = details.querySelector('[data-hero-step="tagline"]');
+    const subtitle = details.querySelector('[data-hero-step="subtitle"]');
+    const links = details.querySelector('[data-hero-step="links"]');
+    const linkItems = links?.querySelectorAll('a') ?? [];
+    const email = details.querySelector('[data-hero-step="email"]');
+    const stats = details.querySelector('[data-hero-step="stats"]');
+    const statItems = stats?.querySelectorAll('[data-hero-stat]') ?? [];
+    const about = details.querySelector('[data-hero-step="about"]');
+    const aboutLine = details.querySelector('[data-hero-step="about-line"]');
+    const contact = details.querySelector('[data-hero-step="contact"]');
+
+    let ctx: gsap.Context | undefined;
+    const VIDEO_FPS = 30;
+
+    const setup = () => {
+      video.pause();
+      video.currentTime = 0;
+
+      const duration = video.duration || 5;
+      let lastFrame = -1;
+
+      ctx = gsap.context(() => {
+        gsap.set(greeting, {
+          opacity: 0,
+          scale: 2.4,
+          y: 56,
+          transformOrigin: 'left center',
+          force3D: true,
+        });
+        gsap.set([tagline, subtitle, links, email, stats, about, aboutLine, contact], {
+          opacity: 0,
+          force3D: true,
+        });
+        gsap.set(tagline, { x: -48, filter: 'blur(10px)' });
+        gsap.set(subtitle, { y: 32, clipPath: 'inset(100% 0 0 0)' });
+        gsap.set(links, { y: 28, scale: 0.96 });
+        gsap.set(linkItems, { opacity: 0, y: 18, scale: 0.92 });
+        gsap.set(email, { x: -24, opacity: 0 });
+        gsap.set(statItems, { opacity: 0, y: 24, scale: 0.85 });
+        gsap.set(about, { x: -20, opacity: 0 });
+        gsap.set(aboutLine, { y: 20, opacity: 0, filter: 'blur(6px)' });
+        gsap.set(contact, { scale: 0.88, y: 20, opacity: 0 });
+        gsap.set(videoWrapRef.current, { scale: 1.04, yPercent: 0, force3D: true });
+        if (scrollHint) gsap.set(scrollHint, { opacity: 1, y: 0 });
+
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: section,
+            start: 'top top',
+            end: '+=240%',
+            scrub: 4.5,
+            pin: sticky,
+            anticipatePin: 1,
+            invalidateOnRefresh: true,
+            onUpdate: () => {
+              const p = tl.progress();
+              const frame = Math.min(
+                duration - 1 / VIDEO_FPS,
+                Math.round(p * duration * VIDEO_FPS) / VIDEO_FPS,
+              );
+              if (frame !== lastFrame) {
+                video.currentTime = frame;
+                lastFrame = frame;
+              }
+            },
+          },
+        });
+
+        tl.to(videoWrapRef.current, { scale: 1.1, yPercent: 4, duration: 1, ease: 'power1.inOut' }, 0);
+
+        // Beat 1 — greeting scales down
+        tl.to(
+          greeting,
+          { opacity: 1, scale: 1, y: 0, duration: 0.14, ease: 'power3.out' },
+          0.02,
+        );
+
+        // Beat 2 — headline tagline slides in with de-blur
+        tl.to(
+          tagline,
+          { opacity: 1, x: 0, filter: 'blur(0px)', duration: 0.12, ease: 'power2.out' },
+          0.16,
+        );
+
+        // Beat 3 — subtitle clip reveal
+        tl.to(
+          subtitle,
+          { opacity: 1, y: 0, clipPath: 'inset(0% 0 0 0)', duration: 0.11, ease: 'power2.inOut' },
+          0.28,
+        );
+
+        // Beat 4 — quick links container + staggered buttons
+        tl.to(links, { opacity: 1, y: 0, scale: 1, duration: 0.1, ease: 'power2.out' }, 0.4)
+          .to(
+            linkItems,
+            { opacity: 1, y: 0, scale: 1, duration: 0.08, stagger: 0.04, ease: 'back.out(1.4)' },
+            0.42,
+          );
+
+        // Beat 5 — email slides in
+        tl.to(email, { opacity: 1, x: 0, duration: 0.09, ease: 'power2.out' }, 0.52);
+
+        // Beat 6 — stats pop in one by one
+        tl.to(stats, { opacity: 1, duration: 0.04 }, 0.62).to(
+          statItems,
+          { opacity: 1, y: 0, scale: 1, duration: 0.1, stagger: 0.06, ease: 'back.out(1.6)' },
+          0.63,
+        );
+
+        // Beat 7 — about link then bio line
+        tl.to(about, { opacity: 1, x: 0, duration: 0.09, ease: 'power2.out' }, 0.74).to(
+          aboutLine,
+          { opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.1, ease: 'power2.out' },
+          0.8,
+        );
+
+        // Beat 8 — contact CTA
+        tl.to(
+          contact,
+          { opacity: 1, scale: 1, y: 0, duration: 0.11, ease: 'back.out(1.35)' },
+          0.88,
+        );
+
+        if (scrollHint) {
+          tl.to(scrollHint, { opacity: 0, y: 12, duration: 0.08, ease: 'power1.in' }, 0.1);
+        }
+      }, section);
+    };
+
+    if (video.readyState >= 1) setup();
+    else video.addEventListener('loadedmetadata', setup, { once: true });
+
+    return () => {
+      video.removeEventListener('loadedmetadata', setup);
+      ctx?.revert();
+    };
+  }, [reduceMotion]);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || !reduceMotion) return;
+    video.pause();
+    video.currentTime = 0;
+  }, [reduceMotion]);
 
   return (
-    <section className="relative flex min-h-[100dvh] w-full flex-col overflow-hidden bg-[#0a1014] pl-[env(safe-area-inset-left)] pr-[env(safe-area-inset-right)] font-hero text-[var(--surface-accent)]">
-      {/* Atmospheric backdrop */}
+    <section
+      ref={sectionRef}
+      className="relative font-hero text-[var(--surface-accent)]"
+      style={{ height: reduceMotion ? undefined : '360vh' }}
+    >
       <div
-        className="pointer-events-none absolute inset-0 z-0"
-        aria-hidden
-        style={{
-          background: `
-            radial-gradient(ellipse 70% 55% at 78% 42%, rgba(72, 229, 194, 0.14) 0%, transparent 58%),
-            radial-gradient(ellipse 55% 50% at 18% 30%, rgba(72, 140, 160, 0.1) 0%, transparent 55%),
-            linear-gradient(165deg, #0e161c 0%, #0a1014 42%, #0c1218 100%)
-          `,
-        }}
-      />
-      <div
-        className="pointer-events-none absolute inset-0 z-[1] hidden lg:block"
-        aria-hidden
-        style={{
-          background:
-            'linear-gradient(90deg, rgba(10,16,20,0.72) 0%, rgba(10,16,20,0.28) 40%, transparent 68%)',
-        }}
-      />
+        ref={stickyRef}
+        className="relative flex min-h-[100dvh] w-full flex-col overflow-hidden pl-[env(safe-area-inset-left)] pr-[env(safe-area-inset-right)]"
+      >
+        <HeroVideoBackdrop videoRef={videoRef} wrapRef={videoWrapRef} />
 
-      {/* ——— Mobile / tablet: centered stack ——— */}
-      <div className="relative z-10 mx-auto flex min-h-[100dvh] w-full max-w-lg flex-1 flex-col items-center justify-center px-5 py-[max(1.25rem,calc(env(safe-area-inset-top)+0.75rem))] pb-[max(5.5rem,calc(env(safe-area-inset-bottom)+4.5rem))] sm:max-w-xl sm:px-8 lg:hidden">
-        <motion.div
-          className="relative z-20 w-full shrink-0 text-center"
-          variants={reduceMotion ? undefined : mobileIntroRootVariants}
-          initial={reduceMotion ? false : 'hidden'}
-          animate="visible"
-        >
-          <div className="sm:hidden">
-            <motion.p
-              variants={reduceMotion ? undefined : mobileGreetingVariants}
-              className="text-[0.9375rem] font-normal tracking-[0.04em] text-[var(--surface-accent)]"
-            >
-              Hi, I{'\u2019'}m
-            </motion.p>
-            <motion.p
-              variants={reduceMotion ? undefined : mobileNameRowVariants}
-              className="relative mt-1 flex flex-wrap items-baseline justify-center font-bold leading-[1.05] tracking-[-0.02em] text-[var(--surface-accent-strong)]"
-              style={{ fontSize: 'clamp(2rem, 8vw, 3.5rem)' }}
-            >
-              <motion.span
-                variants={reduceMotion ? undefined : mobileLetterVariants}
-                className="inline-block text-[#48E5C2]"
-                aria-hidden
-              >
-                {'<'}
-              </motion.span>
-              {mobileNameChars.map((char, i) => {
-                const display = char === ' ' ? '\u00A0' : char;
-                return (
-                  <motion.span
-                    key={`mobile-name-${i}-${char}`}
-                    variants={reduceMotion ? undefined : mobileLetterVariants}
-                    className={`inline-block ${char === ' ' ? 'w-[0.28em]' : ''}`}
-                  >
-                    {display}
-                  </motion.span>
-                );
-              })}
-              <motion.span
-                variants={reduceMotion ? undefined : mobileLetterVariants}
-                className="inline-block text-[#48E5C2]"
-                aria-hidden
-              >
-                {'/>'}
-              </motion.span>
-              <span className="sr-only">{PROFILE.name}</span>
-            </motion.p>
-            <motion.p
-              variants={reduceMotion ? undefined : mobileNameTaglineVariants}
-              className="mx-auto mt-1.5 max-w-[min(19rem,90vw)] text-sm font-normal leading-snug tracking-[0.02em] text-[color-mix(in_srgb,var(--surface-accent-strong)_92%,transparent)]"
-            >
-              {PROFILE.role}
-            </motion.p>
-            <motion.div
-              variants={reduceMotion ? undefined : mobileNameDividerVariants}
-              className="mx-auto mt-2.5 h-[2px] w-[min(12rem,78%)] origin-center rounded-full bg-gradient-to-r from-transparent via-[#48E5C2] to-transparent shadow-[0_0_12px_rgba(72,229,194,0.35)]"
-              aria-hidden
-            />
-          </div>
-          <motion.p
-            variants={reduceMotion ? undefined : mobileGreetingVariants}
-            className="hidden font-bold leading-[0.92] tracking-[-0.02em] text-[var(--surface-accent-strong)] sm:block"
-            style={{ fontSize: 'clamp(2.75rem, 7vw, 4.5rem)' }}
-          >
-            Hi.
-          </motion.p>
-          <motion.p
-            variants={reduceMotion ? undefined : mobileNameTaglineVariants}
-            className="mx-auto mt-1.5 hidden max-w-md text-pretty text-sm font-medium leading-snug text-[color-mix(in_srgb,var(--surface-accent)_80%,transparent)] sm:block"
-          >
-            This is {PROFILE.name}
-          </motion.p>
-        </motion.div>
-
-        <div className="relative flex w-full shrink-0 items-center justify-center py-2 sm:py-3">
-          <motion.div
-            className="relative h-[min(38dvh,260px)] w-full max-w-[min(380px,92vw)] overflow-hidden rounded-2xl bg-[#1a1d22]"
-            initial={reduceMotion ? false : { opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: reduceMotion ? 0 : 0.5, ease: smoothEase }}
-          >
-            <HeroCodingPortrait />
-          </motion.div>
-        </div>
-
-        <motion.div
-          className="relative z-20 w-full shrink-0"
-          initial={reduceMotion ? false : { opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.65, delay: reduceMotion ? 0 : 1.2, ease }}
-        >
-          <HeroQuickLinks className="mx-auto w-full max-w-[min(340px,94vw)] sm:max-w-[360px]" />
-          <HeroEmailLink className="mx-auto mt-3 flex w-full max-w-[min(340px,94vw)] px-1 sm:max-w-[360px]" />
-        </motion.div>
-
-        <motion.div
-          className="mt-4 flex w-full shrink-0 flex-col items-center gap-3.5 text-center sm:mt-5 sm:gap-4"
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.55, delay: reduceMotion ? 0 : 1.35, ease }}
-        >
-          <HeroStats className="justify-center" />
-          <motion.a
-            href="#about"
-            className="group inline-flex items-center gap-2.5"
-            whileHover={reduceMotion ? undefined : { y: 2 }}
-            transition={{ type: 'spring', stiffness: 400, damping: 28 }}
-          >
-            <span
-              className="h-px w-8 bg-[color-mix(in_srgb,var(--surface-accent)_58%,transparent)] transition-all duration-300 group-hover:w-11 group-hover:bg-[#48E5C2]"
-              aria-hidden
-            />
-            <span className="font-hero text-[11px] font-bold uppercase tracking-[0.26em] text-[var(--surface-accent-strong)] transition-colors duration-300 group-hover:text-[#48E5C2]">
-              About me
-            </span>
-            <span className="flex h-7 w-7 items-center justify-center rounded-full border border-[var(--surface-border-subtle)] bg-[color-mix(in_srgb,var(--surface-accent)_10%,transparent)] transition-all duration-300 group-hover:border-[#48E5C2] group-hover:bg-[#48E5C2]">
-              <ChevronDown
-                className="h-3.5 w-3.5 text-[var(--surface-accent-strong)] transition-all duration-300 group-hover:translate-y-0.5 group-hover:text-[var(--surface-dark)]"
-                strokeWidth={2}
-                aria-hidden
-              />
-            </span>
-          </motion.a>
-          <p className="max-w-md text-pretty text-sm font-light leading-relaxed text-[color-mix(in_srgb,var(--surface-accent)_72%,transparent)] [text-shadow:0_1px_12px_rgba(12,12,12,0.9)]">
-            {PROFILE.tagline}
-          </p>
-          <ContactButton variant="dark" href="#contact" />
-        </motion.div>
-      </div>
-
-      {/* ——— Desktop: copy left + portrait right ——— */}
-      <div className="relative z-10 mx-auto hidden min-h-[100dvh] w-full max-w-6xl flex-1 grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] items-center gap-8 px-10 py-10 xl:gap-12 xl:px-14 lg:grid">
-        <motion.div
-          className="relative flex min-w-0 flex-col items-start justify-center gap-4 pr-4 xl:gap-5"
-          initial={reduceMotion ? false : { opacity: 0, x: -18 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.7, ease: smoothEase }}
-        >
-          {/* Soft local wash behind copy */}
-          <div
-            className="pointer-events-none absolute -inset-y-6 -left-6 right-8 rounded-3xl"
-            aria-hidden
-            style={{
-              background:
-                'radial-gradient(ellipse 90% 80% at 20% 50%, rgba(12,12,12,0.55) 0%, rgba(12,12,12,0.2) 55%, transparent 100%)',
-            }}
-          />
-          <div className="relative z-[2]">
+        <div className="relative z-10 mx-auto flex min-h-[100dvh] w-full max-w-6xl flex-1 flex-col justify-center px-5 py-[max(1.25rem,calc(env(safe-area-inset-top)+0.75rem))] pb-[max(5.5rem,calc(env(safe-area-inset-bottom)+4.5rem))] sm:px-8 lg:px-14">
+          {!reduceMotion && (
             <p
-              className="font-bold leading-[0.9] tracking-[-0.03em] text-[var(--surface-accent-strong)]"
-              style={{ fontSize: 'clamp(3.25rem, 6.5vw, 5.5rem)' }}
+              ref={scrollHintRef}
+              className="pointer-events-none absolute bottom-[max(5rem,calc(env(safe-area-inset-bottom)+3.5rem))] left-5 flex items-center gap-2 text-[11px] font-medium tracking-[0.02em] text-[color-mix(in_srgb,var(--surface-accent)_55%,transparent)] sm:left-8 lg:left-14"
+              aria-hidden
             >
-              Hi.
+              <span className="inline-block animate-bounce">↓</span>
+              Scroll
             </p>
-            <p className="mt-2 text-lg font-medium text-[color-mix(in_srgb,var(--surface-accent)_90%,transparent)] xl:text-xl">
-              This is {PROFILE.name}
-            </p>
-            <p className="mt-1.5 max-w-lg text-sm font-medium leading-snug text-[color-mix(in_srgb,var(--surface-accent)_65%,transparent)] xl:text-[0.95rem]">
-              {PROFILE.headerSubtitle}
-            </p>
-          </div>
+          )}
 
-          <div className="relative z-[2] w-full max-w-[22rem]">
-            <HeroQuickLinks className="w-full" />
-            <HeroEmailLink align="start" className="mt-3 w-full" />
-          </div>
-
-          <HeroStats className="relative z-[2]" />
-
-          <div className="relative z-[2] max-w-md">
-            <a
-              href="#about"
-              className="group inline-flex items-center gap-2.5"
+          <div className="relative max-w-2xl">
+            <h1
+              ref={greetingRef}
+              className={`font-bold leading-[1.02] tracking-[-0.03em] text-[var(--surface-accent-strong)] [text-shadow:0_2px_28px_rgba(0,0,0,0.55)] ${
+                reduceMotion ? 'opacity-100' : 'opacity-0'
+              }`}
+              style={{ fontSize: 'clamp(2.25rem, 7.5vw, 4.75rem)' }}
             >
-              <span
-                className="h-px w-8 bg-[color-mix(in_srgb,var(--surface-accent)_50%,transparent)] transition-all duration-300 group-hover:w-11 group-hover:bg-[#48E5C2]"
-                aria-hidden
-              />
-              <span className="font-hero text-[11px] font-bold uppercase tracking-[0.26em] text-[var(--surface-accent-strong)] transition-colors duration-300 group-hover:text-[#48E5C2]">
-                About me
+              Hi, This is{' '}
+              <span className="whitespace-nowrap text-[#48E5C2]">
+                {'<'}
+                {PROFILE.name}
+                {'/>'}
               </span>
-              <ChevronDown
-                className="h-3.5 w-3.5 text-[var(--surface-accent-muted)] transition-transform duration-300 group-hover:translate-y-0.5 group-hover:text-[#48E5C2]"
-                strokeWidth={2}
-                aria-hidden
-              />
-            </a>
-            <p className="relative mt-3 text-pretty text-base font-light leading-relaxed text-[color-mix(in_srgb,var(--surface-accent)_88%,transparent)] xl:text-[1.05rem]">
-              {PROFILE.tagline}
-            </p>
-          </div>
+            </h1>
 
-          <div className="relative z-[2]">
-            <ContactButton variant="dark" href="#contact" />
-          </div>
-        </motion.div>
+            <div ref={detailsRef} className="mt-6 space-y-5 sm:mt-8 sm:space-y-6">
+              <p
+                data-hero-step="tagline"
+                className="max-w-xl text-pretty text-lg font-light leading-snug text-[color-mix(in_srgb,var(--surface-accent)_92%,transparent)] sm:text-xl lg:text-2xl [text-shadow:0_1px_20px_rgba(0,0,0,0.5)]"
+              >
+                I ship <span className="font-medium text-[#48E5C2]">AI systems</span> as products,{' '}
+                <span className="font-medium text-[var(--surface-accent-strong)]">not demos.</span>
+              </p>
 
-        <motion.div
-          className="relative flex h-[min(78dvh,560px)] min-h-0 w-full items-center justify-center lg:justify-end"
-          initial={reduceMotion ? false : { opacity: 0, x: 22 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.75, delay: reduceMotion ? 0 : 0.12, ease: smoothEase }}
-        >
-          <div className="relative h-full w-full max-w-xl overflow-hidden rounded-2xl bg-[#1a1d22]">
-            <HeroCodingPortrait />
+              <p
+                data-hero-step="subtitle"
+                className="max-w-lg text-sm font-medium leading-snug text-[color-mix(in_srgb,var(--surface-accent)_72%,transparent)] sm:text-base"
+              >
+                {PROFILE.headerSubtitle}
+              </p>
+
+              <div data-hero-step="links" className="w-full max-w-[22rem]">
+                <HeroQuickLinks className="w-full" />
+              </div>
+
+              <div data-hero-step="email">
+                <HeroEmailLink className="w-full max-w-[22rem] justify-start" />
+              </div>
+
+              <div data-hero-step="stats">
+                <HeroStats />
+              </div>
+
+              <div data-hero-step="about" className="max-w-md">
+                <a href="#about" className="group inline-flex items-center gap-2.5">
+                  <span
+                    className="h-px w-8 bg-[color-mix(in_srgb,var(--surface-accent)_50%,transparent)] transition-all duration-300 group-hover:w-11 group-hover:bg-[#48E5C2]"
+                    aria-hidden
+                  />
+                  <span className="font-hero text-[11px] font-medium tracking-[0.02em] text-[var(--surface-accent-strong)] transition-colors duration-300 group-hover:text-[#48E5C2]">
+                    About me
+                  </span>
+                  <ChevronDown
+                    className="h-3.5 w-3.5 text-[var(--surface-accent-muted)] transition-transform duration-300 group-hover:translate-y-0.5 group-hover:text-[#48E5C2]"
+                    strokeWidth={2}
+                    aria-hidden
+                  />
+                </a>
+              </div>
+
+              <p
+                data-hero-step="about-line"
+                className="max-w-md text-pretty text-sm font-light leading-relaxed text-[color-mix(in_srgb,var(--surface-accent)_88%,transparent)] sm:text-base [text-shadow:0_1px_12px_rgba(0,0,0,0.45)]"
+              >
+                {PROFILE.tagline}
+              </p>
+
+              <div data-hero-step="contact">
+                <ContactButton variant="dark" href="#contact" />
+              </div>
+            </div>
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );
